@@ -1,0 +1,12 @@
+HTTrack3.49-2+htsswf+htsjava launched on Fri, 13 Oct 2023 00:10:20 at https://christiangarry.com/ +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://christiangarry.com/ -O1 "D:\CV\CV" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+00:10:32	Error: 	"Not Found" (404) at link img1.wsimg.com/traffic-assets/js/tccl.min.js (from https://christiangarry.com/)
+
+HTTrack Website Copier/3.49-2 mirror complete in 12 seconds : 21 links scanned, 19 files written (1407917 bytes overall) [405202 bytes received at 33766 bytes/sec], 1407965 bytes transferred using HTTP compression in 20 files, ratio 27%, 3.0 requests per connection
+(1 errors, 0 warnings, 0 messages)
