@@ -35,8 +35,7 @@ function addPurchase() {
 
 function updateDisplay() {
   const salary = parseFloat(document.getElementById("salaryInput").value);
-  const savingPercent =
-    parseFloat(document.getElementById("savingInput").value) / 100;
+  const savingPercent = parseFloat(document.getElementById("savingInput").value) / 100;
 
   if (
     isNaN(salary) ||
@@ -61,12 +60,7 @@ function updateDisplay() {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const yearStart = new Date(now.getFullYear(), 0, 1);
 
-  let totals = {
-    today: 0,
-    week: 0,
-    month: 0,
-    year: 0,
-  };
+  let totals = { today: 0, week: 0, month: 0, year: 0 };
 
   for (const p of purchases) {
     const d = new Date(p.date);
@@ -93,9 +87,7 @@ function updateDisplay() {
   updateGauge("month", totals.month, limits.month);
   updateGauge("year", totals.year, limits.year);
 
-  document.getElementById("header-salary").textContent = `£${(
-    salary * 12
-  ).toLocaleString()} Yearly Salary`;
+  document.getElementById("header-salary").textContent = `£${(salary * 12).toLocaleString()} Yearly Salary`;
 
   const realSaving = salary - totals.month;
   document.getElementById("header-saving").textContent = `Saving £${realSaving.toFixed(2)} This Month`;
@@ -104,20 +96,14 @@ function updateDisplay() {
 
   for (let i = 11; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const monthKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}`;
-    monthlySavings[monthKey] = salary;
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    monthlySavings[key] = salary;
   }
 
   for (const p of purchases) {
     const d = new Date(p.date);
-    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}`;
-    if (key in monthlySavings) {
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    if (monthlySavings[key] !== undefined) {
       monthlySavings[key] -= p.price;
     }
   }
@@ -127,13 +113,17 @@ function updateDisplay() {
   updatePurchaseTable();
 }
 
+function updateGauge(key, spent, allowed) {
+  document.getElementById(`spent-${key}`).textContent = `£${spent.toFixed(2)}`;
+  const percent = Math.round((spent / allowed) * 100);
+  document.getElementById(`percent-${key}`).textContent = `${percent}%`;
+}
+
 function updatePurchaseTable() {
   const tbody = document.getElementById("purchaseTableBody");
   tbody.innerHTML = "";
 
-  const sorted = [...purchases].sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
-  );
+  const sorted = [...purchases].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   sorted.forEach((p, i) => {
     const row = document.createElement("tr");
@@ -146,7 +136,7 @@ function updatePurchaseTable() {
 
     const dateCell = document.createElement("td");
     const date = new Date(p.date);
-    dateCell.textContent = date.toLocaleDateString(); // <– DATE ONLY
+    dateCell.textContent = date.toLocaleDateString();
 
     const deleteCell = document.createElement("td");
     deleteCell.innerHTML = `<button class="delete-btn" onclick="deletePurchase(${i})">✖</button>`;
@@ -160,19 +150,11 @@ function updatePurchaseTable() {
   });
 }
 
-
-function updateGauge(key, spent, allowed) {
-  document.getElementById(`spent-${key}`).textContent = `£${spent.toFixed(2)}`;
-  const percent = Math.round((spent / allowed) * 100);
-  document.getElementById(`percent-${key}`).textContent = `${percent}%`;
-}
-
 function deletePurchase(index) {
   purchases.splice(index, 1);
   localStorage.setItem("purchases", JSON.stringify(purchases));
   updateDisplay();
 }
-
 
 function getMonday(d) {
   const date = new Date(d);
@@ -181,10 +163,32 @@ function getMonday(d) {
   return new Date(date.setDate(diff));
 }
 
-window.addEventListener("load", () => {
-  loadSettings();
-  updateDisplay();
-});
+function exportCSV() {
+  const csv = ["Item,Price,Date"];
+  for (const p of purchases) {
+    csv.push(`${p.name},${p.price},${p.date}`);
+  }
+  const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "purchases.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function exportSavingsCSV() {
+  const monthlySavings = JSON.parse(localStorage.getItem("monthlySavings") || "{}");
+  const csv = ["Month,Saving"];
+  for (const [month, saving] of Object.entries(monthlySavings)) {
+    csv.push(`${month},${saving.toFixed(2)}`);
+  }
+  const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "monthly_savings.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 
 document.getElementById("csvFile").addEventListener("change", function (e) {
   const file = e.target.files[0];
@@ -204,20 +208,27 @@ document.getElementById("csvFile").addEventListener("change", function (e) {
   reader.readAsText(file);
 });
 
-function exportCSV() {
-  const csv = ["Item,Price,Date"];
-  for (const p of purchases) {
-    csv.push(`${p.name},${p.price},${p.date}`);
-  }
-  const blob = new Blob([csv.join("\n")], { type: "text/csv" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "purchases.csv";
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
+document.getElementById("savingsCsvFile").addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
 
-let savingsChart; // declared once, reused
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const text = event.target.result.trim();
+    const lines = text.split("\n").slice(1);
+    const newSavings = {};
+    for (const line of lines) {
+      const [month, value] = line.split(",");
+      if (!month || isNaN(value)) continue;
+      newSavings[month] = parseFloat(value);
+    }
+    localStorage.setItem("monthlySavings", JSON.stringify(newSavings));
+    updateSavingsChart(newSavings);
+  };
+  reader.readAsText(file);
+});
+
+let savingsChart;
 
 function updateSavingsChart(monthlySavings) {
   const data = Object.entries(monthlySavings).map(([month, value]) => ({
@@ -226,7 +237,6 @@ function updateSavingsChart(monthlySavings) {
   }));
 
   if (!savingsChart) {
-    // create chart only once
     savingsChart = anychart.area();
     const series = savingsChart.area(data);
     savingsChart.baseline(0);
@@ -243,43 +253,17 @@ function updateSavingsChart(monthlySavings) {
     savingsChart.container("savingsChart");
     savingsChart.draw();
   } else {
-    // update data in the existing chart
     const chartSeries = savingsChart.getSeriesAt(0);
     chartSeries.data(data);
   }
 }
 
+window.addEventListener("load", () => {
+  loadSettings();
+  updateDisplay();
 
-function exportSavingsCSV() {
-  const monthlySavings = JSON.parse(localStorage.getItem("monthlySavings") || "{}");
-  const csv = ["Month,Saving"];
-  for (const [month, saving] of Object.entries(monthlySavings)) {
-    csv.push(`${month},${saving.toFixed(2)}`);
+  const savedMonthly = localStorage.getItem("monthlySavings");
+  if (savedMonthly) {
+    updateSavingsChart(JSON.parse(savedMonthly));
   }
-  const blob = new Blob([csv.join("\n")], { type: "text/csv" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "monthly_savings.csv";
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-document.getElementById("savingsCsvFile").addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (event) {
-    const text = event.target.result.trim();
-    const lines = text.split("\n").slice(1); // skip header
-    const newSavings = {};
-    for (const line of lines) {
-      const [month, value] = line.split(",");
-      if (!month || isNaN(value)) continue;
-      newSavings[month] = parseFloat(value);
-    }
-    localStorage.setItem("monthlySavings", JSON.stringify(newSavings));
-    updateSavingsChart(newSavings);
-  };
-  reader.readAsText(file);
 });
