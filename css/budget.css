@@ -158,3 +158,23 @@ body {
   flex: 1;
   min-width: 300px;
 }
+
+.DataSection {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+  align-items: flex-start;
+}
+
+.LeftColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 20px;
+  min-width: 300px;
+}
+
+.ChartArea {
+  flex: 1;
+  min-width: 400px;
+}
