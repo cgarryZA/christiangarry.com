@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Budget</title>
+    <link rel="stylesheet" href="/css/budget.css" />
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-bundle.min.js"></script>
+    <script src="/js/budget.js" defer></script>
+  </head>
+  <body>
+    <div class="Header">
+      <span id="header-salary">£0 Yearly Salary</span>
+      <span id="header-saving">Saving £0 This Month</span>
+    </div>
+
+    <div class="Savings">
+      <div class="gauge-container">
+        <div class="gauge">
+          <span class="heading">Today</span>
+          <span class="value" id="spent-today">£0</span>
+          <span class="percent" id="percent-today">0%</span>
+        </div>
+        <div class="gauge">
+          <span class="heading">This Week</span>
+          <span class="value" id="spent-week">£0</span>
+          <span class="percent" id="percent-week">0%</span>
+        </div>
+        <div class="gauge">
+          <span class="heading">This Month</span>
+          <span class="value" id="spent-month">£0</span>
+          <span class="percent" id="percent-month">0%</span>
+        </div>
+        <div class="gauge">
+          <span class="heading">This Year</span>
+          <span class="value" id="spent-year">£0</span>
+          <span class="percent" id="percent-year">0%</span>
+        </div>
+      </div>
+
+      <div class="inputs">
+        <label
+          >Salary (Take Home / Month):
+          <input type="number" id="salaryInput" placeholder="e.g. 3000" />
+        </label>
+        <label
+          >Saving Goal (%):
+          <input type="number" id="savingInput" placeholder="e.g. 50" />
+        </label>
+        <button onclick="updateDisplay()">Update</button>
+      </div>
+    </div>
+
+    <div class="NewItemEntry">
+      <h3>Add Purchase</h3>
+      <input type="text" id="itemName" placeholder="Item name" />
+      <input type="number" id="itemPrice" placeholder="Price" step="0.01" />
+      <button onclick="addPurchase()">Add</button>
+    </div>
+
+    <div class="PurchaseList">
+      <h3>Purchase History</h3>
+      <div class="purchase-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="purchaseTableBody"></tbody>
+        </table>
+      </div>
+      <button onclick="exportCSV()">Export CSV</button>
+      <label style="margin-left: 10px">
+        Import CSV: <input type="file" id="csvFile" accept=".csv" />
+      </label>
+    </div>
+
+    <div class="ChartArea">
+      <h3>Savings Chart</h3>
+      <div id="savingsChart" style="height: 300px; width: 100%"></div>
+      <div class="SavingsChartControls">
+        <button onclick="exportSavingsCSV()">Export Savings CSV</button>
+        <label style="margin-left: 10px">
+          Import Savings CSV:
+          <input type="file" id="savingsCsvFile" accept=".csv" />
+        </label>
+      </div>
+    </div>
+  </body>
+</html>
