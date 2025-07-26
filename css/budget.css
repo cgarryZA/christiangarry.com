@@ -145,3 +145,16 @@ body {
 .SavingsChartControls input[type="file"] {
   margin-left: 5px;
 }
+
+.DataSection {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+  align-items: flex-start;
+}
+
+.PurchaseList,
+.ChartArea {
+  flex: 1;
+  min-width: 300px;
+}
