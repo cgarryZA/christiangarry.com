@@ -1,4 +1,4 @@
-let purchases = JSON.parse(localStorage.getItem("purchases") || "[]");
+let purchases = [];
 
 function saveSettings(salary, savingPercent) {
   localStorage.setItem("salary", salary);
@@ -11,6 +11,10 @@ function loadSettings() {
 
   if (storedSalary) document.getElementById("salaryInput").value = storedSalary;
   if (storedSaving) document.getElementById("savingInput").value = storedSaving;
+}
+
+function loadPurchases() {
+  purchases = JSON.parse(localStorage.getItem("purchases") || "[]");
 }
 
 function addPurchase() {
@@ -34,6 +38,8 @@ function addPurchase() {
 }
 
 function updateDisplay() {
+  loadPurchases(); // ← ensure latest purchases from localStorage
+
   const salary = parseFloat(document.getElementById("salaryInput").value);
   const savingPercent = parseFloat(document.getElementById("savingInput").value) / 100;
 
@@ -44,19 +50,15 @@ function updateDisplay() {
     savingPercent <= 0 ||
     savingPercent >= 1
   ) {
-    updatePurchaseTable();
+    updatePurchaseTable(); // still show purchases
     return;
   }
 
   saveSettings(salary, savingPercent);
 
   const now = new Date();
-  const todayStart = new Date(now);
-  todayStart.setHours(0, 0, 0, 0);
-
-  const weekStart = getMonday(now);
-  weekStart.setHours(0, 0, 0, 0);
-
+  const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);
+  const weekStart = getMonday(now); weekStart.setHours(0, 0, 0, 0);
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const yearStart = new Date(now.getFullYear(), 0, 1);
 
@@ -93,7 +95,6 @@ function updateDisplay() {
   document.getElementById("header-saving").textContent = `Saving £${realSaving.toFixed(2)} This Month`;
 
   const monthlySavings = {};
-
   for (let i = 11; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
@@ -125,39 +126,18 @@ function updatePurchaseTable() {
 
   const sorted = [...purchases].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  sorted.forEach((p, i) => {
+  for (let i = 0; i < sorted.length; i++) {
+    const p = sorted[i];
     const row = document.createElement("tr");
 
-    const itemCell = document.createElement("td");
-    itemCell.textContent = p.name;
-
-    const priceCell = document.createElement("td");
-    priceCell.textContent = `£${parseFloat(p.price).toFixed(2)}`;
-
-    const dateCell = document.createElement("td");
-    const date = new Date(p.date);
-    dateCell.textContent = date.toLocaleDateString();
-
-    const deleteCell = document.createElement("td");
-    deleteCell.innerHTML = `<button class="delete-btn" onclick="deletePurchase(${i})">✖</button>`;
-
-    row.appendChild(itemCell);
-    row.appendChild(priceCell);
-    row.appendChild(dateCell);
-    row.appendChild(deleteCell);
+    row.innerHTML = `
+      <td>${p.name}</td>
+      <td>£${parseFloat(p.price).toFixed(2)}</td>
+      <td>${new Date(p.date).toLocaleDateString()}</td>
+      <td><button class="delete-btn" onclick="deletePurchase(${i})">✖</button></td>
+    `;
 
     tbody.appendChild(row);
-  });
-
-  const thead = tbody.closest("table").querySelector("thead");
-  if (thead && thead.rows[0].cells.length !== 4) {
-    thead.innerHTML = `
-      <tr>
-        <th>Item</th>
-        <th>Price</th>
-        <th>Date</th>
-        <th></th>
-      </tr>`;
   }
 }
 
@@ -209,18 +189,15 @@ document.getElementById("csvFile").addEventListener("change", function (e) {
   reader.onload = function (event) {
     const text = event.target.result.trim();
     const lines = text.split("\n").slice(1);
-
     const newPurchases = lines.map(line => {
       const [name, price, date] = line.split(",");
       return { name, price: parseFloat(price), date };
     }).filter(p => p.name && !isNaN(p.price) && p.date);
 
-    purchases.length = 0;
-    purchases.push(...newPurchases);
+    purchases = newPurchases;
     localStorage.setItem("purchases", JSON.stringify(purchases));
 
-    updatePurchaseTable();
-    updateDisplay();
+    updateDisplay(); // includes updatePurchaseTable
   };
   reader.readAsText(file);
 });
@@ -246,7 +223,6 @@ document.getElementById("savingsCsvFile").addEventListener("change", function (e
 });
 
 let savingsChart;
-
 function updateSavingsChart(monthlySavings) {
   const data = Object.entries(monthlySavings).map(([month, value]) => ({
     x: month,
@@ -277,10 +253,6 @@ function updateSavingsChart(monthlySavings) {
 
 window.addEventListener("load", () => {
   loadSettings();
+  loadPurchases();
   updateDisplay();
-
-  const savedMonthly = localStorage.getItem("monthlySavings");
-  if (savedMonthly) {
-    updateSavingsChart(JSON.parse(savedMonthly));
-  }
 });
