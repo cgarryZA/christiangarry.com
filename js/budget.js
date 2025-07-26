@@ -148,7 +148,20 @@ function updatePurchaseTable() {
 
     tbody.appendChild(row);
   });
+
+  // Update header to match columns if needed
+  const thead = tbody.closest("table").querySelector("thead");
+  if (thead && thead.rows[0].cells.length !== 4) {
+    thead.innerHTML = `
+      <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Date</th>
+        <th></th>
+      </tr>`;
+  }
 }
+
 
 function deletePurchase(index) {
   purchases.splice(index, 1);
