@@ -40,11 +40,11 @@ function updateDisplay() {
   if (
     isNaN(salary) ||
     isNaN(savingPercent) ||
-    salary === 0 ||
-    savingPercent === 0 ||
+    salary <= 0 ||
     savingPercent <= 0 ||
     savingPercent >= 1
   ) {
+    updatePurchaseTable();
     return;
   }
 
@@ -149,7 +149,6 @@ function updatePurchaseTable() {
     tbody.appendChild(row);
   });
 
-  // Update header to match columns if needed
   const thead = tbody.closest("table").querySelector("thead");
   if (thead && thead.rows[0].cells.length !== 4) {
     thead.innerHTML = `
@@ -161,7 +160,6 @@ function updatePurchaseTable() {
       </tr>`;
   }
 }
-
 
 function deletePurchase(index) {
   purchases.splice(index, 1);
@@ -211,11 +209,17 @@ document.getElementById("csvFile").addEventListener("change", function (e) {
   reader.onload = function (event) {
     const text = event.target.result.trim();
     const lines = text.split("\n").slice(1);
-    purchases = lines.map(line => {
+
+    const newPurchases = lines.map(line => {
       const [name, price, date] = line.split(",");
       return { name, price: parseFloat(price), date };
-    });
+    }).filter(p => p.name && !isNaN(p.price) && p.date);
+
+    purchases.length = 0;
+    purchases.push(...newPurchases);
     localStorage.setItem("purchases", JSON.stringify(purchases));
+
+    updatePurchaseTable();
     updateDisplay();
   };
   reader.readAsText(file);
