@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HMO 5‑Year Outlook Calculator</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #111836;
+      --muted: #96a0c8;
+      --text: #e8ecff;
+      --accent: #7aa2ff;
+      --good: #6fe3a1;
+      --bad: #ff6f91;
+      --grid: rgba(255,255,255,0.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: radial-gradient(1200px 800px at 80% -10%, #1a2350 0%, var(--bg) 60%); color: var(--text); }
+    header { max-width: 1100px; margin: 32px auto 12px; padding: 0 16px; }
+    h1 { margin: 0 0 6px; font-weight: 800; letter-spacing: 0.2px; }
+    p.sub { margin: 4px 0 0; color: var(--muted); }
+
+    .wrap { max-width: 1100px; margin: 0 auto 48px; padding: 0 16px; display: grid; grid-template-columns: 1.1fr 1.2fr; gap: 16px; }
+    @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } }
+
+    .card { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid var(--grid); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+    .card h2 { margin: 0; padding: 16px 18px; font-size: 18px; border-bottom: 1px solid var(--grid); background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0)); border-top-left-radius: 16px; border-top-right-radius: 16px; }
+    .card .content { padding: 16px 18px 20px; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+
+    label { font-size: 12px; letter-spacing: 0.3px; color: var(--muted); display: block; margin-bottom: 6px; }
+    input[type="number"], select { width: 100%; padding: 12px 12px; font-size: 14px; border-radius: 12px; border: 1px solid var(--grid); background: #0e1632; color: var(--text); outline: none; }
+    input[type="checkbox"] { transform: scale(1.1); }
+    .row { display: flex; gap: 12px; align-items: center; }
+    .row > * { flex: 1; }
+    .hint { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    button { appearance: none; border: 1px solid var(--grid); background: #0e1632; color: var(--text); padding: 10px 14px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+    button.primary { background: linear-gradient(180deg, rgba(122,162,255,0.2), rgba(122,162,255,0.05)); border-color: rgba(122,162,255,0.5); }
+    button:hover { filter: brightness(1.08); }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 8px; border-bottom: 1px dashed var(--grid); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    tfoot td { border-top: 1px solid var(--grid); font-weight: 700; }
+
+    .kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+    @media (max-width: 640px) { .kpi { grid-template-columns: 1fr; } }
+    .kpi .tile { background: #0f1835; border: 1px solid var(--grid); padding: 12px 14px; border-radius: 12px; }
+    .kpi .label { color: var(--muted); font-size: 12px; }
+    .kpi .value { font-size: 20px; font-weight: 800; margin-top: 6px; }
+
+    .good { color: var(--good); }
+    .bad { color: var(--bad); }
+
+    .footer-note { max-width: 1100px; margin: 18px auto 48px; padding: 0 16px; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HMO 5‑Year Outlook Calculator</h1>
+    <p class="sub">35‑year repayment • 3% annual price growth • Refi back to 85% LTV in Year 5 • Lean, self‑managed opex</p>
+  </header>
+
+  <div class="wrap">
+    <section class="card">
+      <h2>Inputs</h2>
+      <div class="content">
+        <div class="grid">
+          <div>
+            <label>Purchase price (£)</label>
+            <input id="purchase" type="number" value="495000" min="1" step="1000">
+          </div>
+          <div>
+            <label>Annual rent (£)</label>
+            <input id="rent" type="number" value="38958" min="0" step="100">
+          </div>
+
+          <div>
+            <label>Deposit (%)</label>
+            <input id="depositPct" type="number" value="15" min="0" max="99" step="0.5">
+            <div class="hint">Equates to 85% LTV at purchase</div>
+          </div>
+          <div class="row" style="align-items:flex-end">
+            <div>
+              <label>Interest rate (% p.a.)</label>
+              <input id="rate" type="number" value="5.75" min="0" step="0.05">
+            </div>
+            <div>
+              <label>Term (years)</label>
+              <input id="term" type="number" value="35" min="5" max="40" step="1">
+            </div>
+          </div>
+
+          <div>
+            <label>Annual opex (% of rent)</label>
+            <input id="opexPct" type="number" value="5" min="0" step="0.5">
+          </div>
+          <div>
+            <label>Insurance & safety (£/yr)</label>
+            <input id="insSafety" type="number" value="900" min="0" step="50">
+          </div>
+
+          <div>
+            <label>Product fee (% of loan)</label>
+            <input id="feePct" type="number" value="2" min="0" step="0.25">
+            <div class="hint">Added to loan balance</div>
+          </div>
+          <div>
+            <label>Corporation tax rate (%)</label>
+            <input id="corpTax" type="number" value="25" min="0" max="50" step="1">
+          </div>
+
+          <div>
+            <label>House price growth (% p.a.)</label>
+            <input id="growth" type="number" value="3" min="-10" step="0.25">
+          </div>
+          <div>
+            <label>Refi LTV at Year 5 (%)</label>
+            <input id="refiLtv" type="number" value="85" min="50" max="90" step="1">
+          </div>
+
+          <div>
+            <label>Legals / valuation / broker (£)</label>
+            <input id="legals" type="number" value="3500" min="0" step="100">
+          </div>
+          <div>
+            <label>Non‑resident SDLT surcharge (%)</label>
+            <input id="nrSurcharge" type="number" value="0" min="0" max="2" step="0.5">
+            <div class="hint">Leave 0% if not applicable</div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <button class="primary" id="calcBtn">Calculate</button>
+          <button id="resetBtn" title="Reset to example values">Reset</button>
+          <button id="printBtn" title="Print or Save as PDF">Print / Save PDF</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div class="content" id="results">
+        <div class="kpi">
+          <div class="tile">
+            <div class="label">Initial cash outlay</div>
+            <div class="value" id="kpi-cash">£0</div>
+          </div>
+          <div class="tile">
+            <div class="label">Total return (5y)</div>
+            <div class="value" id="kpi-return">£0</div>
+          </div>
+          <div class="tile">
+            <div class="label">APR (annualised)</div>
+            <div class="value" id="kpi-apr">0%</div>
+          </div>
+        </div>
+
+        <h3 style="margin:18px 0 8px">Cash Summary</h3>
+        <table>
+          <tbody>
+            <tr><td>Deposit</td><td id="row-deposit">£0</td></tr>
+            <tr><td>SDLT (company/additional)</td><td id="row-sdlt">£0</td></tr>
+            <tr><td>Legals / valuation / broker</td><td id="row-legals">£0</td></tr>
+            <tr><td><strong>Initial cash needed</strong></td><td id="row-cashin"><strong>£0</strong></td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin:18px 0 8px">Mortgage & 5‑Year Outlook</h3>
+        <table>
+          <tbody>
+            <tr><td>Loan at completion (with fee added)</td><td id="row-loan">£0</td></tr>
+            <tr><td>Monthly repayment @ rate × term</td><td id="row-monthly">£0</td></tr>
+            <tr><td>Post‑tax cashflow (per year)</td><td id="row-cfy">£0</td></tr>
+            <tr><td>Post‑tax cashflow (5 years)</td><td id="row-cf5">£0</td></tr>
+            <tr><td>Principal repaid (5 years)</td><td id="row-prin5">£0</td></tr>
+            <tr><td>Value after 5 years (growth)</td><td id="row-fv">£0</td></tr>
+            <tr><td>Loan balance after 5 years</td><td id="row-bal5">£0</td></tr>
+            <tr><td>Equity before refi (5 years)</td><td id="row-eqpre">£0</td></tr>
+            <tr><td>Refi proceeds @ LTV (cash‑out)</td><td id="row-cashout">£0</td></tr>
+            <tr><td>Equity left after refi</td><td id="row-eqleft">£0</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><td>Total return (cashflow + cash‑out + equity)</td><td id="row-total"><strong>£0</strong></td></tr>
+            <tr><td>Multiple on cash‑in</td><td id="row-multiple"><strong>0.00×</strong></td></tr>
+            <tr><td>APR (annualised over 5 years)</td><td id="row-apr"><strong>0.0%</strong></td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer-note">
+    Notes: SDLT uses company/additional dwelling bands (3% up to £250k, 8% from £250k to £925k, 13% to £1.5m, 15% above) plus optional 2% non‑resident surcharge if selected. Product fee is added to the loan and included in repayments; tax is applied to positive cashflow only (simplified, no loss relief). This is a simplified tool — not financial advice.
+  </div>
+
+  <script>
+    const fmt = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 });
+    const fmt2 = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 2 });
+
+    function sdltCompany(price, nonResidentPct = 0) {
+      // Company / additional dwelling rates (England): 3%, 8%, 13%, 15%
+      const bands = [
+        { upTo: 250000, rate: 0.03 },
+        { upTo: 925000, rate: 0.08 },
+        { upTo: 1500000, rate: 0.13 },
+        { upTo: Infinity, rate: 0.15 },
+      ];
+      let tax = 0;
+      let remaining = price;
+      let lastCap = 0;
+      for (const b of bands) {
+        const bandAmt = Math.max(0, Math.min(price, b.upTo) - lastCap);
+        tax += bandAmt * b.rate;
+        lastCap = b.upTo;
+        if (b.upTo === Infinity) break;
+      }
+      if (nonResidentPct > 0) {
+        // 2% surcharge applied across full price if applicable
+        tax += price * (nonResidentPct / 100);
+      }
+      return tax;
+    }
+
+    function monthlyPayment(principal, annualRate, termYears) {
+      const r = annualRate / 100 / 12;
+      const n = termYears * 12;
+      if (r === 0) return principal / n;
+      return principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    }
+
+    function runCalc() {
+      const purchase = +document.getElementById('purchase').value || 0;
+      const rent = +document.getElementById('rent').value || 0;
+      const depositPct = (+document.getElementById('depositPct').value || 0) / 100; // e.g. 0.15
+      const rate = +document.getElementById('rate').value || 0; // %
+      const term = +document.getElementById('term').value || 35;
+      const opexPct = (+document.getElementById('opexPct').value || 0) / 100; // of rent
+      const insSafety = +document.getElementById('insSafety').value || 0;
+      const feePct = (+document.getElementById('feePct').value || 0) / 100; // of initial loan
+      const corpTax = (+document.getElementById('corpTax').value || 0) / 100; // %
+      const growth = (+document.getElementById('growth').value || 0) / 100; // % p.a.
+      const refiLtv = (+document.getElementById('refiLtv').value || 85) / 100;
+      const legals = +document.getElementById('legals').value || 0;
+      const nrPct = +document.getElementById('nrSurcharge').value || 0;
+
+      const deposit = purchase * depositPct;
+      const sdlt = sdltCompany(purchase, nrPct);
+      const initialLoan = purchase - deposit;
+      const productFee = initialLoan * feePct; // added to balance
+      const loanWithFee = initialLoan + productFee;
+
+      const mPay = monthlyPayment(loanWithFee, rate, term);
+      const annualDebt = mPay * 12;
+
+      const opex = rent * opexPct + insSafety;
+      const annualCF = rent - opex - annualDebt; // pre-tax
+      const postTaxAnnual = annualCF > 0 ? annualCF * (1 - corpTax) : annualCF; // simple model
+      const postTax5y = postTaxAnnual * 5;
+
+      // Amortization for 60 months
+      let bal = loanWithFee;
+      const rMonthly = rate / 100 / 12;
+      let principalPaid = 0;
+      for (let i = 0; i < 60; i++) {
+        const interest = bal * rMonthly;
+        const principal = mPay - interest;
+        bal -= principal;
+        principalPaid += principal;
+      }
+
+      const futureValue = purchase * Math.pow(1 + growth, 5);
+      const equityBeforeRefi = futureValue - bal;
+      const newLoan = futureValue * refiLtv;
+      const cashOut = newLoan - bal;
+      const equityLeft = futureValue * (1 - refiLtv);
+
+      const cashIn = deposit + sdlt + legals;
+      const totalReturn = postTax5y + cashOut + equityLeft;
+      const multiple = cashIn > 0 ? totalReturn / cashIn : 0;
+      const apr = cashIn > 0 ? Math.pow(totalReturn / cashIn, 1/5) - 1 : 0;
+
+      // Update UI
+      const el = id => document.getElementById(id);
+      el('kpi-cash').textContent = fmt.format(cashIn);
+      el('kpi-return').textContent = fmt.format(totalReturn);
+      el('kpi-apr').textContent = (apr * 100).toFixed(1) + '%';
+
+      el('row-deposit').textContent = fmt.format(deposit);
+      el('row-sdlt').textContent = fmt.format(sdlt);
+      el('row-legals').textContent = fmt.format(legals);
+      el('row-cashin').textContent = fmt.format(cashIn);
+
+      el('row-loan').textContent = fmt.format(loanWithFee);
+      el('row-monthly').textContent = fmt2.format(mPay) + ' / mo';
+      el('row-cfy').textContent = fmt.format(postTaxAnnual);
+      el('row-cf5').textContent = fmt.format(postTax5y);
+      el('row-prin5').textContent = fmt.format(principalPaid);
+      el('row-fv').textContent = fmt.format(futureValue);
+      el('row-bal5').textContent = fmt.format(bal);
+      el('row-eqpre').textContent = fmt.format(equityBeforeRefi);
+      el('row-cashout').textContent = fmt.format(cashOut);
+      el('row-eqleft').textContent = fmt.format(equityLeft);
+
+      el('row-total').textContent = fmt.format(totalReturn);
+      el('row-multiple').textContent = multiple.toFixed(2) + '×';
+      el('row-apr').textContent = (apr * 100).toFixed(1) + '%';
+
+      // Colour hints for APR
+      el('kpi-apr').className = 'value ' + (apr >= 0.1 ? 'good' : (apr < 0 ? 'bad' : ''));
+    }
+
+    function resetDefaults() {
+      document.getElementById('purchase').value = 495000;
+      document.getElementById('rent').value = 38958;
+      document.getElementById('depositPct').value = 15;
+      document.getElementById('rate').value = 5.75;
+      document.getElementById('term').value = 35;
+      document.getElementById('opexPct').value = 5;
+      document.getElementById('insSafety').value = 900;
+      document.getElementById('feePct').value = 2;
+      document.getElementById('corpTax').value = 25;
+      document.getElementById('growth').value = 3;
+      document.getElementById('refiLtv').value = 85;
+      document.getElementById('legals').value = 3500;
+      document.getElementById('nrSurcharge').value = 0;
+      runCalc();
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', runCalc);
+    document.getElementById('resetBtn').addEventListener('click', resetDefaults);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    // Auto-calc on input changes
+    document.querySelectorAll('input').forEach(inp => inp.addEventListener('input', runCalc));
+
+    // Initial run
+    resetDefaults();
+  </script>
+</body>
+</html>
