@@ -1,144 +1,192 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Living CV — GitHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles/index.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">Living&nbsp;CV</a>
+        <ul class="nav-links">
+          <li><a class="active" href="index.html">Home</a></li>
+          <li><a class="active" href="cv.html">CV</a></li>
+        </ul>
+      </div>
+    </nav>
 
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="description" content="HTTrack is an easy-to-use website mirror utility. It allows you to download a World Wide website from the Internet to a local directory,building recursively all structures, getting html, images, and other files from the server to your computer. Links are rebuiltrelatively so that you can freely browse to the local site (works with any browser). You can mirror several sites together so that you can jump from one toanother. You can, also, update an existing mirror site, or resume an interrupted download. The robot is fully configurable, with an integrated help" />
-	<meta name="keywords" content="httrack, HTTRACK, HTTrack, winhttrack, WINHTTRACK, WinHTTrack, offline browser, web mirror utility, aspirateur web, surf offline, web capture, www mirror utility, browse offline, local  site builder, website mirroring, aspirateur www, internet grabber, capture de site web, internet tool, hors connexion, unix, dos, windows 95, windows 98, solaris, ibm580, AIX 4.0, HTS, HTGet, web aspirator, web aspirateur, libre, GPL, GNU, free software" />
-	<title>Local index - HTTrack Website Copier</title>
-  <!-- Mirror and index made by HTTrack Website Copier/3.49-2 [XR&CO'2014] -->
-	<style type="text/css">
-	<!--
+    <div class="wrap">
+      <!-- TOP ROW: GitHub | LinkedIn | Green-Wall -->
+      <section class="hero-v3">
+        <!-- GitHub -->
+        <article class="profile-card card link-card" id="gh-card">
+          <div class="row-identity">
+            <img id="avatar" class="avatar" alt="GitHub avatar" />
+            <div class="who">
+              <h1 id="name">Your Name</h1><img src="assets/github.svg" alt="Github Logo" style="width:16px; height:16px; vertical-align:middle; margin-left:4px;" />
+              <div class="username" id="login">@username</div>
+            </div>
+          </div>
 
-body {
-	margin: 0;  padding: 0;  margin-bottom: 15px;  margin-top: 8px;
-	background: #77b;
-}
-body, td {
-	font: 14px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-	}
+          <p id="bio" class="bio muted">Bio goes here…</p>
 
-#subTitle {
-	background: #000;  color: #fff;  padding: 4px;  font-weight: bold; 
-	}
+          <div class="meta">
+            <div id="location"></div>
+            <div id="blog"></div>
+            <div id="company"></div>
+            <div id="twitter"></div>
+          </div>
 
-#siteNavigation a, #siteNavigation .current {
-	font-weight: bold;  color: #448;
-	}
-#siteNavigation a:link    { text-decoration: none; }
-#siteNavigation a:visited { text-decoration: none; }
+          <div class="kpi-row">
+            <div class="kpi" id="followers">0 followers</div>
+            <div class="kpi" id="following">0 following</div>
+            <div class="kpi" id="public-repos">0 repos</div>
+          </div>
 
-#siteNavigation .current { background-color: #ccd; }
+          <!-- Invisible full-card link -->
+          <a
+            id="gh-url"
+            class="stretched-link"
+            href="#"
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Open GitHub profile"
+          ></a>
+        </article>
 
-#siteNavigation a:hover   { text-decoration: none;  background-color: #fff;  color: #000; }
-#siteNavigation a:active  { text-decoration: none;  background-color: #ccc; }
+        <!-- LinkedIn -->
+        <article class="profile-card card link-card" id="li-card">
+          <div class="row-identity">
+            <img id="li-avatar" class="avatar" alt="LinkedIn avatar" />
+            <div class="who">
+              <h1 id="li-name">Your Name</h1><img src="assets/linkedin.svg" alt="Linkedin Logo" style="width:16px; height:16px; vertical-align:middle; margin-left:4px;" />
+              <div class="username" id="li-handle">/in/your-handle</div>
+            </div>
+          </div>
 
+          <p id="li-headline" class="bio muted">Headline goes here…</p>
 
-a:link    { text-decoration: underline;  color: #00f; }
-a:visited { text-decoration: underline;  color: #000; }
-a:hover   { text-decoration: underline;  color: #c00; }
-a:active  { text-decoration: underline; }
+          <div class="kpi-row">
+            <div class="kpi" id="li-followers">— followers</div>
+            <div class="kpi" id="li-connections">— connections</div>
+            <div class="kpi" id="li-posts">Latest post below</div>
+          </div>
 
-#pageContent {
-	clear: both;
-	border-bottom: 6px solid #000;
-	padding: 10px;  padding-top: 20px;
-	line-height: 1.65em;
-	background-image: url(backblue.gif);
-	background-repeat: no-repeat;
-	background-position: top right;
-	}
+          <!-- Invisible full-card link -->
+          <a
+            id="li-url"
+            class="stretched-link"
+            href="#"
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Open LinkedIn profile"
+          ></a>
+        </article>
 
-#pageContent, #siteNavigation {
-	background-color: #ccd;
-	}
+        <!-- Green-Wall -->
+        <article class="greenwall-card card">
+          <img
+            id="gw"
+            class="gw"
+            alt="GitHub contributions"
+            src="https://green-wall.leoku.dev/api/og/share/cgarryZA?theme=Classic"
+            loading="lazy"
+            decoding="async"
+          />
+        </article>
+      </section>
 
+      <!-- Latest repo -->
+      <section class="card latest">
+        <h2 class="section-title">Latest Project</h2>
+        <a
+          id="latest-link"
+          class="repo latest-card"
+          href="#"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          <div class="latest-content">
+            <div>
+              <h3 id="repo-name">Repo Name</h3>
+              <p id="repo-desc" class="desc muted">No description</p>
+              <div class="badges">
+                <span id="repo-lang"></span>
+                <span id="repo-stars"></span>
+                <span id="repo-updated"></span>
+              </div>
+            </div>
+            <svg
+              class="chev"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              aria-hidden="true"
+            >
+              <path
+                d="M8.5 4.5l7 7-7 7"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </a>
+      </section>
 
-.imgLeft  { float: left;   margin-right: 10px;  margin-bottom: 10px; }
-.imgRight { float: right;  margin-left: 10px;   margin-bottom: 10px; }
+      <!-- Latest on LinkedIn -->
+      <section class="card li-card">
+        <h2 class="section-title">Latest on LinkedIn</h2>
+        <div id="li-embed" class="li-embed">
+          <a
+            id="li-fallback"
+            class="li-fallback"
+            href="#"
+            target="_blank"
+            rel="noreferrer noopener"
+            >View on LinkedIn</a
+          >
+        </div>
+      </section>
 
-hr { height: 1px;  color: #000;  background-color: #000;  margin-bottom: 15px; }
+      <!-- Latest CV Entry (from separate CV repo) -->
+      <section class="card cv-latest">
+        <h2 class="section-title">Latest CV Entry</h2>
 
-h1 { margin: 0;  font-weight: bold;  font-size: 2em; }
-h2 { margin: 0;  font-weight: bold;  font-size: 1.6em; }
-h3 { margin: 0;  font-weight: bold;  font-size: 1.3em; }
-h4 { margin: 0;  font-weight: bold;  font-size: 1.18em; }
+        <!-- White “paper” card that links to the full entry -->
+        <a
+          id="cv-latest-link"
+          class="paper"
+          href="#"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <div class="paper-inner">
+            <div class="paper-media">
+              <img id="cv-cover" class="paper-cover" alt="" />
+            </div>
+            <div class="paper-body">
+              <h3 id="cv-title" class="paper-title">—</h3>
+              <div id="cv-date" class="paper-date muted">—</div>
+              <p id="cv-snippet" class="paper-snippet clamp">—</p>
+              <div id="cv-badges" class="paper-badges"></div>
+            </div>
+          </div>
+        </a>
 
-.blak { background-color: #000; }
-.hide { display: none; }
-.tableWidth { min-width: 400px; }
+        <div
+          id="cv-error"
+          class="muted"
+          style="display: none; margin-top: 8px"
+        ></div>
+      </section>
+    </div>
 
-.tblRegular       { border-collapse: collapse; }
-.tblRegular td    { padding: 6px;  background-image: url(fade.gif);  border: 2px solid #99c; }
-.tblHeaderColor, .tblHeaderColor td { background: #99c; }
-.tblNoBorder td   { border: 0; }
-
-
-// -->
-</style>
-
-</head>
-
-<table width="76%" border="0" align="center" cellspacing="0" cellpadding="3" class="tableWidth">
-	<tr>
-	<td id="subTitle">HTTrack Website Copier - Open Source offline browser</td>
-	</tr>
-</table>
-<table width="76%" border="0" align="center" cellspacing="0" cellpadding="0" class="tableWidth">
-<tr class="blak">
-<td>
-	<table width="100%" border="0" align="center" cellspacing="1" cellpadding="0">
-	<tr>
-	<td colspan="6"> 
-		<table width="100%" border="0" align="center" cellspacing="0" cellpadding="10">
-		<tr> 
-		<td id="pageContent"> 
-<!-- ==================== End prologue ==================== -->
-
-	<meta name="generator" content="HTTrack Website Copier/3.x">
-	<TITLE>Local index - HTTrack</TITLE>
-</HEAD>
-<BODY>
-<H1 ALIGN=Center>Index of locally available sites:</H1>
-	<TABLE BORDER="0" WIDTH="100%" CELLSPACING="1" CELLPADDING="0">
-		<TR>
-			<TD BACKGROUND="fade.gif">
-				&middot;
-					<A HREF="christiangarry.com/index.html">
-						christiangarry.com
-					</A>		
-			</TD>
-		</TR>
-	</TABLE>
-	<BR>
-	<BR>
-	<BR>
-  	<H6 ALIGN="RIGHT">
-	<I>Mirror and index made by HTTrack Website Copier [XR&amp;CO'2008]</I>
-	</H6>
-	<!-- Mirror and index made by HTTrack Website Copier/3.49-2 [XR&CO'2014] -->
-	<!-- Thanks for using HTTrack Website Copier! -->
-	<meta HTTP-EQUIV="Refresh" CONTENT="0; URL=christiangarry.com/index.html">
-
-
-<!-- ==================== Start epilogue ==================== -->
-		</td>
-		</tr>
-		</table>
-	</td>
-	</tr>
-	</table>
-</td>
-</tr>
-</table>
-
-<table width="76%" border="0" align="center" valign="bottom" cellspacing="0" cellpadding="0">
-	<tr>
-	<td id="footer"><small>&copy; 2008 Xavier Roche & other contributors - Web Design: Leto Kauler.</small></td>
-	</tr>
-</table>
-
-</body>
-
+    <script src="scripts/index.js" defer></script>
+  </body>
 </html>
-
-

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CV — Christian Garry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles/index.css" />
+    <link rel="stylesheet" href="styles/cv.css" />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">Living&nbsp;CV</a>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a class="active" href="cv.html">CV</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="cv-toolbar">
+      <h1 style="margin:0;">Curriculum Vitae</h1>
+      <button id="toggle" class="cv-toggle" type="button" aria-pressed="false">
+        <span>Blog view</span>
+      </button>
+    </div>
+
+    <!-- PDF view -->
+    <div id="pdf-view" class="pdf-wrap">
+      <iframe id="cv-frame" class="pdf-frame" title="CV PDF" loading="lazy"></iframe>
+      <div class="muted" style="margin-top:8px;">
+        If the PDF doesn’t load, <a id="cv-raw-link" href="#" target="_blank" rel="noreferrer noopener">open it directly</a>.
+      </div>
+    </div>
+
+    <!-- Blog view -->
+    <section id="blog-view" style="display:none;">
+      <div id="cards" class="cards"></div>
+    </section>
+
+    <script src="scripts/cv.js" defer></script>
+  </body>
+</html>
