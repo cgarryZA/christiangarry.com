@@ -503,7 +503,31 @@ function initToggle() {
 /* =========================
    INIT
    ========================= */
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   initPdfView();
   initToggle();
+
+  // If URL is cv.html#blog or cv.html?view=blog, start in blog view directly
+  const hash = (window.location.hash || "").toLowerCase();
+  const params = new URLSearchParams(window.location.search);
+  const wantBlog = hash === "#blog" || params.get("view") === "blog";
+
+  if (wantBlog) {
+    const btn = document.querySelector("#toggle");
+    const pdf = document.querySelector("#pdf-view");
+    const blog = document.querySelector("#blog-view");
+    if (btn && pdf && blog) {
+      btn.setAttribute("aria-pressed", "true");
+      const span = btn.querySelector("span");
+      if (span) span.textContent = "PDF view";
+
+      pdf.style.display = "none";
+      blog.style.display = "";
+
+      if (!blog.dataset.built) {
+        await buildBlogCards();
+        blog.dataset.built = "1";
+      }
+    }
+  }
 });

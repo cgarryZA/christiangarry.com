@@ -4,6 +4,15 @@
     <meta charset="utf-8" />
     <title>CV — Christian Garry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Fonts to match homepage -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;400;500&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="styles/index.css" />
     <link rel="stylesheet" href="styles/cv.css" />
   </head>
@@ -19,7 +28,7 @@
     </nav>
 
     <div class="cv-toolbar">
-      <h1 style="margin:0;">Curriculum Vitae</h1>
+      <h1 class="cv-title">Curriculum Vitae</h1>
       <button id="toggle" class="cv-toggle" type="button" aria-pressed="false">
         <span>Blog view</span>
       </button>
@@ -27,14 +36,26 @@
 
     <!-- PDF view -->
     <div id="pdf-view" class="pdf-wrap">
-      <iframe id="cv-frame" class="pdf-frame" title="CV PDF" loading="lazy"></iframe>
-      <div class="muted" style="margin-top:8px;">
-        If the PDF doesn’t load, <a id="cv-raw-link" href="#" target="_blank" rel="noreferrer noopener">open it directly</a>.
+      <iframe
+        id="cv-frame"
+        class="pdf-frame"
+        title="CV PDF"
+        loading="lazy"
+      ></iframe>
+      <div class="muted cv-hint">
+        If the PDF doesn’t load,
+        <a
+          id="cv-raw-link"
+          href="#"
+          target="_blank"
+          rel="noreferrer noopener"
+          >open it directly</a
+        >.
       </div>
     </div>
 
     <!-- Blog view -->
-    <section id="blog-view" style="display:none;">
+    <section id="blog-view" style="display: none">
       <div id="cards" class="cards"></div>
     </section>
 

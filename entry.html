@@ -1,54 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Entry — Living CV</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="styles/index.css" />
-    <link rel="stylesheet" href="styles/cv.css" />
-    <style>
-      .entry-wrap { max-width: 1100px; margin: 16px auto; }
-      .entry-header { margin-bottom: 8px; }
-      .entry-title { margin: 0 0 4px; }
-      .entry-period { margin: 0 0 12px; }
-      .entry-media { margin: 12px 0; }
-      .entry-media img { max-width: 100%; height: auto; border-radius: 8px; }
-      .entry-section { margin: 16px 0; }
-      .embed-pdf { width: 100%; height: 70vh; border: none; border-radius: 12px; }
-      .buttonrow { display:flex; gap:8px; flex-wrap:wrap; margin-top: 12px; }
-      .badge { display:inline-block; padding:4px 8px; border:1px solid var(--line, #e5e7eb); border-radius:999px; text-decoration:none; font-size:12px; background:#fff; }
-      .xbadge { display:inline-block; padding:4px 8px; border-radius:999px; text-decoration:none; font-size:12px; color:#0b5fff; background:#e8f0ff; border:1px solid #cfe0ff; }
-      .muted { color: #6b7280; }
-    </style>
-  </head>
-  <body>
-    <nav class="nav">
-      <div class="nav-inner">
-        <a class="brand" href="index.html">Living&nbsp;CV</a>
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a class="active" href="cv.html">CV</a></li>
-        </ul>
-      </div>
-    </nav>
 
-    <div class="entry-wrap">
-      <header class="entry-header">
-        <h1 id="title" class="entry-title">—</h1>
-        <div id="period" class="entry-period muted">—</div>
-      </header>
+<head>
+  <meta charset="utf-8" />
+  <title>Entry — Living CV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-      <div id="cover" class="entry-media"></div>
+  <!-- Fonts to match site -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;400;500&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet" />
 
-      <section id="head" class="entry-section"></section>
-      <section id="body" class="entry-section"></section>
+  <link rel="stylesheet" href="styles/index.css" />
+  <link rel="stylesheet" href="styles/cv.css" />
+  <style>
+    .entry-wrap {
+      max-width: 1120px;
+      margin: 24px auto 40px;
+      padding: 0 20px;
+    }
 
-      <div class="buttonrow" id="xlinks"></div>
-      <div class="buttonrow" id="extlinks"></div>
+    /* NEW: Back button row */
+    .entry-nav {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 12px;
+    }
 
-      <div id="embeds"></div>
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line, rgba(15, 23, 42, 0.18));
+      background: #ffffff;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: #374151;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .back-button:hover {
+      background: #f9fafb;
+    }
+
+    .back-button-icon {
+      font-size: 0.9rem;
+    }
+
+    .entry-header {
+      margin-bottom: 12px;
+    }
+
+    .entry-title {
+      margin: 0 0 4px;
+      font-family: "Spectral", Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: 1.4rem;
+      letter-spacing: 0.02em;
+    }
+
+    .entry-period {
+      margin: 0 0 12px;
+      font-size: 0.92rem;
+    }
+
+    .entry-media {
+      margin: 14px 0;
+    }
+
+    .entry-media img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+      display: block;
+    }
+
+    .entry-section {
+      margin: 18px 0;
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+
+    .embed-pdf {
+      width: 100%;
+      height: 70vh;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+      margin-top: 16px;
+    }
+
+    .buttonrow {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border: 1px solid var(--line, rgba(15, 23, 42, 0.18));
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 12px;
+      background: #ffffff;
+      color: #1f2937;
+    }
+
+    .xbadge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 12px;
+      color: #0b5fff;
+      background: #e8f0ff;
+      border: 1px solid #cfe0ff;
+    }
+
+    .muted {
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">Living&nbsp;CV</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a class="active" href="cv.html">CV</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="entry-wrap">
+    <!-- NEW: Back to CV blog button -->
+    <div class="entry-nav">
+      <a href="cv.html#blog" class="back-button">
+        <span class="back-button-icon">←</span>
+        <span>Back to CV blog view</span>
+      </a>
     </div>
 
-    <script src="scripts/entry.js?v=9" defer></script>
-  </body>
+
+    <header class="entry-header">
+      <h1 id="title" class="entry-title">—</h1>
+      <div id="period" class="entry-period muted">—</div>
+    </header>
+
+    <div id="cover" class="entry-media"></div>
+
+    <section id="head" class="entry-section"></section>
+    <section id="body" class="entry-section"></section>
+
+    <div class="buttonrow" id="xlinks"></div>
+    <div class="buttonrow" id="extlinks"></div>
+
+    <div id="embeds"></div>
+  </div>
+
+  <script src="scripts/entry.js?v=9" defer></script>
+</body>
+
 </html>

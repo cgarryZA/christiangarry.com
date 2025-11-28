@@ -2,8 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Living CV — GitHub</title>
+    <title>Living CV — Christian Garry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Fonts (optional but nice) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;400;500&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="styles/index.css" />
   </head>
   <body>
@@ -13,81 +22,100 @@
         <a class="brand" href="index.html">Living&nbsp;CV</a>
         <ul class="nav-links">
           <li><a class="active" href="index.html">Home</a></li>
-          <li><a class="active" href="cv.html">CV</a></li>
+          <li><a href="cv.html">CV</a></li>
         </ul>
       </div>
     </nav>
 
     <div class="wrap">
-      <!-- TOP ROW: GitHub | LinkedIn | Green-Wall -->
-      <section class="hero-v3">
-        <!-- GitHub -->
-        <article class="profile-card card link-card" id="gh-card">
-          <div class="row-identity">
-            <img id="avatar" class="avatar" alt="GitHub avatar" />
-            <div class="who">
-              <h1 id="name">Your Name</h1><img src="assets/github.svg" alt="Github Logo" style="width:16px; height:16px; vertical-align:middle; margin-left:4px;" />
-              <div class="username" id="login">@username</div>
+      <!-- HERO + NETWORKS -->
+      <section class="layout-hero">
+        <!-- HERO CARD: manual, site-specific -->
+        <article class="card hero-card">
+          <div class="hero-header">
+            <div class="hero-avatar-wrap">
+              <div class="hero-avatar">
+                <!-- swap for your own static avatar if you want -->
+                <span class="hero-avatar-initials">CG</span>
+              </div>
+            </div>
+            <div class="hero-copy">
+              <h1 class="hero-name">Christian Garry</h1>
+              <p class="hero-tagline">
+                Quant-leaning systems engineer working at the intersection of
+                probability, high-reliability systems, and code.
+              </p>
             </div>
           </div>
 
-          <p id="bio" class="bio muted">Bio goes here…</p>
-
-          <div class="meta">
-            <div id="location"></div>
-            <div id="blog"></div>
-            <div id="company"></div>
-            <div id="twitter"></div>
+          <div class="hero-body">
+            <p>
+              Durham-trained engineer building production-grade systems in
+              C++/Python, with a growing body of quantitative research in
+              financial engineering and alternative digital assets.
+            </p>
+            <p class="hero-meta">
+              <span>MEng Electronics · MSc Scientific Computing &amp; Data Analysis</span>
+              <span>Communications Engineer @ Siemens</span>
+            </p>
           </div>
+        </article>
 
-          <div class="kpi-row">
-            <div class="kpi" id="followers">0 followers</div>
-            <div class="kpi" id="following">0 following</div>
-            <div class="kpi" id="public-repos">0 repos</div>
-          </div>
+        <!-- NETWORKS CARD -->
+        <aside class="card networks-card" aria-label="Network profiles">
+          <h2 class="section-title">Networks</h2>
 
-          <!-- Invisible full-card link -->
+          <!-- GitHub chip -->
           <a
-            id="gh-url"
-            class="stretched-link"
+            id="net-gh-link"
+            class="net-chip net-chip-gh"
             href="#"
             target="_blank"
             rel="noreferrer noopener"
-            aria-label="Open GitHub profile"
-          ></a>
-        </article>
-
-        <!-- LinkedIn -->
-        <article class="profile-card card link-card" id="li-card">
-          <div class="row-identity">
-            <img id="li-avatar" class="avatar" alt="LinkedIn avatar" />
-            <div class="who">
-              <h1 id="li-name">Your Name</h1><img src="assets/linkedin.svg" alt="Linkedin Logo" style="width:16px; height:16px; vertical-align:middle; margin-left:4px;" />
-              <div class="username" id="li-handle">/in/your-handle</div>
+          >
+            <div class="net-chip-main">
+              <div class="net-icon-circle">
+                <img src="assets/github.svg" alt="GitHub" class="net-icon" />
+              </div>
+              <div class="net-text">
+                <div class="net-label">GitHub</div>
+                <div class="net-handle" id="net-gh-user">@cgarryZA</div>
+              </div>
             </div>
-          </div>
+            <div class="net-stats">
+              <span id="net-gh-followers">— followers</span>
+              <span id="net-gh-repos">— repos</span>
+            </div>
+          </a>
 
-          <p id="li-headline" class="bio muted">Headline goes here…</p>
-
-          <div class="kpi-row">
-            <div class="kpi" id="li-followers">— followers</div>
-            <div class="kpi" id="li-connections">— connections</div>
-            <div class="kpi" id="li-posts">Latest post below</div>
-          </div>
-
-          <!-- Invisible full-card link -->
+          <!-- LinkedIn chip -->
           <a
-            id="li-url"
-            class="stretched-link"
+            id="net-li-link"
+            class="net-chip net-chip-li"
             href="#"
             target="_blank"
             rel="noreferrer noopener"
-            aria-label="Open LinkedIn profile"
-          ></a>
-        </article>
+          >
+            <div class="net-chip-main">
+              <div class="net-icon-circle net-icon-li">
+                <img src="assets/linkedin.svg" alt="LinkedIn" class="net-icon" />
+              </div>
+              <div class="net-text">
+                <div class="net-label">LinkedIn</div>
+                <div class="net-handle" id="net-li-user">/in/your-handle</div>
+              </div>
+            </div>
+            <div class="net-stats">
+              <span id="net-li-connections">— connections</span>
+            </div>
+          </a>
+        </aside>
+      </section>
 
-        <!-- Green-Wall -->
-        <article class="greenwall-card card">
+      <!-- GITHUB ACTIVITY WALL (smaller) -->
+      <section class="card greenwall-section">
+        <h2 class="section-title">GitHub Activity</h2>
+        <div class="greenwall-inner">
           <img
             id="gw"
             class="gw"
@@ -96,97 +124,101 @@
             loading="lazy"
             decoding="async"
           />
-        </article>
-      </section>
-
-      <!-- Latest repo -->
-      <section class="card latest">
-        <h2 class="section-title">Latest Project</h2>
-        <a
-          id="latest-link"
-          class="repo latest-card"
-          href="#"
-          rel="noreferrer noopener"
-          target="_blank"
-        >
-          <div class="latest-content">
-            <div>
-              <h3 id="repo-name">Repo Name</h3>
-              <p id="repo-desc" class="desc muted">No description</p>
-              <div class="badges">
-                <span id="repo-lang"></span>
-                <span id="repo-stars"></span>
-                <span id="repo-updated"></span>
-              </div>
-            </div>
-            <svg
-              class="chev"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              aria-hidden="true"
-            >
-              <path
-                d="M8.5 4.5l7 7-7 7"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-        </a>
-      </section>
-
-      <!-- Latest on LinkedIn -->
-      <section class="card li-card">
-        <h2 class="section-title">Latest on LinkedIn</h2>
-        <div id="li-embed" class="li-embed">
-          <a
-            id="li-fallback"
-            class="li-fallback"
-            href="#"
-            target="_blank"
-            rel="noreferrer noopener"
-            >View on LinkedIn</a
-          >
         </div>
       </section>
 
-      <!-- Latest CV Entry (from separate CV repo) -->
-      <section class="card cv-latest">
-        <h2 class="section-title">Latest CV Entry</h2>
+      <!-- BOTTOM GRID: Latest project, LinkedIn post, CV entry -->
+      <section class="bottom-grid">
+        <!-- Latest repo -->
+        <section class="card latest">
+          <h2 class="section-title">Latest Project</h2>
+          <a
+            id="latest-link"
+            class="repo latest-card"
+            href="#"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            <div class="latest-content">
+              <div>
+                <h3 id="repo-name" class="repo-name">Repo Name</h3>
+                <p id="repo-desc" class="desc muted">No description</p>
+                <div class="badges">
+                  <span id="repo-lang"></span>
+                  <span id="repo-stars"></span>
+                  <span id="repo-updated"></span>
+                </div>
+              </div>
+              <svg
+                class="chev"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                aria-hidden="true"
+              >
+                <path
+                  d="M8.5 4.5l7 7-7 7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </a>
+        </section>
 
-        <!-- White “paper” card that links to the full entry -->
-        <a
-          id="cv-latest-link"
-          class="paper"
-          href="#"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <div class="paper-inner">
-            <div class="paper-media">
-              <img id="cv-cover" class="paper-cover" alt="" />
-            </div>
-            <div class="paper-body">
-              <h3 id="cv-title" class="paper-title">—</h3>
-              <div id="cv-date" class="paper-date muted">—</div>
-              <p id="cv-snippet" class="paper-snippet clamp">—</p>
-              <div id="cv-badges" class="paper-badges"></div>
-            </div>
+        <!-- Latest on LinkedIn -->
+        <section class="card li-card">
+          <h2 class="section-title">Latest on LinkedIn</h2>
+          <div id="li-embed" class="li-embed">
+            <a
+              id="li-fallback"
+              class="li-fallback"
+              href="#"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              View on LinkedIn
+            </a>
           </div>
-        </a>
+        </section>
 
-        <div
-          id="cv-error"
-          class="muted"
-          style="display: none; margin-top: 8px"
-        ></div>
+        <!-- Latest CV Entry -->
+        <section class="card cv-latest">
+          <h2 class="section-title">Latest CV Entry</h2>
+
+          <!-- White “paper” card that links to the full entry -->
+          <a
+            id="cv-latest-link"
+            class="paper"
+            href="#"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <div class="paper-inner">
+              <div class="paper-media">
+                <img id="cv-cover" class="paper-cover" alt="" />
+              </div>
+              <div class="paper-body">
+                <h3 id="cv-title" class="paper-title">—</h3>
+                <div id="cv-date" class="paper-date muted">—</div>
+                <p id="cv-snippet" class="paper-snippet clamp">—</p>
+                <div id="cv-badges" class="paper-badges"></div>
+              </div>
+            </div>
+          </a>
+
+          <div
+            id="cv-error"
+            class="muted"
+            style="display: none; margin-top: 8px"
+          ></div>
+        </section>
       </section>
     </div>
 
-    <script src="scripts/index.js?v=3" defer></script>
+    <script src="scripts/index.js?v=4" defer></script>
   </body>
 </html>
