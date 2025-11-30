@@ -5,7 +5,6 @@
     <title>Living CV — Christian Garry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Fonts (optional but nice) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -28,22 +27,23 @@
     </nav>
 
     <div class="wrap">
-      <!-- HERO + NETWORKS -->
       <section class="layout-hero">
-        <!-- HERO CARD: manual, site-specific -->
         <article class="card hero-card">
           <div class="hero-header">
             <div class="hero-avatar-wrap">
               <div class="hero-avatar">
-                <!-- swap for your own static avatar if you want -->
-                <span class="hero-avatar-initials">CG</span>
+                <img
+                  src="assets/me.png"
+                  alt="Christian Garry"
+                  class="hero-avatar-initials"
+                />
               </div>
             </div>
             <div class="hero-copy">
               <h1 class="hero-name">Christian Garry</h1>
               <p class="hero-tagline">
-                Quant-leaning systems engineer working at the intersection of
-                probability, high-reliability systems, and code.
+                Building mathematically-driven, high-performance software with a
+                focus on probability and stochastic modelling.
               </p>
             </div>
           </div>
@@ -51,11 +51,14 @@
           <div class="hero-body">
             <p>
               Durham-trained engineer building production-grade systems in
-              C++/Python, with a growing body of quantitative research in
-              financial engineering and alternative digital assets.
+              C++/Python, with active research-driven projects in quantitative
+              finance and alternative digital asset markets.
             </p>
             <p class="hero-meta">
-              <span>MEng Electronics · MSc Scientific Computing &amp; Data Analysis</span>
+              <span
+                >MEng Electronics · MSc Scientific Computing &amp; Data
+                Analysis</span
+              >
               <span>Communications Engineer @ Siemens</span>
             </p>
           </div>
@@ -98,7 +101,11 @@
           >
             <div class="net-chip-main">
               <div class="net-icon-circle net-icon-li">
-                <img src="assets/linkedin.svg" alt="LinkedIn" class="net-icon" />
+                <img
+                  src="assets/linkedin.svg"
+                  alt="LinkedIn"
+                  class="net-icon"
+                />
               </div>
               <div class="net-text">
                 <div class="net-label">LinkedIn</div>
@@ -113,60 +120,25 @@
       </section>
 
       <!-- GITHUB ACTIVITY WALL (smaller) -->
-      <section class="card greenwall-section">
+      <section class="card greenwall-card">
         <h2 class="section-title">GitHub Activity</h2>
-        <div class="greenwall-inner">
-          <img
-            id="gw"
-            class="gw"
-            alt="GitHub contributions"
-            src="https://green-wall.leoku.dev/api/og/share/cgarryZA?theme=Classic"
-            loading="lazy"
-            decoding="async"
-          />
+        <img src="http://ghchart.rshah.org/cgarryZA" alt="Github chart" />
+      </section>
+
+      <!-- FEATURED PROJECTS STRIP -->
+      <section class="featured-wrap">
+        <h2 class="section-title">Featured Projects</h2>
+        <div id="featured-projects" class="featured-row">
         </div>
       </section>
 
+
       <!-- BOTTOM GRID: Latest project, LinkedIn post, CV entry -->
       <section class="bottom-grid">
-        <!-- Latest repo -->
         <section class="card latest">
-          <h2 class="section-title">Latest Project</h2>
-          <a
-            id="latest-link"
-            class="repo latest-card"
-            href="#"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            <div class="latest-content">
-              <div>
-                <h3 id="repo-name" class="repo-name">Repo Name</h3>
-                <p id="repo-desc" class="desc muted">No description</p>
-                <div class="badges">
-                  <span id="repo-lang"></span>
-                  <span id="repo-stars"></span>
-                  <span id="repo-updated"></span>
-                </div>
-              </div>
-              <svg
-                class="chev"
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                aria-hidden="true"
-              >
-                <path
-                  d="M8.5 4.5l7 7-7 7"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          </a>
+          <h2 class="section-title">Latest Projects</h2>
+          <div id="repo-list" class="repo-list">
+          </div>
         </section>
 
         <!-- Latest on LinkedIn -->
@@ -184,38 +156,37 @@
             </a>
           </div>
         </section>
+      </section>
 
-        <!-- Latest CV Entry -->
-        <section class="card cv-latest">
-          <h2 class="section-title">Latest CV Entry</h2>
+      <!-- Latest CV Entry -->
+      <section class="card cv-latest">
+        <h2 class="section-title">Latest CV Entry</h2>
 
-          <!-- White “paper” card that links to the full entry -->
-          <a
-            id="cv-latest-link"
-            class="paper"
-            href="#"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            <div class="paper-inner">
-              <div class="paper-media">
-                <img id="cv-cover" class="paper-cover" alt="" />
-              </div>
-              <div class="paper-body">
-                <h3 id="cv-title" class="paper-title">—</h3>
-                <div id="cv-date" class="paper-date muted">—</div>
-                <p id="cv-snippet" class="paper-snippet clamp">—</p>
-                <div id="cv-badges" class="paper-badges"></div>
-              </div>
+        <a
+          id="cv-latest-link"
+          class="paper"
+          href="#"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <div class="paper-inner">
+            <div class="paper-media">
+              <img id="cv-cover" class="paper-cover" alt="" />
             </div>
-          </a>
+            <div class="paper-body">
+              <h3 id="cv-title" class="paper-title">—</h3>
+              <div id="cv-date" class="paper-date muted">—</div>
+              <p id="cv-snippet" class="paper-snippet clamp">—</p>
+              <div id="cv-badges" class="paper-badges"></div>
+            </div>
+          </div>
+        </a>
 
-          <div
-            id="cv-error"
-            class="muted"
-            style="display: none; margin-top: 8px"
-          ></div>
-        </section>
+        <div
+          id="cv-error"
+          class="muted"
+          style="display: none; margin-top: 8px"
+        ></div>
       </section>
     </div>
 

@@ -1,0 +1,16 @@
+[
+  {
+    "owner": "cgarryZA",
+    "repo": "christiangarry.com",
+    "title": "My Website",
+    "branch": "main",
+    "readme": "README.md"
+  },
+  {
+    "owner": "cgarryZA",
+    "repo": "real-estate-montecarlo",
+    "title": "Monte Carlo Real Estate Analysis",
+    "branch": "main",
+    "readme": "README.md"
+  }
+]
