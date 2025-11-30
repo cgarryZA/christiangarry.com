@@ -126,7 +126,7 @@ async function loadGithub() {
 }
 
 // =====================
-// Featured projects (pinned_projects.json + repo READMEs)
+// Featured projects (pinned_projects.json + repo READMEs / COVER.md)
 // =====================
 async function loadPinnedProjects() {
   const container = document.getElementById("featured-projects");
@@ -162,13 +162,17 @@ async function loadPinnedProjects() {
     if (!repo) continue;
 
     const branch = pin.branch || "main";
-    const readmePath = pin.readme || "README.md";
+    const readmePath = pin.readme || "README.md"; // can be COVER.md
     const title = pin.title || repo;
+
     const githubUrl =
       pin.githubUrl ||
       `https://github.com/${encodeURIComponent(owner)}/${encodeURIComponent(
         repo
       )}`;
+
+    // target for whole card: explicit target/url, else GitHub
+    const targetUrl = pin.target || pin.url || githubUrl;
 
     const rawUrl = `https://raw.githubusercontent.com/${encodeURIComponent(
       owner
@@ -180,14 +184,18 @@ async function loadPinnedProjects() {
       if (r.ok) {
         readmeText = await r.text();
       } else {
-        console.warn("[Featured] README fetch failed for", repo, r.status);
+        console.warn("[Featured] README/COVER fetch failed for", repo, r.status);
       }
     } catch (e) {
-      console.warn("[Featured] README fetch error for", repo, e);
+      console.warn("[Featured] README/COVER fetch error for", repo, e);
     }
 
-    const card = document.createElement("article");
+    // Make whole card an <a> so it's entirely clickable
+    const card = document.createElement("a");
     card.className = "card featured-card";
+    card.href = targetUrl;
+    card.target = "_blank";
+    card.rel = "noreferrer noopener";
 
     const inner = document.createElement("div");
     inner.className = "featured-inner";
@@ -198,13 +206,13 @@ async function loadPinnedProjects() {
 
     const meta = document.createElement("p");
     meta.className = "featured-meta";
-    meta.innerHTML = `<a href="${githubUrl}" target="_blank" rel="noreferrer noopener">View on GitHub</a>`;
+    meta.innerHTML = `<span>View on GitHub</span>`;
 
     const body = document.createElement("div");
     body.className = "featured-body";
     body.innerHTML = readmeText
       ? mdToHtmlFeatured(readmeText)
-      : "<p><em>README not available.</em></p>";
+      : "<p><em>Abstract not available.</em></p>";
 
     inner.appendChild(h3);
     inner.appendChild(meta);
@@ -402,6 +410,7 @@ function parseFrontMatter(md) {
   return { meta, body };
 }
 
+// naive snippet: strip markdown and truncate
 function makeSnippet(md) {
   let s = String(md || "");
   s = s.replace(/```[\s\S]*?```/g, "");
@@ -461,6 +470,7 @@ function saveLocalCvCache(obj) {
   try {
     localStorage.setItem(CV_LOCAL_CACHE_KEY, JSON.stringify(obj));
   } catch {
+    /* ignore */
   }
 }
 
