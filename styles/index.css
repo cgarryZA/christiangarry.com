@@ -217,11 +217,17 @@ body {
 }
 
 /* Greenwall Card ---------------------------------------- */
+.greenwall-card {
+  overflow: hidden; /* prevent chart from overflowing the card */
+}
+
 .greenwall-card img,
 .greenwall-inner img {
+  display: block;
+  max-width: 100%;
   width: 100%;
+  height: auto;           /* natural aspect ratio */
   border-radius: 12px;
-  height: 200px;
   object-fit: cover;
 }
 
@@ -405,6 +411,7 @@ body {
 .featured-card {
   flex: 0 0 400px;
   width: 400px;
+  max-width: 100%; /* never wider than its column / viewport */
   height: 500px;
   border-radius: 10px;
   border: 1px solid rgba(15, 23, 42, 0.18);
@@ -417,10 +424,11 @@ body {
   transition:
     box-shadow 0.16s ease,
     border-color 0.16s ease,
-    background 0.16s ease;   /* no transform here */
+    background 0.16s ease;  /* no transform here */
 }
 
 .featured-card:hover {
+  /* outer frame stays put */
   border-color: var(--accent);
   background: #fffdf6;
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
@@ -428,7 +436,7 @@ body {
 
 .featured-inner {
   position: relative;
-  background: #fdf7ec;
+  background: #faf7f1;
   border-radius: 4px;
   padding: 18px 22px 20px;
   display: flex;
@@ -436,6 +444,19 @@ body {
   height: 100%;
   width: 100%;
   transition: transform 0.16s ease;
+  overflow: hidden;
+}
+
+.featured-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("../assets/paperboard-texture.jpg");
+  background-repeat: repeat;
+  background-size: 250px 250px;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
 }
 
 .featured-card:hover .featured-inner {
@@ -497,4 +518,12 @@ body {
 .featured-body ul {
   margin: 0.2em 0 0.6em 1.1em;
   padding: 0;
+}
+
+/* Mobile tweaks for featured cards ---------------------- */
+@media (max-width: 700px) {
+  .featured-card {
+    flex: 0 0 100%;
+    width: 100%;   /* full-width card; no horizontal overflow */
+  }
 }
