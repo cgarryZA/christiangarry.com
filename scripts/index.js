@@ -9,7 +9,8 @@ const CV_REPO_NAME = "CV";
 const CV_ENTRIES_DIR = "entries";
 const CV_BRANCH = "main";
 
-const CV_LOCAL_CACHE_KEY = "cv_index_cache_v1";
+// Bumped cache key so older cached entry lists don't stick for 24h after changes
+const CV_LOCAL_CACHE_KEY = "cv_index_cache_v2";
 const CV_LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 
 // ---- helpers
@@ -410,17 +411,42 @@ function parseFrontMatter(md) {
   return { meta, body };
 }
 
-// naive snippet: strip markdown and truncate
+/**
+ * Snippet generator:
+ * - strips common CV section headings (Head/Body/Short CV Snippet) entirely
+ * - strips markdown
+ * - ensures we never start with "Head ..." on the landing card
+ */
 function makeSnippet(md) {
   let s = String(md || "");
+
+  // Remove whole lines that are just these headings (before we collapse whitespace)
+  // Handles: "# Head", "### Head", "### Short CV Snippet (LaTeX)", etc.
+  s = s.replace(
+    /^\s*#{1,6}\s*(Head|Body|Short\s+CV\s+Snippet(?:\s*\([^)]+\))?)\s*$/gim,
+    ""
+  );
+
+  // Also nuke fenced code blocks & common markdown constructs
   s = s.replace(/```[\s\S]*?```/g, "");
   s = s.replace(/!\[[^\]]*]\([^)]+\)/g, "");
   s = s.replace(/\[[^\]]*]\([^)]+\)/g, (m) =>
     m.replace(/\[|\]|\([^)]*\)/g, "")
   );
+
+  // Strip remaining heading markers (keeps the text)
   s = s.replace(/^#{1,6}\s+/gm, "");
+
+  // Strip other markdown chars
   s = s.replace(/[*_`>]/g, "");
+
+  // Collapse whitespace
   s = s.replace(/\s+/g, " ").trim();
+
+  // Final guard: if "Head" is still the very first token, remove it.
+  // (Only at the beginning, so we don't delete legit uses of "head" later.)
+  s = s.replace(/^Head\s*[-:–—]?\s+/i, "");
+
   if (s.length > 500) s = s.slice(0, 500).trim() + "…";
   return s || "—";
 }
@@ -527,7 +553,11 @@ async function loadLatestCvEntry() {
   }
 
   const entry = idx.entries[0];
-  const r = await fetch(entry.url, { cache: "no-store" });
+
+  // Cache-bust the markdown fetch so CDNs never show stale content after updates
+  const mdUrl = `${entry.url}?v=${Date.now()}`;
+
+  const r = await fetch(mdUrl, { cache: "no-store" });
   if (!r.ok) {
     if (errorEl) {
       errorEl.textContent = "Could not load latest entry.";
@@ -546,9 +576,7 @@ async function loadLatestCvEntry() {
     meta.date || (entry.path.match(/(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
   const snippet = makeSnippet(body);
   const coverRel = extractFirstImage(body, meta.cover);
-  const coverAbs = coverRel
-    ? resolveCoverURL(entry.url, coverRel)
-    : null;
+  const coverAbs = coverRel ? resolveCoverURL(entry.url, coverRel) : null;
 
   if (linkEl) {
     const entryId =
