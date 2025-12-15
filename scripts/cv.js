@@ -3,15 +3,21 @@
    ========================= */
 const CV_REPO_OWNER = "cgarryZA";
 const CV_REPO_NAME = "CV";
-const CV_ENTRIES_DIR = "entries";
-const CV_PDF_PATH = "cv.pdf";
 const CV_BRANCH = "main";
 
-const CV_CACHE_URL = "data/cv_cache.json";
-const CV_LOCAL_CACHE_KEY = "cv_index_cache_v1";
-const CV_LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const CV_PDF_PATH = "Christian_Timothy_Thomas_Garry_CV.pdf";
 
-const PLACEHOLDER_COVER = "assets/placeholder-cover.png";
+// Where entry markdown lives in your CV repo
+const CV_ENTRIES_DIR = "entries";
+
+// Optional: if you have a generated cache file you host (else it silently falls back)
+const CV_CACHE_URL = "data/cv_cache.json";
+
+// Local cache (list of entry files) to avoid hitting GitHub API too hard
+const CV_LOCAL_CACHE_KEY = "cv_index_cache_v2";
+const CV_LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
+
+const PLACEHOLDER_COVER = "assets/placeholder-cover.jpg";
 
 /* =========================
    HELPERS
@@ -21,6 +27,7 @@ const $ = (s) => document.querySelector(s);
 function jsDelivrRaw(owner, repo, path, ref = "main") {
   return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${path}`;
 }
+
 function normSlashes(p) {
   return String(p || "").replace(/\\/g, "/");
 }
@@ -37,20 +44,88 @@ function resolveCoverURL(rawMdUrl, cover) {
   if (!cover) return null;
   let c = normSlashes(cover).replace(/^\.\//, "");
   if (/^https?:\/\//i.test(c)) return c;
+
   const baseDir = dirnameFromRaw(rawMdUrl);
   const root = repoRootFromRaw(rawMdUrl);
-  if (c.startsWith("assets/")) return root + c; // repo-root asset
-  return baseDir + c; // entry-relative
+  if (c.startsWith("assets/")) return root + c;
+  return baseDir + c;
 }
 
-/* ---------- Front matter ---------- */
+function escapeHtml(s) {
+  return String(s).replace(
+    /[&<>"']/g,
+    (m) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[m])
+  );
+}
+
+/* Minimal markdown -> HTML for entry teasers */
+function mdToHtml(mdRaw) {
+  let md = String(mdRaw || "");
+
+  // strip fenced code blocks
+  md = md.replace(/```[\s\S]*?```/g, "");
+
+  // images -> drop from teaser (cover is handled separately)
+  md = md.replace(/!\[[^\]]*]\([^)]+\)/g, "");
+
+  // links -> keep label only
+  md = md.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text) => escapeHtml(text));
+
+  // bold / italic
+  md = md.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  md = md.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+
+  // headings -> keep text
+  md = md.replace(/^\s*#{1,6}\s+/gm, "");
+
+  // bullet lists -> simple
+  md = md.replace(
+    /(^|\n)(- [^\n]+(?:\n- [^\n]+)*)/g,
+    (full, lead, block) => {
+      const items = block
+        .split("\n")
+        .map((l) => l.replace(/^- /, "").trim())
+        .filter(Boolean);
+      const lis = items.map((txt) => `<li>${txt}</li>`).join("");
+      return `${lead}<ul>${lis}</ul>`;
+    }
+  );
+
+  // paragraphs
+  const parts = md
+    .split(/\n{2,}/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((block) =>
+      /^<(ul)/i.test(block) ? block : `<p>${escapeHtml(block)}</p>`
+    );
+
+  return parts.join("\n");
+}
+
+/* teaser = first <p> block */
+function firstParagraph(html) {
+  const paras = html.match(/<p>[\s\S]*?<\/p>/i);
+  return paras ? paras[0] : "";
+}
+
+/* Front-matter parser (simple key: value lines) */
 function parseFrontMatter(md) {
   if (!md.startsWith("---")) return { meta: {}, body: md };
   const end = md.indexOf("\n---", 3);
   if (end === -1) return { meta: {}, body: md };
+
   const raw = md.slice(3, end).trim();
   const body = md.slice(end + 4).replace(/^\s*\n/, "");
   const meta = {};
+
   raw.split(/\r?\n/).forEach((line) => {
     const m = line.match(/^([A-Za-z0-9_.-]+)\s*:\s*(.*)$/);
     if (m) {
@@ -60,21 +135,35 @@ function parseFrontMatter(md) {
       meta[k] = v;
     }
   });
+
   return { meta, body };
 }
 
-/* ---------- CV inclusion ---------- */
-function isCvIncluded(meta) {
-  const cvFlag = String(meta.cv || "")
-    .trim()
-    .toLowerCase();
-  const truthy = ["1", "true", "yes", "y", "on"];
-  if (truthy.includes(cvFlag)) return true;
-  const pub = String(meta.publish || "")
-    .toLowerCase()
-    .split(/[,;]/)
-    .map((s) => s.trim());
-  return pub.includes("cv");
+/* Split body into Head / Body sections if you use those markers */
+function splitHeadBody(body) {
+  const s = String(body || "");
+  const headIdx = s.search(/^\s*###\s*Head\s*$/im);
+  const bodyIdx = s.search(/^\s*###\s*Body\s*$/im);
+
+  // If markers not found, treat whole thing as body
+  if (headIdx === -1 && bodyIdx === -1) return { headMd: "", bodyMd: s };
+
+  let headMd = "";
+  let bodyMd = "";
+
+  if (headIdx !== -1) {
+    const headStart = s.slice(headIdx).replace(/^\s*###\s*Head\s*$/im, "");
+    if (bodyIdx !== -1 && bodyIdx > headIdx) {
+      headMd = headStart.slice(0, bodyIdx - headIdx).trim();
+      bodyMd = s.slice(bodyIdx).replace(/^\s*###\s*Body\s*$/im, "").trim();
+    } else {
+      headMd = headStart.trim();
+    }
+  } else if (bodyIdx !== -1) {
+    bodyMd = s.slice(bodyIdx).replace(/^\s*###\s*Body\s*$/im, "").trim();
+  }
+
+  return { headMd, bodyMd };
 }
 
 /* ---------- ordering ---------- */
@@ -104,6 +193,7 @@ const MONTHS = {
   dec: 12,
   december: 12,
 };
+
 function parseFallbackDate(dateStr) {
   if (!dateStr) return new Date(1900, 0, 1);
   const fmts = [
@@ -123,159 +213,23 @@ function parseFallbackDate(dateStr) {
   }
   return new Date(1900, 0, 1);
 }
+
 function parsePeriodStart(period, fallbackDate) {
   if (typeof period !== "string" || !period.trim())
     return parseFallbackDate(fallbackDate);
+
   const left = period.replace(/[—–]/g, "-").split("-", 1)[0].trim();
   const tokens = left.replace(",", " ").split(/\s+/).filter(Boolean);
   if (!tokens.length) return parseFallbackDate(fallbackDate);
+
   if (tokens.length >= 2) {
     const m = tokens[0].toLowerCase();
     const y = tokens.slice(1).find((t) => /^\d{4}$/.test(t));
     if (MONTHS[m] && y) return new Date(+y, MONTHS[m] - 1, 1);
   }
+
   if (/^\d{4}$/.test(tokens[0])) return new Date(+tokens[0], 0, 1);
   return parseFallbackDate(fallbackDate);
-}
-
-/* =========================================
-   SECTION PARSER (robust marker scanner)
-   =========================================
-   We only care about these markers (case-insensitive):
-     ### Head
-     ### Body
-     ### Short CV Snippet (LaTeX)      <-- we exclude this and everything under it
-*/
-function scanMarkers(md) {
-  const re =
-    /^\s*###\s*(Head|Body|Short\s+CV\s+Snippet(?:\s*\(LaTeX\))?)\s*$/gim;
-  const hits = [];
-  let m;
-  while ((m = re.exec(md)) !== null) {
-    hits.push({
-      name: m[1].toLowerCase(),
-      start: m.index,
-      endOfLine: re.lastIndex,
-    });
-  }
-  return hits;
-}
-
-function sliceBetween(md, startIdx, nextIdx) {
-  const s = startIdx;
-  const e = nextIdx === null || nextIdx === undefined ? md.length : nextIdx;
-  // capture from end-of-marker line to just before next marker
-  const afterMarkerNL = md.indexOf("\n", s);
-  const from = afterMarkerNL === -1 ? e : afterMarkerNL + 1;
-  return md.slice(from, e).trim();
-}
-
-function splitHeadBody(md) {
-  const markers = scanMarkers(md);
-  if (!markers.length) {
-    // no markers at all: everything is "Head" teaser
-    return { headMd: md.trim(), bodyMd: "" };
-  }
-  // Find indices for each marker
-  let headRange = null;
-  let bodyRange = null;
-
-  for (let i = 0; i < markers.length; i++) {
-    const cur = markers[i];
-    const next = markers[i + 1];
-    const nextStart = next ? next.start : md.length;
-
-    if (cur.name.startsWith("head")) {
-      headRange = sliceBetween(md, cur.start, nextStart);
-    } else if (cur.name.startsWith("body")) {
-      // stop Body at next marker or EOF, but NOT into Short CV Snippet
-      bodyRange = sliceBetween(md, cur.start, nextStart);
-    } else if (cur.name.startsWith("short cv snippet")) {
-      // everything after here is LaTeX — ignore (do not include in head/body)
-      break;
-    }
-  }
-
-  return {
-    headMd: (headRange || "").trim(),
-    bodyMd: (bodyRange || "").trim(),
-  };
-}
-
-/* ---------- strip helpers (defensive) ---------- */
-function stripShortCvSnippet(md) {
-  // Remove the "Short CV Snippet (LaTeX)" block entirely (from its header to next marker or EOF)
-  return md
-    .replace(
-      /^\s*###\s*Short\s+CV\s+Snippet(?:\s*\(LaTeX\))?\s*[\r\n]+[\s\S]*$/gim,
-      ""
-    )
-    .trim();
-}
-function stripSpecialBlockquotes(md) {
-  // Not strictly necessary for list view, but keeps noise down if present
-  return md
-    .replace(/^\s*>\s*_?Cross-?linked\s+to[\s\S]*$/gim, "")
-    .replace(/^\s*>\s*Transcript:\s*.*$/gim, "")
-    .trim();
-}
-
-/* ---------- minimal markdown → HTML ---------- */
-function mdToHtml(md) {
-  md = stripShortCvSnippet(md);
-  md = stripSpecialBlockquotes(md);
-  md = md.replace(/```[\s\S]*?```/g, ""); // nuke fenced code blocks
-  md = md.replace(/^\s*---\s*$/gm, ""); // strip standalone rules
-
-  // images
-  md = md.replace(
-    /!\[([^\]]*)\]\(([^)]+)\)/g,
-    (_, alt, src) => `<img alt="${escapeHtml(alt)}" src="${escapeHtml(src)}" />`
-  );
-  // links
-  md = md.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    (_, text, href) =>
-      `<a href="${escapeHtml(
-        href
-      )}" target="_blank" rel="noreferrer noopener">${escapeHtml(text)}</a>`
-  );
-  // emphasis
-  md = md.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  md = md.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-  // headings
-  md = md.replace(/^\s*###\s+(.+)$/gm, "<h3>$1</h3>");
-  md = md.replace(/^\s*##\s+(.+)$/gm, "<h2>$1</h2>");
-  md = md.replace(/^\s*#\s+(.+)$/gm, "<h1>$1</h1>");
-  // simple bullets
-  md = md.replace(
-    /(^|\n)-\s+(.+)(?=(\n-|\n\n|$))/g,
-    (m, pfx, item) => `${pfx}<ul><li>${item.trim()}</li></ul>`
-  );
-  // paragraphs
-  const parts = md
-    .split(/\n{2,}/)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((block) =>
-      /^<(h\d|ul|img)/i.test(block) ? block : `<p>${block}</p>`
-    );
-  return parts.join("\n");
-}
-function escapeHtml(s) {
-  return String(s).replace(
-    /[&<>"']/g,
-    (m) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[
-        m
-      ])
-  );
-}
-
-/* teaser = first <p> block (skip headings if Head starts with ### Title) */
-function firstParagraph(html) {
-  const paras = html.match(/<p>[\s\S]*?<\/p>/i);
-  return paras ? paras[0] : "";
 }
 
 /* =========================
@@ -290,6 +244,7 @@ async function fetchCvCacheJson() {
     return null;
   }
 }
+
 function loadLocalCache() {
   try {
     const raw = localStorage.getItem(CV_LOCAL_CACHE_KEY);
@@ -302,6 +257,7 @@ function loadLocalCache() {
     return null;
   }
 }
+
 function saveLocalCache(obj) {
   try {
     localStorage.setItem(CV_LOCAL_CACHE_KEY, JSON.stringify(obj));
@@ -312,8 +268,11 @@ async function fetchCvEntriesFromApi() {
   const listUrl = `https://api.github.com/repos/${CV_REPO_OWNER}/${CV_REPO_NAME}/contents/${CV_ENTRIES_DIR}`;
   const r = await fetch(listUrl);
   if (!r.ok) throw new Error(`CV list ${r.status}`);
+
   const files = await r.json();
   const mdFiles = files.filter((f) => /\.md$/i.test(f.name));
+
+  // sort by filename date prefix if present (YYYY-MM-DD-title.md)
   mdFiles.sort((a, b) => {
     const da = a.name.match(/^(\d{4}-\d{2}-\d{2})/);
     const db = b.name.match(/^(\d{4}-\d{2}-\d{2})/);
@@ -321,6 +280,7 @@ async function fetchCvEntriesFromApi() {
     const tb = db ? new Date(db[1]).getTime() : 0;
     return tb - ta || b.name.localeCompare(a.name);
   });
+
   return {
     entries: mdFiles.map((f) => ({
       path: f.path,
@@ -361,9 +321,11 @@ async function buildBlogCards() {
   for (const e of entries) {
     const r = await fetch(e.url, { cache: "no-store" });
     if (!r.ok) continue;
+
     const md = await r.text();
     const { meta, body } = parseFrontMatter(md);
-    if (!isCvIncluded(meta)) continue;
+
+    // ✅ IMPORTANT: include ALL entries (ignore cv:true entirely)
 
     // Split strictly by markers
     const { headMd, bodyMd } = splitHeadBody(body);
@@ -398,6 +360,7 @@ async function buildBlogCards() {
     });
   }
 
+  // Newest first
   items.sort((a, b) => b.sortDate - a.sortDate);
 
   for (const it of items) {
@@ -410,6 +373,7 @@ async function buildBlogCards() {
 
     const media = document.createElement("div");
     media.className = "paper-media";
+
     const img = document.createElement("img");
     img.className = "paper-cover";
     img.src = it.coverAbs;
@@ -441,6 +405,7 @@ async function buildBlogCards() {
     badges.className = "paper-badges";
     badges.appendChild(makeBadge(it.ghUrl, "View on GitHub"));
 
+    // Whole card clickable
     const link = document.createElement("a");
     link.href = it.entryUrl;
     link.className = "stretched-link";
@@ -466,15 +431,12 @@ function initPdfView() {
   const frame = $("#cv-frame");
   const rawLink = $("#cv-raw-link");
   if (!frame) return;
-  const pdfUrl = jsDelivrRaw(
-    CV_REPO_OWNER,
-    CV_REPO_NAME,
-    CV_PDF_PATH,
-    CV_BRANCH
-  );
+
+  const pdfUrl = jsDelivrRaw(CV_REPO_OWNER, CV_REPO_NAME, CV_PDF_PATH, CV_BRANCH);
   frame.src = pdfUrl + "#toolbar=0&navpanes=0&scrollbar=0&zoom=page-width";
   if (rawLink) rawLink.href = pdfUrl;
 }
+
 function initToggle() {
   const btn = $("#toggle");
   const pdf = $("#pdf-view");
@@ -484,8 +446,10 @@ function initToggle() {
   btn.addEventListener("click", async () => {
     const isBlog = btn.getAttribute("aria-pressed") === "true";
     const next = !isBlog;
+
     btn.setAttribute("aria-pressed", String(next));
     btn.querySelector("span").textContent = next ? "PDF view" : "Blog view";
+
     if (next) {
       pdf.style.display = "none";
       blog.style.display = "";
