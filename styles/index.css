@@ -566,19 +566,6 @@ body {
 }
 
 /* HERO ROW ------------------------------------------------ */
-.hero-row {
-  grid-template-columns: 200px 1fr 240px;
-  display: grid;
-  gap: 22px;
-  align-items: stretch;
-}
-
-.hero-row {
-  grid-template-columns: 0.9fr 2.6fr 1.1fr;
-  min-height: 260px;
-  height: auto;
-  align-items: stretch;
-}
 
 .hero-avatar-card {
   display: flex;
@@ -632,6 +619,10 @@ body {
 }
 
 .hero-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 22px;
+  min-height: 260px;
   align-items: stretch;
 }
 
