@@ -572,7 +572,8 @@ body {
   grid-template-columns: 200px 1fr 240px;
   gap: 22px;
   align-items: stretch;
-  height: 260px; /* 👈 pin height */
+  min-height: 260px;
+  height: auto;
 }
 
 .hero-avatar-card {
@@ -623,4 +624,16 @@ body {
     height: auto;
     grid-template-columns: 1fr;
   }
+}
+
+.hero-row {
+  align-items: stretch;
+}
+
+.hero-avatar-large {
+  object-fit: cover;
+}
+
+.hero-bio-card {
+  max-width: 900px;
 }
