@@ -50,8 +50,40 @@
       font-size: 0.9rem;
     }
 
+    /* ===== Header layout ===== */
     .entry-header {
       margin-bottom: 12px;
+    }
+
+    .entry-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .entry-coverbox {
+      width: 120px;
+      height: 120px;
+      flex: 0 0 120px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(15, 23, 42, 0.06);
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .entry-coverbox img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .entry-meta {
+      flex: 1;
+      min-width: 0;
     }
 
     .entry-title {
@@ -63,8 +95,60 @@
     }
 
     .entry-period {
-      margin: 0 0 12px;
+      margin: 0;
       font-size: 0.92rem;
+    }
+
+    .buttonrow {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    /* External buttons */
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border: 1px solid var(--line, rgba(15, 23, 42, 0.18));
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 12px;
+      background: #ffffff;
+      color: #1f2937;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .badge:hover {
+      background: #f9fafb;
+    }
+
+    /* Internal crosslink buttons */
+    .xbadge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 12px;
+      color: #0b5fff;
+      background: #e8f0ff;
+      border: 1px solid #cfe0ff;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .xbadge:hover {
+      background: #dce8ff;
+    }
+
+    .muted {
+      color: #6b7280;
+    }
+
+    /* Content */
+    .entry-section {
+      margin: 18px 0;
+      font-size: 0.96rem;
+      line-height: 1.6;
     }
 
     .entry-media {
@@ -79,12 +163,6 @@
       display: block;
     }
 
-    .entry-section {
-      margin: 18px 0;
-      font-size: 0.96rem;
-      line-height: 1.6;
-    }
-
     .embed-pdf {
       width: 100%;
       height: 70vh;
@@ -94,37 +172,17 @@
       margin-top: 16px;
     }
 
-    .buttonrow {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
+    @media (max-width: 680px) {
+      .entry-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
 
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border: 1px solid var(--line, rgba(15, 23, 42, 0.18));
-      border-radius: 999px;
-      text-decoration: none;
-      font-size: 12px;
-      background: #ffffff;
-      color: #1f2937;
-    }
-
-    .xbadge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      text-decoration: none;
-      font-size: 12px;
-      color: #0b5fff;
-      background: #e8f0ff;
-      border: 1px solid #cfe0ff;
-    }
-
-    .muted {
-      color: #6b7280;
+      .entry-coverbox {
+        width: 96px;
+        height: 96px;
+        flex: 0 0 96px;
+      }
     }
   </style>
 </head>
@@ -148,24 +206,28 @@
       </a>
     </div>
 
-
     <header class="entry-header">
-      <h1 id="title" class="entry-title">—</h1>
-      <div id="period" class="entry-period muted">—</div>
-    </header>
+      <div class="entry-top">
+        <div id="cover" class="entry-coverbox" aria-label="Entry cover"></div>
 
-    <div id="cover" class="entry-media"></div>
+        <div class="entry-meta">
+          <h1 id="title" class="entry-title">—</h1>
+          <div id="period" class="entry-period muted">—</div>
+
+          <!-- Buttons sit here now (top under title/period) -->
+          <div class="buttonrow" id="xlinks"></div>
+          <div class="buttonrow" id="extlinks"></div>
+        </div>
+      </div>
+    </header>
 
     <section id="head" class="entry-section"></section>
     <section id="body" class="entry-section"></section>
 
-    <div class="buttonrow" id="xlinks"></div>
-    <div class="buttonrow" id="extlinks"></div>
-
     <div id="embeds"></div>
   </div>
 
-  <script src="scripts/entry.js?v=9" defer></script>
+  <script src="scripts/entry.js?v=10" defer></script>
 </body>
 
 </html>
