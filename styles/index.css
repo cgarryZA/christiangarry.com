@@ -527,3 +527,49 @@ body {
     width: 100%;   /* full-width card; no horizontal overflow */
   }
 }
+
+/* HERO ROW ------------------------------------------------ */
+.hero-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 260px;
+  gap: 22px;
+  align-items: stretch;
+}
+
+@media (max-width: 1000px) {
+  .hero-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* AVATAR CARD -------------------------------------------- */
+.hero-avatar-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-avatar-large {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* BIO CARD ----------------------------------------------- */
+.hero-bio-card {
+  padding: 24px;
+}
+
+.hero-bio-card .hero-name {
+  margin-top: 0;
+}
+
+/* SOCIALS CARD ------------------------------------------- */
+.hero-socials-card {
+  padding: 18px;
+}
+
+.hero-socials-card .net-chip {
+  margin-bottom: 12px;
+}

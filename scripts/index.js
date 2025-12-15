@@ -112,9 +112,9 @@ async function loadGithub() {
   const netGhLink = $("#net-gh-link");
   if (netGhLink) netGhLink.href = ghUrl;
 
-  setTextById("net-gh-user", "@" + (u.login || GITHUB_USERNAME));
-  setTextById("net-gh-followers", `${nf.format(u.followers ?? 0)} followers`);
-  setTextById("net-gh-repos", `${nf.format(u.public_repos ?? 0)} repos`);
+  //setTextById("net-gh-user", "@" + (u.login || GITHUB_USERNAME));
+  //setTextById("net-gh-followers", `${nf.format(u.followers ?? 0)} followers`);
+  //setTextById("net-gh-repos", `${nf.format(u.public_repos ?? 0)} repos`);
 
   // Green-Wall banner (if present)
   const gw = $("#gw");

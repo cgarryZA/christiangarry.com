@@ -27,53 +27,49 @@
     </nav>
 
     <div class="wrap">
-      <section class="layout-hero">
-        <article class="card hero-card">
-          <div class="hero-header">
-            <div class="hero-avatar-wrap">
-              <div class="hero-avatar">
-                <img
-                  src="assets/me.png"
-                  alt="Christian Garry"
-                  class="hero-avatar-initials"
-                />
-              </div>
-            </div>
-            <div class="hero-copy">
-              <h1 class="hero-name">Christian Garry</h1>
-              <p class="hero-tagline">
-                Engineer building mathematically grounded, production-grade
-                systems with an emphasis on probabilistic reasoning and
-                quantitative risk analysis.
-              </p>
-            </div>
-          </div>
-
-          <div class="hero-body">
-            <p>
-              Durham-trained engineer working across C++ and Python on
-              communications and ML systems and quantitative research projects,
-              with a focus on risk modelling, stress testing, and reproducible
-              analysis.
-            </p>
-            <p class="hero-meta">
-              <span
-                >MEng Electronic Engineering · MSc Scientific Computing &amp;
-                Data Analysis</span
-              >
-              <span>Graduate Communications Engineer @ Siemens</span>
-            </p>
-          </div>
+      <section class="hero-row">
+        <!-- AVATAR CARD -->
+        <article class="card hero-avatar-card">
+          <img
+            src="assets/me.png"
+            alt="Christian Garry"
+            class="hero-avatar-large"
+          />
         </article>
 
-        <!-- NETWORKS CARD -->
-        <aside class="card networks-card" aria-label="Network profiles">
+        <!-- BIO CARD -->
+        <article class="card hero-bio-card">
+          <h1 class="hero-name">Christian Garry</h1>
+
+          <p class="hero-tagline">
+            Engineer building mathematically grounded, production-grade systems
+            with an emphasis on probabilistic reasoning and quantitative risk
+            analysis.
+          </p>
+
+          <p class="hero-body">
+            Durham-trained engineer working across C++ and Python on
+            communications, ML systems, and quantitative research projects, with
+            a focus on risk modelling, stress testing, and reproducible
+            analysis.
+          </p>
+
+          <p class="hero-meta">
+            <span
+              >MEng Electronic Engineering · MSc Scientific Computing & Data
+              Analysis</span
+            >
+            <span>Graduate Communications Engineer @ Siemens</span>
+          </p>
+        </article>
+
+        <!-- SOCIALS CARD -->
+        <aside class="card hero-socials-card">
           <h2 class="section-title">Networks</h2>
 
-          <!-- GitHub chip -->
           <a
             id="net-gh-link"
-            class="net-chip net-chip-gh"
+            class="net-chip"
             href="#"
             target="_blank"
             rel="noreferrer noopener"
@@ -84,19 +80,14 @@
               </div>
               <div class="net-text">
                 <div class="net-label">GitHub</div>
-                <div class="net-handle" id="net-gh-user">@cgarryZA</div>
+                <div class="net-handle">@cgarryZA</div>
               </div>
-            </div>
-            <div class="net-stats">
-              <span id="net-gh-followers">— followers</span>
-              <span id="net-gh-repos">— repos</span>
             </div>
           </a>
 
-          <!-- LinkedIn chip -->
           <a
             id="net-li-link"
-            class="net-chip net-chip-li"
+            class="net-chip"
             href="#"
             target="_blank"
             rel="noreferrer noopener"
@@ -111,11 +102,8 @@
               </div>
               <div class="net-text">
                 <div class="net-label">LinkedIn</div>
-                <div class="net-handle" id="net-li-user">/in/your-handle</div>
+                <div class="net-handle">/in/christian-tt-garry</div>
               </div>
-            </div>
-            <div class="net-stats">
-              <span id="net-li-connections">— connections</span>
             </div>
           </a>
         </aside>
