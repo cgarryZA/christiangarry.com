@@ -573,3 +573,61 @@ body {
 .hero-socials-card .net-chip {
   margin-bottom: 12px;
 }
+
+.hero-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 240px;
+  gap: 22px;
+  align-items: stretch;
+  height: 260px; /* 👈 pin height */
+}
+
+.hero-avatar-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0; /* remove padding so image dominates */
+}
+
+.hero-avatar-large {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.hero-bio-card {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertically centers text */
+}
+
+.hero-tagline {
+  max-width: 620px;
+}
+
+.hero-socials-card {
+  padding: 16px;
+  font-size: 0.85rem;
+}
+
+.hero-socials-card .net-label {
+  font-size: 0.7rem;
+}
+
+.hero-socials-card .net-handle {
+  font-size: 0.9rem;
+}
+
+.hero-socials-card .net-chip {
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 1000px) {
+  .hero-row {
+    height: auto;
+    grid-template-columns: 1fr;
+  }
+}
