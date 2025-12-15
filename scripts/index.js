@@ -411,6 +411,29 @@ function parseFrontMatter(md) {
   return { meta, body };
 }
 
+function extractHeadParagraph(md) {
+  if (!md) return "";
+
+  // Find "### Head" section
+  const headMatch = md.match(
+    /###\s+Head\s*([\s\S]*?)(?:\n###\s+|$)/i
+  );
+  if (!headMatch) return "";
+
+  let headBlock = headMatch[1].trim();
+
+  // Remove the job title line (usually first markdown heading)
+  headBlock = headBlock.replace(/^###.*$/m, "").trim();
+
+  // Remove italic meta line (dates / location)
+  headBlock = headBlock.replace(/^\*.*?\*\s*/m, "").trim();
+
+  // First real paragraph only
+  const para = headBlock.split(/\n\s*\n/)[0];
+
+  return para.trim();
+}
+
 /**
  * Snippet generator:
  * - strips common CV section headings (Head/Body/Short CV Snippet) entirely
@@ -574,7 +597,10 @@ async function loadLatestCvEntry() {
     entry.path.replace(/^entries\//, "").replace(/\.md$/i, "");
   const dateStr =
     meta.date || (entry.path.match(/(\d{4}-\d{2}-\d{2})/) || [])[1] || "";
-  const snippet = makeSnippet(body);
+  const headPara = extractHeadParagraph(body);
+  const snippet = headPara
+    ? makeSnippet(headPara)
+    : makeSnippet(body);
   const coverRel = extractFirstImage(body, meta.cover);
   const coverAbs = coverRel ? resolveCoverURL(entry.url, coverRel) : null;
 
