@@ -8,9 +8,16 @@
   },
   {
     "owner": "cgarryZA",
-    "repo": "real-estate-montecarlo",
-    "title": "Monte Carlo Real Estate Analysis",
+    "repo": "cashflow-stress-testing",
+    "title": "Cashflow Stress Testing Under Rate and Vacancy Shocks",
     "branch": "main",
-    "readme": "README.md"
-  }
+    "readme": "COVER.md"
+  },
+  {
+  "owner": "cgarryZA",
+  "repo": "leverage-feasibility-frontier",
+  "title": "Leverage Feasibility Frontier Under Rate and Occupancy Shocks",
+  "branch": "main",
+  "readme": "COVER.md"
+}
 ]
