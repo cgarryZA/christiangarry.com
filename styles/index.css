@@ -620,7 +620,7 @@ body {
 
 .hero-row {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 2fr 4fr 1fr;
   gap: 22px;
   min-height: 260px;
   align-items: stretch;
