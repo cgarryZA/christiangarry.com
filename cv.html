@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="styles/index.css" />
     <link rel="stylesheet" href="styles/cv.css" />
   </head>
+
   <body>
     <nav class="nav">
       <div class="nav-inner">
@@ -28,36 +29,49 @@
 
     <div class="cv-toolbar">
       <h1 class="cv-title">Curriculum Vitae</h1>
-      <button id="toggle" class="cv-toggle" type="button" aria-pressed="false">
-        <span>Blog view</span>
-      </button>
-    </div>
 
-    <!-- PDF view -->
-    <div id="pdf-view" class="pdf-wrap">
-      <iframe
-        id="cv-frame"
-        class="pdf-frame"
-        title="CV PDF"
-        loading="lazy"
-      ></iframe>
-      <div class="muted cv-hint">
-        If the PDF doesn’t load,
+      <div class="cv-actions">
         <a
-          id="cv-raw-link"
+          id="download-pdf"
+          class="cv-download"
           href="#"
           target="_blank"
           rel="noreferrer noopener"
-          >open it directly</a
-        >.
+          >Download PDF</a
+        >
+
+        <button id="toggle" class="cv-toggle" type="button" aria-pressed="false">
+          <span>Blog view</span>
+        </button>
       </div>
     </div>
 
-    <!-- Blog view -->
+    <!-- CV VIEW (INLINE HTML, NO IFRAME) -->
+    <div id="cv-view" class="cv-inline-wrap">
+      <div class="cv-inline-card paper">
+        <div class="paper-inner">
+          <!-- We inject the fetched CV html into this host via Shadow DOM -->
+          <div id="cv-inline-host" class="cv-inline-host" aria-label="CV HTML"></div>
+
+          <div id="cv-inline-fallback" class="muted cv-hint" style="display:none; margin-top: 10px;">
+            If the CV doesn’t load, you can
+            <a
+              id="cv-raw-html-link"
+              href="#"
+              target="_blank"
+              rel="noreferrer noopener"
+              >open it directly</a
+            >.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG VIEW -->
     <section id="blog-view" style="display: none">
       <div id="cards" class="cards"></div>
     </section>
 
-    <script src="scripts/cv.js?v=10" defer></script>
+    <script src="scripts/cv.js?v=999" defer></script>
   </body>
 </html>

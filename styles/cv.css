@@ -185,3 +185,28 @@
 .muted {
   color: #6b7280;
 }
+
+/* ===== Inline CV (no iframe) ===== */
+.cv-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.cv-download {
+  font-size: 14px;
+}
+
+.cv-inline-wrap {
+  width: 100%;
+}
+
+.cv-inline-card {
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+/* The host that receives the Shadow DOM */
+.cv-inline-host {
+  width: 100%;
+}

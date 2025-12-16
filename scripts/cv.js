@@ -4,6 +4,7 @@
 const CV_REPO_OWNER = "cgarryZA";
 const CV_REPO_NAME = "CV";
 const CV_ENTRIES_DIR = "entries";
+const CV_HTML_PATH = "cv.html";
 const CV_PDF_PATH = "cv.pdf";
 const CV_BRANCH = "main";
 
@@ -129,7 +130,7 @@ function parsePeriodStart(period, fallbackDate) {
   return parseFallbackDate(fallbackDate);
 }
 
-// NEW: sort by MOST RECENT ENDING DATE (treat Present as far future)
+// sort by MOST RECENT ENDING DATE (treat Present as far future)
 function parsePeriodEnd(period, fallbackDate) {
   if (typeof period !== "string" || !period.trim())
     return parseFallbackDate(fallbackDate);
@@ -263,9 +264,13 @@ function escapeHtml(s) {
   return String(s).replace(
     /[&<>"']/g,
     (m) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[
-        m
-      ])
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[m])
   );
 }
 
@@ -276,23 +281,19 @@ function firstParagraph(html) {
 }
 
 /**
- * NEW: teaser text sanitiser:
+ * teaser text sanitiser:
  * - decodes common tag-entities like &lt;em&gt; so they don’t show as literal text
  * - strips tags entirely for the card preview (clean, clamped, consistent)
  */
 function teaserToText(html) {
   let s = String(html || "");
-  // decode a small safe subset that often appears in your content
   s = s.replace(/&lt;(\/?)(em|strong|i|b)&gt;/gi, "<$1$2>");
-  // strip all tags
   s = s.replace(/<\/?[^>]+>/g, " ");
-  // decode a couple of entities so it reads nicely
   s = s
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'");
-  // collapse whitespace
   s = s.replace(/\s+/g, " ").trim();
   return s;
 }
@@ -498,31 +499,110 @@ async function buildBlogCards() {
 }
 
 /* =========================
-   PDF VIEW + TOGGLE
+   INLINE CV VIEW (NO IFRAME)
+   - Fetch cv.html from CV repo
+   - Parse it
+   - Inject into Shadow DOM so its CSS doesn't break your site
+   - Rewrite ONLY `body { ... }` -> `.cv-root { ... }` so centering comes back
    ========================= */
-function initPdfView() {
-  const frame = $("#cv-frame");
-  const rawLink = $("#cv-raw-link");
-  if (!frame) return;
-  const pdfUrl = jsDelivrRaw(CV_REPO_OWNER, CV_REPO_NAME, CV_PDF_PATH, CV_BRANCH);
-  frame.src = pdfUrl + "#toolbar=0&navpanes=0&scrollbar=0&zoom=page-width";
-  if (rawLink) rawLink.href = pdfUrl;
+function rewriteBodySelectorToCvRoot(cssText) {
+  if (!cssText) return "";
+  // Replace ONLY selector occurrences of `body` (not words inside values)
+  // Handles: `body {`, `body{`, `body, ...`, `... , body {`
+  return cssText
+    .replace(/(^|[{\s,])body(\s*[,{])/gim, "$1.cv-root$2")
+    .replace(/(^|[{\s,])body(\s*\{)/gim, "$1.cv-root$2");
 }
 
+async function initInlineCv() {
+  const host = $("#cv-inline-host");
+  const fallback = $("#cv-inline-fallback");
+  const rawLink = $("#cv-raw-html-link");
+  if (!host) return;
+
+  const htmlUrl = jsDelivrRaw(CV_REPO_OWNER, CV_REPO_NAME, CV_HTML_PATH, CV_BRANCH);
+  if (rawLink) rawLink.href = htmlUrl;
+
+  try {
+    const r = await fetch(htmlUrl, { cache: "no-store" });
+    if (!r.ok) throw new Error(`cv.html fetch ${r.status}`);
+    const text = await r.text();
+
+    // Parse as full document
+    const doc = new DOMParser().parseFromString(text, "text/html");
+
+    // Pull all <style> from head (your generator inlines CSS here)
+    const styleTexts = Array.from(doc.querySelectorAll("head style"))
+      .map((s) => s.textContent || "")
+      .filter(Boolean);
+
+    // Pull body content
+    const bodyContent = doc.body ? doc.body.innerHTML : text;
+
+    // Shadow DOM mount
+    host.innerHTML = "";
+    const shadow = host.attachShadow({ mode: "open" });
+
+    // Base wrapper so rewritten `body {}` becomes `.cv-root {}`
+    const wrapper = document.createElement("div");
+    wrapper.className = "cv-root";
+    wrapper.innerHTML = bodyContent;
+
+    // Compose styles:
+    // - your CV repo styles (with `body` rewritten)
+    // - small safety resets so it sits nicely in your card
+    const style = document.createElement("style");
+    const rewritten = styleTexts.map(rewriteBodySelectorToCvRoot).join("\n\n");
+
+    style.textContent = `
+/* Host safety */
+:host { display:block; width:100%; }
+.cv-root { width:100%; }
+
+/* Slightly reduce weird inherited site styles */
+.cv-root * { box-sizing: border-box; }
+.cv-root img { max-width: 100%; height: auto; }
+
+/* ===== CV repo inline CSS (rewritten) ===== */
+${rewritten}
+`;
+
+    shadow.appendChild(style);
+    shadow.appendChild(wrapper);
+
+    if (fallback) fallback.style.display = "none";
+  } catch (err) {
+    console.warn("[CV] Inline CV load failed:", err);
+    if (fallback) fallback.style.display = "";
+  }
+}
+
+/* =========================
+   PDF DOWNLOAD
+   ========================= */
+function initPdfDownload() {
+  const link = $("#download-pdf");
+  if (!link) return;
+  link.href = jsDelivrRaw(CV_REPO_OWNER, CV_REPO_NAME, CV_PDF_PATH, CV_BRANCH);
+}
+
+/* =========================
+   TOGGLE
+   ========================= */
 function initToggle() {
   const btn = $("#toggle");
-  const pdf = $("#pdf-view");
+  const cvView = $("#cv-view");
   const blog = $("#blog-view");
-  if (!btn || !pdf || !blog) return;
+  if (!btn || !cvView || !blog) return;
 
   btn.addEventListener("click", async () => {
     const isBlog = btn.getAttribute("aria-pressed") === "true";
     const next = !isBlog;
     btn.setAttribute("aria-pressed", String(next));
-    btn.querySelector("span").textContent = next ? "PDF view" : "Blog view";
+    btn.querySelector("span").textContent = next ? "CV view" : "Blog view";
 
     if (next) {
-      pdf.style.display = "none";
+      cvView.style.display = "none";
       blog.style.display = "";
       if (!blog.dataset.built) {
         await buildBlogCards();
@@ -530,7 +610,7 @@ function initToggle() {
       }
     } else {
       blog.style.display = "none";
-      pdf.style.display = "";
+      cvView.style.display = "";
     }
   });
 }
@@ -539,29 +619,16 @@ function initToggle() {
    INIT
    ========================= */
 window.addEventListener("DOMContentLoaded", async () => {
-  initPdfView();
+  initPdfDownload();
   initToggle();
+  await initInlineCv();
 
   const hash = (window.location.hash || "").toLowerCase();
   const params = new URLSearchParams(window.location.search);
   const wantBlog = hash === "#blog" || params.get("view") === "blog";
 
   if (wantBlog) {
-    const btn = document.querySelector("#toggle");
-    const pdf = document.querySelector("#pdf-view");
-    const blog = document.querySelector("#blog-view");
-    if (btn && pdf && blog) {
-      btn.setAttribute("aria-pressed", "true");
-      const span = btn.querySelector("span");
-      if (span) span.textContent = "PDF view";
-
-      pdf.style.display = "none";
-      blog.style.display = "";
-
-      if (!blog.dataset.built) {
-        await buildBlogCards();
-        blog.dataset.built = "1";
-      }
-    }
+    const btn = $("#toggle");
+    if (btn) btn.click();
   }
 });
