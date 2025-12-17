@@ -709,7 +709,6 @@ body {
 }
 
 .net-chip {
-  aspect-ratio: 1 / 1;          /* square */
   width: 100%;
   max-width: 100%;
   
