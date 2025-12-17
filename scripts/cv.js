@@ -476,10 +476,6 @@ async function buildBlogCards() {
     content.className = "paper-rich";
     content.textContent = it.teaserText || "—";
 
-    const badges = document.createElement("div");
-    badges.className = "paper-badges";
-    badges.appendChild(makeBadge(it.ghUrl, "View on GitHub"));
-
     const link = document.createElement("a");
     link.href = it.entryUrl;
     link.className = "stretched-link";
@@ -488,8 +484,7 @@ async function buildBlogCards() {
     bodyDiv.appendChild(h3);
     bodyDiv.appendChild(dateEl);
     bodyDiv.appendChild(content);
-    bodyDiv.appendChild(badges);
-
+    
     inner.appendChild(media);
     inner.appendChild(bodyDiv);
     card.appendChild(inner);
