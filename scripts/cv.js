@@ -507,12 +507,24 @@ async function buildBlogCards() {
    ========================= */
 function rewriteBodySelectorToCvRoot(cssText) {
   if (!cssText) return "";
-  // Replace ONLY selector occurrences of `body` (not words inside values)
-  // Handles: `body {`, `body{`, `body, ...`, `... , body {`
-  return cssText
-    .replace(/(^|[{\s,])body(\s*[,{])/gim, "$1.cv-root$2")
-    .replace(/(^|[{\s,])body(\s*\{)/gim, "$1.cv-root$2");
+
+  let out = cssText;
+
+  // Rewrite body selector
+  out = out.replace(/(^|[{\s,])body(\s*[,{])/gim, "$1.cv-root$2");
+  out = out.replace(/(^|[{\s,])body(\s*\{)/gim, "$1.cv-root$2");
+
+  // When embedded, neutralise page-level spacing
+  out += `
+    .cv-root {
+      margin: 0 auto;
+      padding: 48px 0;
+    }
+  `;
+
+  return out;
 }
+
 
 async function initInlineCv() {
   const host = $("#cv-inline-host");
