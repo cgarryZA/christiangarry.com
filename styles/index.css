@@ -587,7 +587,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start; /* natural flow */
-  gap: 12px;                   /* consistent spacing */
+  gap: 12px; /* consistent spacing */
 }
 
 .hero-tagline {
@@ -629,10 +629,6 @@ body {
 
 .hero-avatar-large {
   object-fit: cover;
-}
-
-.hero-bio-card {
-  max-width: 900px;
 }
 
 .hero-bio-link {
@@ -697,6 +693,7 @@ body {
 .hero-socials-card {
   display: flex;
   flex-direction: column;
+  padding: 0;
 }
 
 /* this area takes all remaining height */
@@ -705,24 +702,25 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly; /* KEY */
-  gap: 0;                        /* spacing comes from even distribution */
+  gap: 0; /* spacing comes from even distribution */
 }
 
 .net-chip {
   width: 100%;
   max-width: 100%;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
 
   border-radius: 16px;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background: #ffffff;
   text-decoration: none;
   color: inherit;
 
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease,
+    border-color 160ms ease;
 }
 
 .net-chip-main {
@@ -760,7 +758,7 @@ body {
 .net-chip:hover {
   transform: translateY(-2px);
   border-color: var(--accent);
-  box-shadow: 0 14px 32px rgba(0,0,0,0.14);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
 }
 
 a {
@@ -770,4 +768,192 @@ a {
 
 a:visited {
   color: inherit;
+}
+
+/* HERO ROW ------------------------------------------------ */
+
+.hero-row {
+  display: grid;
+  /* Col 1: min-content (Fits the avatar image size naturally) or use 300px 
+     Col 2: 1fr (Takes all remaining space)
+     Col 3: 280px (Fixed width for LinkedIn/Github)
+  */
+  grid-template-columns: 300px 1fr 250px;
+  gap: 22px;
+  /* REMOVED fixed height and max-height to fix the "borked" overlapping */
+  min-height: 260px;
+  align-items: stretch;
+  margin-bottom: 22px;
+}
+
+/* Ensure the wrapper we just named fills the height so buttons distribute evenly */
+.hero-socials-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Make sure the LinkedIn badge respects the container width */
+.LI-profile-badge {
+  width: 100%;
+  /* Optional: Ensures the badge doesn't overflow if LinkedIn loads a wide iframe */
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 14px; /* Matches your other styles */
+}
+
+/* Ensure social links container fills remaining vertical space */
+.hero-socials-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Pushes Github button to the bottom align with Bio */
+}
+
+/* RESPONSIVE: Stack them on smaller screens */
+@media (max-width: 1000px) {
+  .hero-row {
+    grid-template-columns: 1fr; /* Stack vertically */
+    height: auto; /* Allow auto growth */
+    max-height: none;
+  }
+
+  .hero-socials-wrapper {
+    flex-direction: row; /* On mobile, put LinkedIn and Github side-by-side? */
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Reset the fixed width on mobile so it fits screen */
+  .hero-row > * {
+    width: 100%;
+  }
+}
+
+/* HERO ROW - FIXED OVERLAP & ALIGNMENT */
+.hero-row {
+  display: grid;
+  /* Col 1: Avatar (Fixed) 
+     Col 2: Bio (Flexible - fills remaining space)
+     Col 3: Socials (Fixed width to match LinkedIn badge) */
+  grid-template-columns: 300px 1fr 250px;
+  gap: 22px;
+
+  /* CRITICAL: Changed from 'height' to 'min-height' */
+  /* This prevents the row from collapsing, but allows it to grow if text wraps */
+  min-height: 385px;
+  height: auto;
+  max-height: none;
+
+  align-items: stretch;
+  margin-bottom: 22px;
+}
+
+/* Fix the Bio Card to distribute text evenly */
+.hero-bio-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Spreads content from top to bottom */
+  height: 100%;
+  padding: 24px;
+}
+
+/* This pushes the middle text away from the header and footer */
+.hero-bio-card .hero-body {
+  margin: 15px 0;
+  flex-grow: 1;
+}
+
+/* Socials Wrapper Alignment */
+.hero-socials-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 250px; /* Forces buttons to match the column width */
+}
+
+.hero-socials-links {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Make GitHub button align to the bottom of the column */
+#net-gh-link {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* Ensure LinkedIn badge fits the 250px column exactly */
+.LI-profile-badge {
+  width: 100% !important;
+  max-width: 250px !important;
+}
+
+/* RESPONSIVE FIX */
+@media (max-width: 1100px) {
+  .hero-row {
+    /* Switch to 1 column when screen is too narrow for 3 side-by-side */
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+  }
+  .hero-socials-wrapper {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .hero-socials-links {
+    padding: 0;
+  }
+
+  .hero-avatar-large {
+    border-radius: 18px;
+  }
+}
+
+.hero-socials-links {
+  padding-bottom: 0;
+}
+
+.net-chip {
+  margin-bottom: 0;
+}
+
+.hero-avatar-card {
+  margin-bottom: 0;
+}
+
+.net-chip {
+  height: 100%;
+}
+
+/* UNIFIED HOVER TRANSITION BASE */
+.hero-bio-link, 
+.net-chip {
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+/* UNIFIED HOVER STATE */
+.hero-bio-link:hover, 
+.net-chip:hover {
+  transform: translateY(-4px); /* Unified lift distance */
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18); /* Matches your Featured Card shadow */
+  cursor: pointer;
+}
+
+/* Specific resets to ensure no conflicting styles interfere */
+.hero-bio-link {
+  display: flex; /* Keeps the flex distribution we set up earlier */
+  text-decoration: none;
+  color: inherit;
+}
+
+.net-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
