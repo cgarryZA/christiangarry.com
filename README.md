@@ -1,6 +1,6 @@
 # Christian Garry – Living CV
 
-A **living, self-updating CV** and research notebook, powered by my real GitHub, LinkedIn, and CV repositories.
+A **living, self-updating CV** and research notebook, powered by my GitHub, LinkedIn, and CV repository.
 
 This site is meant to feel like a cross between a personal research homepage and a status dashboard: featured projects look like little research papers, activity streams in from my developer and professional networks, and the latest CV entry is always one click away.
 
