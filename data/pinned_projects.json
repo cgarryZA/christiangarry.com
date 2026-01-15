@@ -1,6 +1,13 @@
 [
   {
     "owner": "cgarryZA",
+    "repo": "advent-of-camel-2025",
+    "title": "FPGA - Advent of Code",
+    "branch": "main",
+    "readme": "COVER.md"
+  },
+  {
+    "owner": "cgarryZA",
     "repo": "christiangarry.com",
     "title": "My Website",
     "branch": "main",
