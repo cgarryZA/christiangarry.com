@@ -1,3 +1,16 @@
+// ===== IMPORTS =====
+import {
+  $,
+  setTextById,
+  escapeHtml,
+  nf,
+  mdToHtmlFeatured,
+  jsDelivrRaw,
+  parseFrontMatter,
+  resolveCoverURL,
+  fetchWithRetry,
+} from "./utils.js";
+
 // ===== CONFIG =====
 const GITHUB_USERNAME = "cgarryZA";
 const LI_JSON_URL = "data/linkedin.json";
@@ -13,94 +26,11 @@ const CV_BRANCH = "main";
 const CV_LOCAL_CACHE_KEY = "cv_index_cache_v2";
 const CV_LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 
-// ---- helpers
-const $ = (s) => document.querySelector(s);
-
-function setTextById(id, text) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = text;
-}
-
-function escapeHtml(s) {
-  return String(s).replace(
-    /[&<>"']/g,
-    (m) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      }[m])
-  );
-}
-
-const nf = new Intl.NumberFormat();
-
-/* Minimal markdown -> HTML for featured cards */
-function mdToHtmlFeatured(mdRaw) {
-  let md = String(mdRaw || "");
-
-  // strip fenced code blocks (keep it clean / paper-like)
-  md = md.replace(/```[\s\S]*?```/g, "");
-
-  // images
-  md = md.replace(
-    /!\[([^\]]*)\]\(([^)]+)\)/g,
-    (_, alt, src) =>
-      `<img alt="${escapeHtml(alt)}" src="${escapeHtml(src)}" />`
-  );
-
-  // links
-  md = md.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    (_, text, href) =>
-      `<a href="${escapeHtml(
-        href
-      )}" target="_blank" rel="noreferrer noopener">${escapeHtml(text)}</a>`
-  );
-
-  // bold / italic
-  md = md.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  md = md.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-
-  // headings
-  md = md.replace(/^\s*###\s+(.+)$/gm, "<h3>$1</h3>");
-  md = md.replace(/^\s*##\s+(.+)$/gm, "<h2>$1</h2>");
-  md = md.replace(/^\s*#\s+(.+)$/gm, "<h1>$1</h1>");
-
-  // bullet lists
-  md = md.replace(
-    /(^|\n)(- [^\n]+(?:\n- [^\n]+)*)/g,
-    (full, lead, block) => {
-      const items = block
-        .split("\n")
-        .map((l) => l.replace(/^- /, "").trim())
-        .filter(Boolean);
-      const lis = items.map((txt) => `<li>${txt}</li>`).join("");
-      return `${lead}<ul>${lis}</ul>`;
-    }
-  );
-
-  // paragraphs
-  const parts = md
-    .split(/\n{2,}/)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((block) =>
-      /^<(h\d|ul|img|iframe)/i.test(block)
-        ? block
-        : `<p>${block}</p>`
-    );
-
-  return parts.join("\n");
-}
-
 // =====================
 // GitHub block
 // =====================
 async function loadGithub() {
-  const r = await fetch(
+  const r = await fetchWithRetry(
     `https://api.github.com/users/${encodeURIComponent(GITHUB_USERNAME)}`
   );
   if (!r.ok) throw new Error(`GH profile ${r.status}`);
@@ -135,7 +65,7 @@ async function loadPinnedProjects() {
 
   let resp;
   try {
-    resp = await fetch(PINNED_JSON_URL, { cache: "no-store" });
+    resp = await fetchWithRetry(PINNED_JSON_URL);
   } catch (e) {
     console.warn("[Featured] pinned_projects.json fetch failed", e);
     return;
@@ -157,13 +87,36 @@ async function loadPinnedProjects() {
 
   container.innerHTML = "";
 
-  for (const pin of pins) {
+  // ===== PERFORMANCE FIX: Fetch all READMEs in parallel =====
+  const fetchPromises = pins.map((pin) => {
+    const owner = pin.owner || GITHUB_USERNAME;
+    const repo = pin.repo;
+    if (!repo) return Promise.resolve({ pin, readmeText: "" });
+
+    const branch = pin.branch || "main";
+    const readmePath = pin.readme || "README.md";
+
+    const rawUrl = `https://raw.githubusercontent.com/${encodeURIComponent(
+      owner
+    )}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${readmePath}`;
+
+    return fetchWithRetry(rawUrl)
+      .then((r) => (r.ok ? r.text() : ""))
+      .then((readmeText) => ({ pin, readmeText }))
+      .catch((e) => {
+        console.warn("[Featured] README/COVER fetch error for", repo, e);
+        return { pin, readmeText: "" };
+      });
+  });
+
+  const results = await Promise.all(fetchPromises);
+
+  // Render all cards with their fetched content
+  for (const { pin, readmeText } of results) {
     const owner = pin.owner || GITHUB_USERNAME;
     const repo = pin.repo;
     if (!repo) continue;
 
-    const branch = pin.branch || "main";
-    const readmePath = pin.readme || "README.md"; // can be COVER.md
     const title = pin.title || repo;
 
     const githubUrl =
@@ -174,22 +127,6 @@ async function loadPinnedProjects() {
 
     // target for whole card: explicit target/url, else GitHub
     const targetUrl = pin.target || pin.url || githubUrl;
-
-    const rawUrl = `https://raw.githubusercontent.com/${encodeURIComponent(
-      owner
-    )}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${readmePath}`;
-
-    let readmeText = "";
-    try {
-      const r = await fetch(rawUrl);
-      if (r.ok) {
-        readmeText = await r.text();
-      } else {
-        console.warn("[Featured] README/COVER fetch failed for", repo, r.status);
-      }
-    } catch (e) {
-      console.warn("[Featured] README/COVER fetch error for", repo, e);
-    }
 
     // Make whole card an <a> so it's entirely clickable
     const card = document.createElement("a");
@@ -227,7 +164,7 @@ async function loadPinnedProjects() {
 // Latest repos card (scrollable list)
 // =====================
 async function loadLatestRepo() {
-  const r = await fetch(
+  const r = await fetchWithRetry(
     `https://api.github.com/users/${encodeURIComponent(
       GITHUB_USERNAME
     )}/repos?per_page=100&sort=updated`
@@ -334,7 +271,7 @@ function extractActivityId(url) {
 }
 
 async function loadLinkedIn() {
-  const r = await fetch(LI_JSON_URL, { cache: "no-store" });
+  const r = await fetchWithRetry(LI_JSON_URL);
   if (!r.ok) {
     console.warn("[LI] data/linkedin.json not found");
     return;
@@ -388,28 +325,6 @@ async function loadLinkedIn() {
 // =====================
 // CV: latest entry card
 // =====================
-function jsDelivrRaw(owner, repo, path, ref = "main") {
-  return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${path}`;
-}
-
-function parseFrontMatter(md) {
-  if (!md.startsWith("---")) return { meta: {}, body: md };
-  const end = md.indexOf("\n---", 3);
-  if (end === -1) return { meta: {}, body: md };
-  const raw = md.slice(3, end).trim();
-  const body = md.slice(end + 4).replace(/^\s*\n/, "");
-  const meta = {};
-  raw.split(/\r?\n/).forEach((line) => {
-    const m = line.match(/^([A-Za-z0-9_.-]+)\s*:\s*(.*)$/);
-    if (m) {
-      const k = m[1].trim();
-      let v = m[2].trim();
-      v = v.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
-      meta[k] = v;
-    }
-  });
-  return { meta, body };
-}
 
 function extractHeadParagraph(md) {
   if (!md) return "";
@@ -480,29 +395,6 @@ function extractFirstImage(md, coverFromMeta) {
   return m ? m[1] : null;
 }
 
-function normSlashes(p) {
-  return String(p || "").replace(/\\/g, "/");
-}
-function dirnameFromRaw(rawUrl) {
-  return rawUrl.replace(/\/[^/]*$/, "/");
-}
-function repoRootFromRaw(rawUrl) {
-  const m = rawUrl.match(
-    /^(https:\/\/cdn\.jsdelivr\.net\/gh\/[^@]+\/[^@]+@[^/]+)\//i
-  );
-  return m ? m[1] + "/" : dirnameFromRaw(rawUrl);
-}
-function resolveCoverURL(rawMdUrl, cover) {
-  if (!cover) return null;
-  let c = normSlashes(cover).replace(/^\.\//, "");
-  if (/^https?:\/\//i.test(c)) return c;
-
-  const baseDir = dirnameFromRaw(rawMdUrl);
-  const root = repoRootFromRaw(rawMdUrl);
-  if (c.startsWith("assets/")) return root + c;
-  return baseDir + c;
-}
-
 function loadLocalCvCache() {
   try {
     const raw = localStorage.getItem(CV_LOCAL_CACHE_KEY);
@@ -525,7 +417,7 @@ function saveLocalCvCache(obj) {
 
 async function fetchCvEntriesFromApi() {
   const listUrl = `https://api.github.com/repos/${CV_REPO_OWNER}/${CV_REPO_NAME}/contents/${CV_ENTRIES_DIR}`;
-  const r = await fetch(listUrl);
+  const r = await fetchWithRetry(listUrl);
   if (!r.ok) throw new Error(`CV list ${r.status}`);
   const files = await r.json();
   const mdFiles = files.filter((f) => /\.md$/i.test(f.name));
@@ -580,7 +472,7 @@ async function loadLatestCvEntry() {
   // Cache-bust the markdown fetch so CDNs never show stale content after updates
   const mdUrl = `${entry.url}?v=${Date.now()}`;
 
-  const r = await fetch(mdUrl, { cache: "no-store" });
+  const r = await fetchWithRetry(mdUrl);
   if (!r.ok) {
     if (errorEl) {
       errorEl.textContent = "Could not load latest entry.";
@@ -654,33 +546,20 @@ async function loadLatestCvEntry() {
 
 // ===== init =====
 window.addEventListener("DOMContentLoaded", async () => {
-  try {
-    await loadGithub();
-  } catch (e) {
-    console.error("GitHub load failed", e);
-  }
+  // ===== PERFORMANCE FIX: Load all sections in parallel =====
+  const results = await Promise.allSettled([
+    loadGithub(),
+    loadPinnedProjects(),
+    loadLatestRepo(),
+    loadLinkedIn(),
+    loadLatestCvEntry(),
+  ]);
 
-  try {
-    await loadPinnedProjects();
-  } catch (e) {
-    console.error("Featured projects load failed", e);
-  }
-
-  try {
-    await loadLatestRepo();
-  } catch (e) {
-    console.error("Latest repo load failed", e);
-  }
-
-  try {
-    await loadLinkedIn();
-  } catch (e) {
-    console.error("LinkedIn load failed", e);
-  }
-
-  try {
-    await loadLatestCvEntry();
-  } catch (e) {
-    console.error("Latest CV entry load failed", e);
-  }
+  // Log any failures
+  const sectionNames = ["GitHub", "Featured projects", "Latest repo", "LinkedIn", "Latest CV entry"];
+  results.forEach((result, i) => {
+    if (result.status === "rejected") {
+      console.error(`${sectionNames[i]} load failed:`, result.reason);
+    }
+  });
 });
