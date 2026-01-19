@@ -186,23 +186,23 @@
   width: 100%;
 }
 
-.cv-inline-card {
-  width: min(980px, calc(100% - 32px));
-  margin: 0 auto;
-}
-
 /* The host that receives the Shadow DOM */
 .cv-inline-host {
   width: 100%;
 }
 
-/* ===== Inline CV Card ===== */
+/* === CV Card container === */
 .cv-inline-card {
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 14px;
+  padding: 24px;
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    0 0 0 1px rgba(0, 0, 0, 0.06);
+    0 12px 32px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(15, 23, 42, 0.06);
+  transform: scale(0.88);
+  transform-origin: top center;
 }
 
 /* Ensure no site gradients leak inside */
@@ -214,26 +214,6 @@
   margin-top: 0;
 }
 
-.cv-inline-card {
-  width: min(980px, calc(100% - 32px));
-  margin: 0 auto;
-}
-
-.cv-inline-card {
-  transform: scale(0.88);
-  transform-origin: top center;
-}
-
-/* === CV Card container === */
-.cv-inline-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 24px;
-  box-shadow:
-    0 12px 32px rgba(15, 23, 42, 0.12),
-    0 0 0 1px rgba(15, 23, 42, 0.06);
-}
-
 .cv-inline-wrap {
   margin-top: 56px;
 }
@@ -242,19 +222,8 @@
   display: flex;
 }
 
-.paper-inner {
-  display: flex;
-  width: 100%;
-}
-
 .paper-media {
   flex: 0 0 140px;
-}
-
-.paper-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
 .paper-badges {
@@ -308,8 +277,4 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.paper-badges {
-  margin-top: auto;
 }

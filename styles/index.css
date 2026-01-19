@@ -77,15 +77,13 @@ body {
 }
 
 /* HERO + NETWORK GRID ----------------------------------- */
-.hero-grid,
-.layout-hero {
+.hero-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 22px;
 }
 @media (max-width: 900px) {
-  .hero-grid,
-  .layout-hero {
+  .hero-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -96,7 +94,6 @@ body {
   gap: 16px;
   align-items: center;
 }
-.avatar,
 .hero-avatar {
   width: 82px;
   height: 82px;
@@ -124,7 +121,6 @@ body {
   font-family: "Spectral", serif;
   font-size: 1.6rem;
 }
-.hero-subtitle,
 .hero-tagline {
   font-size: 0.95rem;
   color: var(--muted);
@@ -151,34 +147,13 @@ body {
   font-size: 1rem;
 }
 
-.network-pill,
-.net-chip {
-  display: block;
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #ffffffcf;
-  text-decoration: none;
-  margin-bottom: 14px;
-  transition: 0.15s ease;
-  color: var(--text);
-}
-.network-pill:hover,
-.net-chip:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  background: #fff;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
-}
 
-.pill-left,
 .net-chip-main {
   display: flex;
   gap: 12px;
   align-items: center;
 }
 
-.pill-logo,
 .net-icon-circle {
   width: 36px;
   height: 36px;
@@ -188,18 +163,12 @@ body {
   justify-content: center;
   align-items: center;
 }
-.linkedin-pill-logo,
-.net-icon-li {
-  background: rgba(37, 99, 235, 0.15);
-}
 
-.pill-logo-img,
 .net-icon {
   width: 18px;
   height: 18px;
 }
 
-.pill-label,
 .net-label {
   font-size: 0.75rem;
   color: var(--muted);
@@ -207,33 +176,17 @@ body {
   letter-spacing: 0.14em;
 }
 
-.pill-primary,
 .net-handle {
   font-size: 1rem;
   font-weight: 500;
 }
 
-.pill-secondary,
 .net-stats {
   font-size: 0.86rem;
   color: var(--muted);
   margin-top: 4px;
 }
 
-/* Greenwall Card ---------------------------------------- */
-.greenwall-card {
-  overflow: hidden; /* prevent chart from overflowing the card */
-}
-
-.greenwall-card img,
-.greenwall-inner img {
-  display: block;
-  max-width: 100%;
-  width: 100%;
-  height: auto; /* natural aspect ratio */
-  border-radius: 12px;
-  object-fit: cover;
-}
 
 /* SECTION TITLES ---------------------------------------- */
 .section-title {
@@ -262,22 +215,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.desc {
-  color: var(--muted);
-}
-.badges {
-  display: flex;
-  gap: 12px;
-}
-
-.repo-list {
-  max-height: 280px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-right: 4px;
 }
 
 .repo-list .latest-card {
@@ -545,58 +482,20 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0;
+  overflow: hidden;
 }
 
 /* BIO CARD ----------------------------------------------- */
-.hero-bio-card {
-  padding: 24px;
-}
-
 .hero-bio-card .hero-name {
   margin-top: 0;
 }
 
 /* SOCIALS CARD ------------------------------------------- */
 .hero-socials-card {
-  padding: 18px;
-}
-
-.hero-socials-card .net-chip {
-  margin-bottom: 12px;
-}
-
-/* HERO ROW ------------------------------------------------ */
-
-.hero-avatar-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  overflow: hidden;
-}
-
-.hero-avatar-large {
-  width: 100%;
-  height: 100%;
-  border-radius: 5%;
-  object-fit: cover;
-}
-
-.hero-bio-card {
-  padding: 22px 24px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* natural flow */
-  gap: 12px; /* consistent spacing */
-}
-
-.hero-tagline {
-  max-width: 620px;
-}
-
-.hero-socials-card {
-  padding: 16px;
-  font-size: 0.85rem;
+  padding: 0;
 }
 
 .hero-socials-card .net-label {
@@ -607,28 +506,17 @@ body {
   font-size: 0.9rem;
 }
 
-.hero-socials-card .net-chip {
-  padding: 12px;
-  margin-bottom: 10px;
-}
-
-@media (max-width: 1000px) {
-  .hero-row {
-    height: auto;
-    grid-template-columns: 1fr;
-  }
-}
-
-.hero-row {
-  display: grid;
-  grid-template-columns: 2fr 4fr 1fr;
-  gap: 22px;
-  min-height: 260px;
-  align-items: stretch;
-}
+/* HERO ROW ------------------------------------------------ */
 
 .hero-avatar-large {
+  width: 100%;
+  height: 100%;
+  border-radius: 5%;
   object-fit: cover;
+}
+
+.hero-tagline {
+  max-width: 620px;
 }
 
 .hero-bio-link {
@@ -641,26 +529,8 @@ body {
   cursor: pointer;
 }
 
-.hero-bio-link {
-  transition: transform 180ms ease, box-shadow 180ms ease;
-}
-
-.hero-bio-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
-}
-
 .hero-bio-card .hero-meta {
   margin-top: auto;
-}
-
-.hero-row {
-  display: grid;
-  grid-template-columns: 2fr 4fr 1fr;
-  gap: 22px;
-  height: 385px;
-  max-height: 385px;
-  align-items: stretch;
 }
 
 @media (max-width: 1000px) {
@@ -672,37 +542,6 @@ body {
   .hero-bio-card {
     overflow: visible;
   }
-}
-
-.hero-socials-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.hero-socials-links {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-.hero-socials-links {
-  padding: 8px 0;
-}
-
-.hero-socials-card {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-}
-
-/* this area takes all remaining height */
-.hero-socials-links {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly; /* KEY */
-  gap: 0; /* spacing comes from even distribution */
 }
 
 .net-chip {
@@ -770,66 +609,6 @@ a:visited {
   color: inherit;
 }
 
-/* HERO ROW ------------------------------------------------ */
-
-.hero-row {
-  display: grid;
-  /* Col 1: min-content (Fits the avatar image size naturally) or use 300px 
-     Col 2: 1fr (Takes all remaining space)
-     Col 3: 280px (Fixed width for LinkedIn/Github)
-  */
-  grid-template-columns: 300px 1fr 250px;
-  gap: 22px;
-  /* REMOVED fixed height and max-height to fix the "borked" overlapping */
-  min-height: 260px;
-  align-items: stretch;
-  margin-bottom: 22px;
-}
-
-/* Ensure the wrapper we just named fills the height so buttons distribute evenly */
-.hero-socials-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Make sure the LinkedIn badge respects the container width */
-.LI-profile-badge {
-  width: 100%;
-  /* Optional: Ensures the badge doesn't overflow if LinkedIn loads a wide iframe */
-  max-width: 100%;
-  overflow: hidden;
-  border-radius: 14px; /* Matches your other styles */
-}
-
-/* Ensure social links container fills remaining vertical space */
-.hero-socials-links {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end; /* Pushes Github button to the bottom align with Bio */
-}
-
-/* RESPONSIVE: Stack them on smaller screens */
-@media (max-width: 1000px) {
-  .hero-row {
-    grid-template-columns: 1fr; /* Stack vertically */
-    height: auto; /* Allow auto growth */
-    max-height: none;
-  }
-
-  .hero-socials-wrapper {
-    flex-direction: row; /* On mobile, put LinkedIn and Github side-by-side? */
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  /* Reset the fixed width on mobile so it fits screen */
-  .hero-row > * {
-    width: 100%;
-  }
-}
-
 /* HERO ROW - FIXED OVERLAP & ALIGNMENT */
 .hero-row {
   display: grid;
@@ -876,6 +655,7 @@ a:visited {
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-bottom: 0;
 }
 
 /* Make GitHub button align to the bottom of the column */
@@ -912,20 +692,13 @@ a:visited {
   }
 }
 
-.hero-socials-links {
-  padding-bottom: 0;
-}
-
 .net-chip {
   margin-bottom: 0;
+  height: 100%;
 }
 
 .hero-avatar-card {
   margin-bottom: 0;
-}
-
-.net-chip {
-  height: 100%;
 }
 
 /* UNIFIED HOVER TRANSITION BASE */
