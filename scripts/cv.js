@@ -8,6 +8,9 @@ import {
   resolveCoverURL,
   escapeHtml,
   mdToHtml,
+  fetchWithRetry,
+  showLoading,
+  hideLoading,
 } from "./utils.js";
 
 /* =========================
@@ -217,7 +220,7 @@ function teaserToText(html) {
    ========================= */
 async function fetchCvCacheJson() {
   try {
-    const r = await fetch(CV_CACHE_URL, { cache: "no-store" });
+    const r = await fetchWithRetry(CV_CACHE_URL);
     if (!r.ok) return null;
     return await r.json();
   } catch {
@@ -281,7 +284,9 @@ function makeBadge(href, label, className = "badge") {
 async function buildBlogCards() {
   const wrap = $("#cards");
   if (!wrap) return;
-  wrap.innerHTML = "";
+
+  // ===== LOADING INDICATOR =====
+  showLoading("cards");
 
   // Prefer API (full list). Only use cv_cache.json as fallback.
   let idx = loadLocalCache();
@@ -300,14 +305,17 @@ async function buildBlogCards() {
     return;
   }
 
-  // ===== PERFORMANCE FIX: Fetch all entries in parallel =====
+  // ===== PERFORMANCE FIX: Fetch all entries in parallel with retry and caching =====
   const fetchPromises = entries.map((e) =>
-    fetch(e.url, { cache: "no-store" })
+    fetchWithRetry(e.url)  // ✅ Removed cache: "no-store" for better CDN caching
       .then((r) => (r.ok ? r.text().then((md) => ({ e, md })) : null))
       .catch(() => null)
   );
 
   const results = await Promise.all(fetchPromises);
+
+  // Clear loading indicator
+  hideLoading("cards");
 
   const items = [];
   for (const result of results) {
@@ -453,7 +461,8 @@ async function initInlineCv() {
   if (rawLink) rawLink.href = htmlUrl;
 
   try {
-    const r = await fetch(htmlUrl, { cache: "no-store" });
+    // ✅ Use fetchWithRetry and remove cache: "no-store" for better caching
+    const r = await fetchWithRetry(htmlUrl);
     if (!r.ok) throw new Error(`cv.html fetch ${r.status}`);
     const text = await r.text();
 

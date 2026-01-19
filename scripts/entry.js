@@ -11,6 +11,7 @@ import {
   resolveAgainst,
   escapeHtml,
   mdToHtml as mdToHtmlShared,
+  fetchWithRetry,
 } from "./utils.js";
 
 const CV_REPO_OWNER = "cgarryZA";
@@ -367,7 +368,7 @@ async function findEntryByQuery() {
 
   for (const f of mdFiles) {
     const url = jsDelivrRaw(CV_REPO_OWNER, CV_REPO_NAME, f.path, CV_BRANCH);
-    const resp = await fetch(url, { cache: "no-store" });
+    const resp = await fetchWithRetry(url);
     if (!resp.ok) continue;
     const md = await resp.text();
     const { meta, body } = parseFrontMatter(md);
@@ -419,7 +420,7 @@ async function resolveTitleForId(targetId, mdFiles, memo) {
 
   for (const f of mdFiles) {
     const url = jsDelivrRaw(CV_REPO_OWNER, CV_REPO_NAME, f.path, CV_BRANCH);
-    const resp = await fetch(url, { cache: "no-store" });
+    const resp = await fetchWithRetry(url);
     if (!resp.ok) continue;
     const md = await resp.text();
     const { meta } = parseFrontMatter(md);
@@ -511,7 +512,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       meta = entry.meta;
       body = entry.body;
     } else {
-      const resp = await fetch(entry.url, { cache: "no-store" });
+      const resp = await fetchWithRetry(entry.url);
       const md = await resp.text();
       ({ meta, body } = parseFrontMatter(md));
     }

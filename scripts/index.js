@@ -8,6 +8,7 @@ import {
   jsDelivrRaw,
   parseFrontMatter,
   resolveCoverURL,
+  fetchWithRetry,
 } from "./utils.js";
 
 // ===== CONFIG =====
@@ -29,7 +30,7 @@ const CV_LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 // GitHub block
 // =====================
 async function loadGithub() {
-  const r = await fetch(
+  const r = await fetchWithRetry(
     `https://api.github.com/users/${encodeURIComponent(GITHUB_USERNAME)}`
   );
   if (!r.ok) throw new Error(`GH profile ${r.status}`);
@@ -64,7 +65,7 @@ async function loadPinnedProjects() {
 
   let resp;
   try {
-    resp = await fetch(PINNED_JSON_URL, { cache: "no-store" });
+    resp = await fetchWithRetry(PINNED_JSON_URL);
   } catch (e) {
     console.warn("[Featured] pinned_projects.json fetch failed", e);
     return;
@@ -99,7 +100,7 @@ async function loadPinnedProjects() {
       owner
     )}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${readmePath}`;
 
-    return fetch(rawUrl)
+    return fetchWithRetry(rawUrl)
       .then((r) => (r.ok ? r.text() : ""))
       .then((readmeText) => ({ pin, readmeText }))
       .catch((e) => {
@@ -163,7 +164,7 @@ async function loadPinnedProjects() {
 // Latest repos card (scrollable list)
 // =====================
 async function loadLatestRepo() {
-  const r = await fetch(
+  const r = await fetchWithRetry(
     `https://api.github.com/users/${encodeURIComponent(
       GITHUB_USERNAME
     )}/repos?per_page=100&sort=updated`
@@ -270,7 +271,7 @@ function extractActivityId(url) {
 }
 
 async function loadLinkedIn() {
-  const r = await fetch(LI_JSON_URL, { cache: "no-store" });
+  const r = await fetchWithRetry(LI_JSON_URL);
   if (!r.ok) {
     console.warn("[LI] data/linkedin.json not found");
     return;
@@ -416,7 +417,7 @@ function saveLocalCvCache(obj) {
 
 async function fetchCvEntriesFromApi() {
   const listUrl = `https://api.github.com/repos/${CV_REPO_OWNER}/${CV_REPO_NAME}/contents/${CV_ENTRIES_DIR}`;
-  const r = await fetch(listUrl);
+  const r = await fetchWithRetry(listUrl);
   if (!r.ok) throw new Error(`CV list ${r.status}`);
   const files = await r.json();
   const mdFiles = files.filter((f) => /\.md$/i.test(f.name));
@@ -471,7 +472,7 @@ async function loadLatestCvEntry() {
   // Cache-bust the markdown fetch so CDNs never show stale content after updates
   const mdUrl = `${entry.url}?v=${Date.now()}`;
 
-  const r = await fetch(mdUrl, { cache: "no-store" });
+  const r = await fetchWithRetry(mdUrl);
   if (!r.ok) {
     if (errorEl) {
       errorEl.textContent = "Could not load latest entry.";

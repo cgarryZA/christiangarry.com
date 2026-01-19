@@ -208,3 +208,67 @@ export function setTextById(id, text) {
 
 // Number formatter
 export const nf = new Intl.NumberFormat();
+
+// ===== RETRY LOGIC =====
+export async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+  const delays = [1000, 2000, 4000]; // 1s, 2s, 4s backoff
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      if (response.ok) return response;
+
+      // Don't retry on client errors (4xx), only server/network errors
+      if (response.status >= 400 && response.status < 500) {
+        return response;
+      }
+
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, delays[attempt]));
+      }
+    } catch (error) {
+      if (attempt === maxRetries) throw error;
+      await new Promise(resolve => setTimeout(resolve, delays[attempt]));
+    }
+  }
+
+  throw new Error(`Failed to fetch ${url} after ${maxRetries + 1} attempts`);
+}
+
+// ===== LOADING INDICATORS =====
+export function showLoading(elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+
+  el.innerHTML = `
+    <div class="loading-skeleton" style="
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s ease-in-out infinite;
+      border-radius: 8px;
+      height: 100px;
+    "></div>
+  `;
+}
+
+export function hideLoading(elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.innerHTML = '';
+}
+
+// Add loading animation CSS if not already present
+if (typeof document !== 'undefined' && !document.getElementById('loading-styles')) {
+  const style = document.createElement('style');
+  style.id = 'loading-styles';
+  style.textContent = `
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .loading-skeleton {
+      margin: 8px 0;
+    }
+  `;
+  document.head.appendChild(style);
+}
