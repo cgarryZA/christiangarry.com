@@ -157,13 +157,36 @@ async function loadPinnedProjects() {
 
   container.innerHTML = "";
 
-  for (const pin of pins) {
+  // ===== PERFORMANCE FIX: Fetch all READMEs in parallel =====
+  const fetchPromises = pins.map((pin) => {
+    const owner = pin.owner || GITHUB_USERNAME;
+    const repo = pin.repo;
+    if (!repo) return Promise.resolve({ pin, readmeText: "" });
+
+    const branch = pin.branch || "main";
+    const readmePath = pin.readme || "README.md";
+
+    const rawUrl = `https://raw.githubusercontent.com/${encodeURIComponent(
+      owner
+    )}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${readmePath}`;
+
+    return fetch(rawUrl)
+      .then((r) => (r.ok ? r.text() : ""))
+      .then((readmeText) => ({ pin, readmeText }))
+      .catch((e) => {
+        console.warn("[Featured] README/COVER fetch error for", repo, e);
+        return { pin, readmeText: "" };
+      });
+  });
+
+  const results = await Promise.all(fetchPromises);
+
+  // Render all cards with their fetched content
+  for (const { pin, readmeText } of results) {
     const owner = pin.owner || GITHUB_USERNAME;
     const repo = pin.repo;
     if (!repo) continue;
 
-    const branch = pin.branch || "main";
-    const readmePath = pin.readme || "README.md"; // can be COVER.md
     const title = pin.title || repo;
 
     const githubUrl =
@@ -174,22 +197,6 @@ async function loadPinnedProjects() {
 
     // target for whole card: explicit target/url, else GitHub
     const targetUrl = pin.target || pin.url || githubUrl;
-
-    const rawUrl = `https://raw.githubusercontent.com/${encodeURIComponent(
-      owner
-    )}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${readmePath}`;
-
-    let readmeText = "";
-    try {
-      const r = await fetch(rawUrl);
-      if (r.ok) {
-        readmeText = await r.text();
-      } else {
-        console.warn("[Featured] README/COVER fetch failed for", repo, r.status);
-      }
-    } catch (e) {
-      console.warn("[Featured] README/COVER fetch error for", repo, e);
-    }
 
     // Make whole card an <a> so it's entirely clickable
     const card = document.createElement("a");
@@ -654,33 +661,20 @@ async function loadLatestCvEntry() {
 
 // ===== init =====
 window.addEventListener("DOMContentLoaded", async () => {
-  try {
-    await loadGithub();
-  } catch (e) {
-    console.error("GitHub load failed", e);
-  }
+  // ===== PERFORMANCE FIX: Load all sections in parallel =====
+  const results = await Promise.allSettled([
+    loadGithub(),
+    loadPinnedProjects(),
+    loadLatestRepo(),
+    loadLinkedIn(),
+    loadLatestCvEntry(),
+  ]);
 
-  try {
-    await loadPinnedProjects();
-  } catch (e) {
-    console.error("Featured projects load failed", e);
-  }
-
-  try {
-    await loadLatestRepo();
-  } catch (e) {
-    console.error("Latest repo load failed", e);
-  }
-
-  try {
-    await loadLinkedIn();
-  } catch (e) {
-    console.error("LinkedIn load failed", e);
-  }
-
-  try {
-    await loadLatestCvEntry();
-  } catch (e) {
-    console.error("Latest CV entry load failed", e);
-  }
+  // Log any failures
+  const sectionNames = ["GitHub", "Featured projects", "Latest repo", "LinkedIn", "Latest CV entry"];
+  results.forEach((result, i) => {
+    if (result.status === "rejected") {
+      console.error(`${sectionNames[i]} load failed:`, result.reason);
+    }
+  });
 });

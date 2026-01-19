@@ -386,12 +386,20 @@ async function buildBlogCards() {
     return;
   }
 
-  const items = [];
-  for (const e of entries) {
-    const r = await fetch(e.url, { cache: "no-store" });
-    if (!r.ok) continue;
+  // ===== PERFORMANCE FIX: Fetch all entries in parallel =====
+  const fetchPromises = entries.map((e) =>
+    fetch(e.url, { cache: "no-store" })
+      .then((r) => (r.ok ? r.text().then((md) => ({ e, md })) : null))
+      .catch(() => null)
+  );
 
-    const md = await r.text();
+  const results = await Promise.all(fetchPromises);
+
+  const items = [];
+  for (const result of results) {
+    if (!result) continue;
+    const { e, md } = result;
+
     const { meta, body } = parseFrontMatter(md);
 
     // Split strictly by markers
