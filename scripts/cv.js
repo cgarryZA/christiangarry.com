@@ -1,4 +1,16 @@
 /* =========================
+   IMPORTS
+   ========================= */
+import {
+  $,
+  jsDelivrRaw,
+  parseFrontMatter,
+  resolveCoverURL,
+  escapeHtml,
+  mdToHtml,
+} from "./utils.js";
+
+/* =========================
    CONFIG
    ========================= */
 const CV_REPO_OWNER = "cgarryZA";
@@ -11,61 +23,11 @@ const CV_BRANCH = "main";
 // Optional static cache (only used as a fallback now)
 const CV_CACHE_URL = "data/cv_cache.json";
 
-// Bump the cache key so older filtered lists don’t stick around
+// Bump the cache key so older filtered lists don't stick around
 const CV_LOCAL_CACHE_KEY = "cv_index_cache_v2";
 const CV_LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 const PLACEHOLDER_COVER = "assets/placeholder-cover.png";
-
-/* =========================
-   HELPERS
-   ========================= */
-const $ = (s) => document.querySelector(s);
-
-function jsDelivrRaw(owner, repo, path, ref = "main") {
-  return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${path}`;
-}
-function normSlashes(p) {
-  return String(p || "").replace(/\\/g, "/");
-}
-function dirnameFromRaw(rawUrl) {
-  return rawUrl.replace(/\/[^/]*$/, "/");
-}
-function repoRootFromRaw(rawUrl) {
-  const m = rawUrl.match(
-    /^(https:\/\/cdn\.jsdelivr\.net\/gh\/[^@]+\/[^@]+@[^/]+)\//i
-  );
-  return m ? m[1] + "/" : dirnameFromRaw(rawUrl);
-}
-function resolveCoverURL(rawMdUrl, cover) {
-  if (!cover) return null;
-  let c = normSlashes(cover).replace(/^\.\//, "");
-  if (/^https?:\/\//i.test(c)) return c;
-  const baseDir = dirnameFromRaw(rawMdUrl);
-  const root = repoRootFromRaw(rawMdUrl);
-  if (c.startsWith("assets/")) return root + c; // repo-root asset
-  return baseDir + c; // entry-relative
-}
-
-/* ---------- Front matter ---------- */
-function parseFrontMatter(md) {
-  if (!md.startsWith("---")) return { meta: {}, body: md };
-  const end = md.indexOf("\n---", 3);
-  if (end === -1) return { meta: {}, body: md };
-  const raw = md.slice(3, end).trim();
-  const body = md.slice(end + 4).replace(/^\s*\n/, "");
-  const meta = {};
-  raw.split(/\r?\n/).forEach((line) => {
-    const m = line.match(/^([A-Za-z0-9_.-]+)\s*:\s*(.*)$/);
-    if (m) {
-      const k = m[1].trim();
-      let v = m[2].trim();
-      v = v.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
-      meta[k] = v;
-    }
-  });
-  return { meta, body };
-}
 
 /* ---------- ordering ---------- */
 const MONTHS = {
@@ -219,59 +181,11 @@ function stripSpecialBlockquotes(md) {
     .trim();
 }
 
-/* ---------- minimal markdown → HTML ---------- */
-function mdToHtml(md) {
+/* ---------- minimal markdown → HTML (using shared util with custom preprocessing) ---------- */
+function mdToHtmlCV(md) {
   md = stripShortCvSnippet(md);
   md = stripSpecialBlockquotes(md);
-  md = md.replace(/```[\s\S]*?```/g, "");
-  md = md.replace(/^\s*---\s*$/gm, "");
-
-  md = md.replace(
-    /!\[([^\]]*)\]\(([^)]+)\)/g,
-    (_, alt, src) => `<img alt="${escapeHtml(alt)}" src="${escapeHtml(src)}" />`
-  );
-
-  md = md.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    (_, text, href) =>
-      `<a href="${escapeHtml(
-        href
-      )}" target="_blank" rel="noreferrer noopener">${escapeHtml(text)}</a>`
-  );
-
-  md = md.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  md = md.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-
-  md = md.replace(/^\s*###\s+(.+)$/gm, "<h3>$1</h3>");
-  md = md.replace(/^\s*##\s+(.+)$/gm, "<h2>$1</h2>");
-  md = md.replace(/^\s*#\s+(.+)$/gm, "<h1>$1</h1>");
-
-  md = md.replace(
-    /(^|\n)-\s+(.+)(?=(\n-|\n\n|$))/g,
-    (m, pfx, item) => `${pfx}<ul><li>${item.trim()}</li></ul>`
-  );
-
-  const parts = md
-    .split(/\n{2,}/)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((block) => (/^<(h\d|ul|img)/i.test(block) ? block : `<p>${block}</p>`));
-
-  return parts.join("\n");
-}
-
-function escapeHtml(s) {
-  return String(s).replace(
-    /[&<>"']/g,
-    (m) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      }[m])
-  );
+  return mdToHtml(md);  // Use shared utility
 }
 
 /* teaser = first <p> block */
@@ -406,9 +320,9 @@ async function buildBlogCards() {
     const { headMd, bodyMd } = splitHeadBody(body);
 
     // Teaser: Head paragraph if available; else first Body paragraph
-    let teaserHtml = mdToHtml(headMd || "");
+    let teaserHtml = mdToHtmlCV(headMd || "");
     if (!teaserHtml) {
-      const bodyHtml = mdToHtml(bodyMd || body);
+      const bodyHtml = mdToHtmlCV(bodyMd || body);
       teaserHtml = firstParagraph(bodyHtml);
     } else {
       teaserHtml = firstParagraph(teaserHtml);

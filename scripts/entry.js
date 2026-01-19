@@ -2,13 +2,22 @@
    entry.js — Updated: crosslinks support (id + optional label)
    ========================================================================= */
 
+/* =========================
+   IMPORTS
+   ========================= */
+import {
+  $,
+  jsDelivrRaw,
+  resolveAgainst,
+  escapeHtml,
+  mdToHtml as mdToHtmlShared,
+} from "./utils.js";
+
 const CV_REPO_OWNER = "cgarryZA";
 const CV_REPO_NAME = "CV";
 const CV_ENTRIES_DIR = "entries";
 const CV_BRANCH = "main";
 const PLACEHOLDER_COVER = "assets/placeholder-cover.png";
-
-const $ = (s) => document.querySelector(s);
 
 /* =========================
    Small, clear console logger
@@ -31,32 +40,7 @@ const LOG = {
   },
 };
 
-/* =========================
-   URL/path helpers
-   ========================= */
-function jsDelivrRaw(owner, repo, path, ref = "main") {
-  return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${path}`;
-}
-function normSlashes(p) {
-  return String(p || "").replace(/\\/g, "/");
-}
-function dirnameFromRaw(rawUrl) {
-  return rawUrl.replace(/\/[^/]*$/, "/");
-}
-function repoRootFromRaw(rawUrl) {
-  const m = rawUrl.match(
-    /^(https:\/\/cdn\.jsdelivr\.net\/gh\/[^@]+\/[^@]+@[^/]+)\//i
-  );
-  return m ? m[1] + "/" : dirnameFromRaw(rawUrl);
-}
-function resolveAgainst(rawMdUrl, rel) {
-  if (!rel) return null;
-  let c = normSlashes(rel).replace(/^\.\//, "");
-  if (/^https?:\/\//i.test(c)) return c;
-  const baseDir = dirnameFromRaw(rawMdUrl);
-  const root = repoRootFromRaw(rawMdUrl);
-  return c.startsWith("assets/") ? root + c : baseDir + c;
-}
+/* URL/path helpers now imported from utils.js */
 
 /* =========================
    Normalize MD (kill gremlins)
@@ -268,53 +252,11 @@ function splitHeadBody(mdRaw) {
 }
 
 /* =========================
-   Minimal markdown renderer
+   Minimal markdown renderer (using shared utility with normalization)
    ========================= */
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (m) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])
-  );
-}
-function renderInline(md) {
-  md = md.replace(
-    /!\[([^\]]*)\]\(([^)]+)\)/g,
-    (_, alt, src) =>
-      `<img alt="${escapeHtml(alt)}" src="${escapeHtml(src)}" />`
-  );
-  md = md.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    (_, text, href) =>
-      `<a href="${escapeHtml(
-        href
-      )}" target="_blank" rel="noreferrer noopener">${escapeHtml(text)}</a>`
-  );
-  md = md.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  md = md.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-  return md;
-}
 function mdToHtml(mdRaw) {
-  let md = normalizeMd(mdRaw);
-  md = md.replace(
-    /^\s*###\s*Short\s+CV\s+Snippet(?:\s*\(LaTeX\))?\s*[\r\n]+[\s\S]*$/gim,
-    ""
-  );
-  md = md.replace(/```[\s\S]*?```/g, "");
-  md = md.replace(/^\s*---\s*$/gm, "");
-  md = renderInline(md);
-  md = md.replace(/^\s*###\s+(.+)$/gm, "<h3>$1</h3>");
-  md = md.replace(/^\s*##\s+(.+)$/gm, "<h2>$1</h2>");
-  md = md.replace(/^\s*#\s+(.+)$/gm, "<h1>$1</h1>");
-  md = md.replace(/(^|\n)(- [^\n]+(?:\n- [^\n]+)*)/g, (full, lead, block) => {
-    const items = block.split("\n").map((l) => l.replace(/^- /, "").trim());
-    const lis = items.map((txt) => `<li>${txt}</li>`).join("");
-    return `${lead}<ul>${lis}</ul>`;
-  });
-  const parts = md
-    .split(/\n{2,}/)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((b) => (/^<(h\d|ul|img|iframe)/i.test(b) ? b : `<p>${b}</p>`));
-  return parts.join("\n");
+  const md = normalizeMd(mdRaw);
+  return mdToHtmlShared(md);
 }
 
 /* =========================
