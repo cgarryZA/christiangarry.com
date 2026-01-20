@@ -501,6 +501,52 @@ function renderTopButtons(meta, entryPath, mdFiles) {
 }
 
 /* =========================
+   Update Meta Tags for SEO
+   ========================= */
+function updateMetaTags(meta, coverAbs, entryId) {
+  const title = meta.title || "CV Entry";
+  const description = meta.description || meta.snippet || "CV entry from Christian Garry's living curriculum vitae.";
+  const url = `https://christiangarry.com/entry.html?id=${encodeURIComponent(entryId || "")}`;
+  const image = coverAbs || "https://christiangarry.com/assets/me.png";
+
+  // Update document title
+  document.title = `${title} — Living CV`;
+
+  // Update canonical URL
+  const canonical = document.getElementById("canonical-url");
+  if (canonical) canonical.href = url;
+
+  // Update Open Graph tags
+  const ogUrl = document.getElementById("og-url");
+  if (ogUrl) ogUrl.content = url;
+  const ogTitle = document.getElementById("og-title");
+  if (ogTitle) ogTitle.content = `${title} — Living CV`;
+  const ogDescription = document.getElementById("og-description");
+  if (ogDescription) ogDescription.content = description;
+  const ogImage = document.getElementById("og-image");
+  if (ogImage) ogImage.content = image;
+
+  // Update Twitter tags
+  const twitterUrl = document.getElementById("twitter-url");
+  if (twitterUrl) twitterUrl.content = url;
+  const twitterTitle = document.getElementById("twitter-title");
+  if (twitterTitle) twitterTitle.content = `${title} — Living CV`;
+  const twitterDescription = document.getElementById("twitter-description");
+  if (twitterDescription) twitterDescription.content = description;
+  const twitterImage = document.getElementById("twitter-image");
+  if (twitterImage) twitterImage.content = image;
+
+  // Update meta description
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (!metaDesc) {
+    metaDesc = document.createElement('meta');
+    metaDesc.name = 'description';
+    document.head.appendChild(metaDesc);
+  }
+  metaDesc.content = description;
+}
+
+/* =========================
    INIT
    ========================= */
 window.addEventListener("DOMContentLoaded", async () => {
@@ -530,6 +576,11 @@ window.addEventListener("DOMContentLoaded", async () => {
     $("#cover").innerHTML = `<img src="${coverAbs}" alt="${escapeHtml(
       meta.title || ""
     )}" loading="lazy" decoding="async" />`;
+
+    // Update meta tags for SEO
+    const params = new URLSearchParams(window.location.search);
+    const entryId = params.get("id") || params.get("path") || "";
+    updateMetaTags(meta, coverAbs, entryId);
 
     // Buttons under title/period (internal + external)
     renderTopButtons(meta, entry.path || "", entry.mdFiles || []);
