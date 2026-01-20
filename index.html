@@ -37,9 +37,16 @@
 
   <link rel="stylesheet" href="styles/index.css" />
 
-  <!-- Analytics - Plausible (privacy-friendly, GDPR compliant, no cookies) -->
-  <!-- To enable: Sign up at https://plausible.io and replace data-domain with your domain -->
-  <script defer data-domain="christiangarry.com" src="https://plausible.io/js/script.js"></script>
+  <!-- Google Analytics -->
+  <!-- To enable: Replace G-XXXXXXXXXX with your Google Analytics 4 Measurement ID -->
+  <!-- Get your ID from: https://analytics.google.com/analytics/web/ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
