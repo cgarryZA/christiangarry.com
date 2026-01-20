@@ -3,8 +3,31 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Entry — Living CV</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Entry — Living CV</title>
+  <meta name="description" content="CV entry from Christian Garry's living curriculum vitae - engineering projects, research work, and professional experience." />
+  <meta name="author" content="Christian Garry" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" />
+
+  <!-- Canonical URL (will be updated by JavaScript) -->
+  <link rel="canonical" href="https://christiangarry.com/entry.html" id="canonical-url" />
+
+  <!-- Open Graph / Facebook (will be updated by JavaScript) -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://christiangarry.com/entry.html" id="og-url" />
+  <meta property="og:title" content="Entry — Living CV" id="og-title" />
+  <meta property="og:description" content="CV entry from Christian Garry's living curriculum vitae." id="og-description" />
+  <meta property="og:image" content="https://christiangarry.com/assets/me.png" id="og-image" />
+
+  <!-- Twitter (will be updated by JavaScript) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://christiangarry.com/entry.html" id="twitter-url" />
+  <meta name="twitter:title" content="Entry — Living CV" id="twitter-title" />
+  <meta name="twitter:description" content="CV entry from Christian Garry's living curriculum vitae." id="twitter-description" />
+  <meta name="twitter:image" content="https://christiangarry.com/assets/me.png" id="twitter-image" />
 
   <!-- Fonts to match site -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,6 +38,11 @@
 
   <link rel="stylesheet" href="styles/index.css" />
   <link rel="stylesheet" href="styles/cv.css" />
+
+  <!-- Analytics - Plausible (privacy-friendly, GDPR compliant, no cookies) -->
+  <!-- To enable: Sign up at https://plausible.io and replace data-domain with your domain -->
+  <script defer data-domain="christiangarry.com" src="https://plausible.io/js/script.js"></script>
+
   <style>
     .entry-wrap {
       max-width: 1120px;
@@ -188,17 +216,20 @@
 </head>
 
 <body>
-  <nav class="nav">
+  <!-- Skip to main content for keyboard users -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-inner">
       <a class="brand" href="index.html">Living&nbsp;CV</a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a class="active" href="cv.html">CV</a></li>
+        <li><a class="active" href="cv.html" aria-current="page">CV</a></li>
       </ul>
     </div>
   </nav>
 
-  <div class="entry-wrap">
+  <main id="main-content" class="entry-wrap">
     <div class="entry-nav">
       <a href="cv.html#blog" class="back-button">
         <span class="back-button-icon">←</span>
@@ -221,11 +252,31 @@
       </div>
     </header>
 
-    <section id="head" class="entry-section"></section>
-    <section id="body" class="entry-section"></section>
+    <article>
+      <section id="head" class="entry-section" aria-label="Entry summary"></section>
+      <section id="body" class="entry-section" aria-label="Entry content"></section>
 
-    <div id="embeds"></div>
-  </div>
+      <div id="embeds" aria-label="Embedded content"></div>
+    </article>
+  </main>
+
+  <style>
+    /* Skip to content link for keyboard accessibility */
+    .skip-to-content {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #000;
+      color: #fff;
+      padding: 8px 16px;
+      text-decoration: none;
+      z-index: 100;
+      border-radius: 0 0 4px 0;
+    }
+    .skip-to-content:focus {
+      top: 0;
+    }
+  </style>
 
   <script type="module" src="scripts/entry.js?v=12"></script>
 </body>

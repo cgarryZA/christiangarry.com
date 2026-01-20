@@ -3,8 +3,31 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Living CV — Christian Garry</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Living CV — Christian Garry</title>
+  <meta name="description" content="Durham-trained engineer working across C++ and Python on communications, ML systems, and quantitative research projects, with a focus on risk modelling, stress testing, and reproducible analysis." />
+  <meta name="author" content="Christian Garry" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.ico" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://christiangarry.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://christiangarry.com/" />
+  <meta property="og:title" content="Living CV — Christian Garry" />
+  <meta property="og:description" content="Durham-trained engineer working across C++ and Python on communications, ML systems, and quantitative research projects, with a focus on risk modelling, stress testing, and reproducible analysis." />
+  <meta property="og:image" content="https://christiangarry.com/assets/me.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:url" content="https://christiangarry.com/" />
+  <meta name="twitter:title" content="Living CV — Christian Garry" />
+  <meta name="twitter:description" content="Durham-trained engineer working across C++ and Python on communications, ML systems, and quantitative research projects, with a focus on risk modelling, stress testing, and reproducible analysis." />
+  <meta name="twitter:image" content="https://christiangarry.com/assets/me.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,29 +36,63 @@
     rel="stylesheet" />
 
   <link rel="stylesheet" href="styles/index.css" />
+
+  <!-- Analytics - Plausible (privacy-friendly, GDPR compliant, no cookies) -->
+  <!-- To enable: Sign up at https://plausible.io and replace data-domain with your domain -->
+  <script defer data-domain="christiangarry.com" src="https://plausible.io/js/script.js"></script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Christian Garry",
+    "jobTitle": "Graduate Communications Engineer",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Siemens"
+    },
+    "alumniOf": [
+      {
+        "@type": "EducationalOrganization",
+        "name": "Durham University"
+      }
+    ],
+    "url": "https://christiangarry.com",
+    "image": "https://christiangarry.com/assets/me.png",
+    "sameAs": [
+      "https://github.com/cgarryZA",
+      "https://uk.linkedin.com/in/christian-tt-garry"
+    ],
+    "description": "Durham-trained engineer working across C++ and Python on communications, ML systems, and quantitative research projects, with a focus on risk modelling, stress testing, and reproducible analysis."
+  }
+  </script>
 </head>
 
 <body>
+  <!-- Skip to main content for keyboard users -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
   <!-- NAV -->
-  <nav class="nav">
+  <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-inner">
       <a class="brand" href="index.html">Living&nbsp;CV</a>
       <ul class="nav-links">
-        <li><a class="active" href="index.html">Home</a></li>
+        <li><a class="active" href="index.html" aria-current="page">Home</a></li>
         <li><a href="cv.html">CV</a></li>
       </ul>
     </div>
   </nav>
 
-  <div class="wrap">
-    <section class="hero-row">
+  <main id="main-content" class="wrap">
+    <section class="hero-row" aria-label="Introduction">
       <!-- AVATAR CARD -->
       <article class="card hero-avatar-card">
-        <img src="assets/me.png" alt="Christian Garry" class="hero-avatar-large" />
+        <img src="assets/me.png" alt="Profile photo of Christian Garry" class="hero-avatar-large" />
       </article>
 
       <!-- BIO CARD -->
-      <a href="cv.html" class="card hero-bio-card hero-bio-link">
+      <a href="cv.html" class="card hero-bio-card hero-bio-link" aria-label="View full CV">
         <h1 class="hero-name">Christian Garry</h1>
 
         <p class="hero-meta">
@@ -85,21 +142,21 @@
     </section>
 
     <!-- FEATURED PROJECTS STRIP -->
-    <section class="featured-wrap">
-      <h2 class="section-title">Featured Projects</h2>
-      <div id="featured-projects" class="featured-row"></div>
+    <section class="featured-wrap" aria-labelledby="featured-title">
+      <h2 id="featured-title" class="section-title">Featured Projects</h2>
+      <div id="featured-projects" class="featured-row" role="list"></div>
     </section>
 
     <!-- BOTTOM GRID: Latest project, LinkedIn post, CV entry -->
-    <section class="bottom-grid">
-      <section class="card latest">
-        <h2 class="section-title">Latest Projects</h2>
-        <div id="repo-list" class="repo-list"></div>
+    <section class="bottom-grid" aria-label="Recent activity">
+      <section class="card latest" aria-labelledby="latest-title">
+        <h2 id="latest-title" class="section-title">Latest Projects</h2>
+        <div id="repo-list" class="repo-list" role="list"></div>
       </section>
 
       <!-- Latest on LinkedIn -->
-      <section class="card li-card">
-        <h2 class="section-title">Latest on LinkedIn</h2>
+      <section class="card li-card" aria-labelledby="linkedin-title">
+        <h2 id="linkedin-title" class="section-title">Latest on LinkedIn</h2>
         <div id="li-embed" class="li-embed">
           <a id="li-fallback" class="li-fallback" href="#" target="_blank" rel="noreferrer noopener">
             View on LinkedIn
@@ -109,13 +166,13 @@
     </section>
 
     <!-- Latest CV Entry -->
-    <section class="card cv-latest">
-      <h2 class="section-title">Latest CV Entry</h2>
+    <section class="card cv-latest" aria-labelledby="cv-entry-title">
+      <h2 id="cv-entry-title" class="section-title">Latest CV Entry</h2>
 
-      <a id="cv-latest-link" class="paper" href="#" target="_blank" rel="noreferrer noopener">
+      <a id="cv-latest-link" class="paper" href="#" target="_blank" rel="noreferrer noopener" aria-label="View latest CV entry">
         <div class="paper-inner">
           <div class="paper-media">
-            <img id="cv-cover" class="paper-cover" alt="" />
+            <img id="cv-cover" class="paper-cover" alt="CV entry cover" />
           </div>
           <div class="paper-body">
             <h3 id="cv-title" class="paper-title">—</h3>
@@ -128,7 +185,26 @@
 
       <div id="cv-error" class="muted" style="display: none; margin-top: 8px"></div>
     </section>
-  </div>
+  </main>
+
+  <style>
+    /* Skip to content link for keyboard accessibility */
+    .skip-to-content {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #000;
+      color: #fff;
+      padding: 8px 16px;
+      text-decoration: none;
+      z-index: 100;
+      border-radius: 0 0 4px 0;
+    }
+    .skip-to-content:focus {
+      top: 0;
+    }
+  </style>
+
   <script type="module" src="scripts/index.js?v=6"></script>
   <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
 </body>

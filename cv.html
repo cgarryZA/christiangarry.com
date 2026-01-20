@@ -2,8 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>CV — Christian Garry</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CV — Christian Garry</title>
+    <meta name="description" content="Christian Garry's living curriculum vitae - a dynamic portfolio of engineering projects, research work, and professional experience in communications, ML systems, and quantitative analysis." />
+    <meta name="author" content="Christian Garry" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://christiangarry.com/cv.html" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content="https://christiangarry.com/cv.html" />
+    <meta property="og:title" content="CV — Christian Garry" />
+    <meta property="og:description" content="Christian Garry's living curriculum vitae - a dynamic portfolio of engineering projects, research work, and professional experience." />
+    <meta property="og:image" content="https://christiangarry.com/assets/me.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:url" content="https://christiangarry.com/cv.html" />
+    <meta name="twitter:title" content="CV — Christian Garry" />
+    <meta name="twitter:description" content="Christian Garry's living curriculum vitae - a dynamic portfolio of engineering projects, research work, and professional experience." />
+    <meta name="twitter:image" content="https://christiangarry.com/assets/me.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,20 +37,27 @@
 
     <link rel="stylesheet" href="styles/index.css" />
     <link rel="stylesheet" href="styles/cv.css" />
+
+    <!-- Analytics - Plausible (privacy-friendly, GDPR compliant, no cookies) -->
+    <!-- To enable: Sign up at https://plausible.io and replace data-domain with your domain -->
+    <script defer data-domain="christiangarry.com" src="https://plausible.io/js/script.js"></script>
   </head>
 
   <body>
-    <nav class="nav">
+    <!-- Skip to main content for keyboard users -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <nav class="nav" role="navigation" aria-label="Main navigation">
       <div class="nav-inner">
         <a class="brand" href="index.html">Living&nbsp;CV</a>
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
-          <li><a class="active" href="cv.html">CV</a></li>
+          <li><a class="active" href="cv.html" aria-current="page">CV</a></li>
         </ul>
       </div>
     </nav>
 
-    <div class="cv-toolbar">
+    <header class="cv-toolbar">
       <h1 class="cv-title">Curriculum Vitae</h1>
 
       <div class="cv-actions">
@@ -37,17 +67,19 @@
           href="#"
           target="_blank"
           rel="noreferrer noopener"
+          aria-label="Download CV as PDF"
           >Download PDF</a
         >
 
-        <button id="toggle" class="cv-toggle" type="button" aria-pressed="false">
+        <button id="toggle" class="cv-toggle" type="button" aria-pressed="false" aria-label="Toggle between CV view and blog view">
           <span>Blog view</span>
         </button>
       </div>
-    </div>
+    </header>
 
-    <!-- CV VIEW (INLINE HTML, NO IFRAME) -->
-    <div id="cv-view" class="cv-inline-wrap">
+    <main id="main-content">
+      <!-- CV VIEW (INLINE HTML, NO IFRAME) -->
+      <div id="cv-view" class="cv-inline-wrap">
       <div class="cv-inline-card paper">
         <div class="paper">
           <!-- We inject the fetched CV html into this host via Shadow DOM -->
@@ -67,10 +99,29 @@
       </div>
     </div>
 
-    <!-- BLOG VIEW -->
-    <section id="blog-view" style="display: none">
-      <div id="cards" class="cards"></div>
-    </section>
+      <!-- BLOG VIEW -->
+      <section id="blog-view" style="display: none" aria-label="Blog view of CV entries">
+        <div id="cards" class="cards"></div>
+      </section>
+    </main>
+
+    <style>
+      /* Skip to content link for keyboard accessibility */
+      .skip-to-content {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: #fff;
+        padding: 8px 16px;
+        text-decoration: none;
+        z-index: 100;
+        border-radius: 0 0 4px 0;
+      }
+      .skip-to-content:focus {
+        top: 0;
+      }
+    </style>
 
     <script type="module" src="scripts/cv.js?v=1002"></script>
   </body>
