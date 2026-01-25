@@ -58,7 +58,10 @@
   {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": "https://christiangarry.com/#christian-garry",
     "name": "Christian Garry",
+    "image": "https://christiangarry.com/assets/christian-garry-profile.jpg",
+    "url": "https://christiangarry.com/",
     "jobTitle": "Quantitative Engineer",
     "worksFor": {
       "@type": "Organization",
@@ -68,13 +71,15 @@
       "@type": "EducationalOrganization",
       "name": "Durham University"
     },
-    "url": "https://christiangarry.com",
-    "image": "https://christiangarry.com/assets/me.png",
     "sameAs": [
       "https://github.com/cgarryZA",
       "https://uk.linkedin.com/in/christian-tt-garry"
     ],
-    "description": "Engineer building mathematically grounded, production-grade systems at the intersection of communications engineering, stochastic modelling, and numerical methods."
+    "description": "Quantitative Engineer building mathematically grounded, production-grade systems at the intersection of engineering, stochastic modelling, and numerical methods.",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://christiangarry.com/"
+    }
   }
   </script>
 </head>
@@ -83,7 +88,18 @@
   <!-- NAV -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="nav-inner">
-      <a class="brand" href="index.html">Living&nbsp;CV</a>
+      <a class="brand brand-avatar" href="index.html" aria-label="Home">
+        <img
+          src="/assets/christian-garry-profile.jpg"
+          alt="Christian Garry portrait"
+          width="40"
+          height="40"
+          loading="eager"
+        />
+      </a>
+
+      <span class="brand-name">Christian Garry</span>
+
       <ul class="nav-links">
         <li><a class="active" href="index.html" aria-current="page">Home</a></li>
         <li><a href="cv.html">CV</a></li>

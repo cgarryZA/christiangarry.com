@@ -730,3 +730,66 @@ a:visited {
   justify-content: center;
   text-decoration: none;
 }
+
+.brand-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brand-avatar img {
+width: 140%;
+height: auto;
+display: block;
+transform: translateY(20%);
+transition: transform 0.15s ease;
+border: 2px solid rgba(0,0,0,0.08);
+image-rendering: auto;
+}
+
+.brand-avatar:hover img {
+  transform: translateY(20%) scale(1.05);
+}
+
+.brand-name {
+  font-family: "Spectral", serif;
+  font-size: 2rem; /* larger than nav */
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin-left: 12px;
+  white-space: nowrap;
+  color: #1f2933; /* deep neutral, not pure black */
+  font-variant-caps: small-caps;
+  position: relative;
+  top: -1px;
+}
+
+.nav-links a {
+  font-family: "Inter", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 450;
+  letter-spacing: 0.02em;
+  color: #334155;
+  text-decoration: none;
+}
+
+
+.nav-links a:hover {
+  color: #0f172a;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
