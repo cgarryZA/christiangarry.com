@@ -1,0 +1,396 @@
+/* ============================================================
+   BOOKSHELF - Physical bookshelf with book spines & paper sheaves
+   ============================================================ */
+
+.bookshelf-section {
+  margin-top: 10px;
+  margin-bottom: 22px;
+  padding: 20px 0 0;
+}
+
+.shelf-container {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 0 0 12px;
+}
+
+/* Custom scrollbar */
+.shelf-container::-webkit-scrollbar {
+  height: 6px;
+}
+.shelf-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.shelf-container::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 999px;
+}
+
+/* Shelf label */
+.shelf-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  padding: 0 16px 4px;
+  margin: 8px 0 0;
+}
+
+/* ============================================================
+   SHARED SHELF BASE
+   ============================================================ */
+.shelf {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 10px 16px 0;
+  position: relative;
+}
+
+/* The wooden shelf plank */
+.shelf::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: linear-gradient(180deg, #8B6914 0%, #6B4F12 40%, #5a4210 100%);
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  z-index: 2;
+}
+
+/* Shelf edge lip */
+.shelf::before {
+  content: "";
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(180deg, #a07d2a, #8B6914);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+
+/* Back panel behind items */
+.shelf-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  background: linear-gradient(180deg,
+    rgba(139, 105, 20, 0.05) 0%,
+    rgba(139, 105, 20, 0.12) 100%
+  );
+  border-radius: 4px 4px 0 0;
+  z-index: 0;
+}
+
+/* Papers shelf */
+.shelf.shelf--papers {
+  margin-top: 6px;
+}
+
+/* ============================================================
+   BOOK SPINES - Wider, two-line layout
+   ============================================================ */
+.book-spine {
+  position: relative;
+  z-index: 1;
+  width: 58px;
+  min-width: 48px;
+  border-radius: 3px 4px 2px 2px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* Spine texture overlay */
+.book-spine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 15%,
+    rgba(255, 255, 255, 0.05) 30%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.05) 85%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Top/bottom edge shadow for depth */
+.book-spine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.book-spine:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+/* Text container on spine — vertical with wrapping */
+.spine-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 24px 4px 8px;
+  overflow: hidden;
+  max-height: 100%;
+  z-index: 2;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.spine-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* In vertical-rl, line-clamp works on horizontal overflow */
+  white-space: normal;
+  word-break: break-word;
+}
+
+.spine-author {
+  font-size: 0.48rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   PAPER SHEAVES - Standing upright like stacked pages
+   ============================================================ */
+.paper-sheaf {
+  position: relative;
+  z-index: 1;
+  width: 52px;
+  min-width: 44px;
+  border-radius: 1px 2px 1px 1px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  background: #f5f0e4;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Stacked-pages effect — offset layers behind */
+.paper-sheaf::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: -3px;
+  right: 3px;
+  bottom: -1px;
+  background: #ece7d8;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 1px;
+  z-index: -1;
+  transform: rotate(-0.8deg);
+}
+
+.paper-sheaf::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: -5px;
+  right: 5px;
+  bottom: -2px;
+  background: #e3ddd0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 1px;
+  z-index: -2;
+  transform: rotate(-1.5deg);
+}
+
+.paper-sheaf:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Text on the paper sheaf — vertical */
+.sheaf-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 22px 5px 8px;
+  overflow: hidden;
+  max-height: 100%;
+  z-index: 2;
+  user-select: none;
+  color: #2c2c2c;
+  box-sizing: border-box;
+}
+
+.sheaf-title {
+  font-size: 0.52rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.sheaf-author {
+  font-size: 0.44rem;
+  font-weight: 400;
+  line-height: 1.15;
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dog-ear fold on top-right corner */
+.paper-sheaf .sheaf-fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.06) 50%);
+  z-index: 3;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .shelf::after {
+    background: linear-gradient(180deg, #4a3510 0%, #3a2a0d 40%, #2d2008 100%);
+  }
+  html:not([data-theme="light"]) .shelf::before {
+    background: linear-gradient(180deg, #5a4210, #4a3510);
+  }
+  html:not([data-theme="light"]) .shelf-back {
+    background: linear-gradient(180deg,
+      rgba(139, 105, 20, 0.03) 0%,
+      rgba(139, 105, 20, 0.08) 100%
+    );
+  }
+  html:not([data-theme="light"]) .paper-sheaf {
+    background: #2a2520;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  html:not([data-theme="light"]) .paper-sheaf::before {
+    background: #252018;
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+  html:not([data-theme="light"]) .paper-sheaf::after {
+    background: #201c14;
+    border-color: rgba(255, 255, 255, 0.04);
+  }
+  html:not([data-theme="light"]) .sheaf-text {
+    color: #d4c9b0;
+  }
+}
+
+html[data-theme="dark"] .shelf::after {
+  background: linear-gradient(180deg, #4a3510 0%, #3a2a0d 40%, #2d2008 100%);
+}
+html[data-theme="dark"] .shelf::before {
+  background: linear-gradient(180deg, #5a4210, #4a3510);
+}
+html[data-theme="dark"] .shelf-back {
+  background: linear-gradient(180deg,
+    rgba(139, 105, 20, 0.03) 0%,
+    rgba(139, 105, 20, 0.08) 100%
+  );
+}
+html[data-theme="dark"] .paper-sheaf {
+  background: #2a2520;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .paper-sheaf::before {
+  background: #252018;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+html[data-theme="dark"] .paper-sheaf::after {
+  background: #201c14;
+  border-color: rgba(255, 255, 255, 0.04);
+}
+html[data-theme="dark"] .sheaf-text {
+  color: #d4c9b0;
+}
+
+/* Light mode force (overrides prefers-color-scheme: dark when toggled) */
+html[data-theme="light"] .shelf::after {
+  background: linear-gradient(180deg, #8B6914 0%, #6B4F12 40%, #5a4210 100%);
+}
+html[data-theme="light"] .shelf::before {
+  background: linear-gradient(180deg, #a07d2a, #8B6914);
+}
+html[data-theme="light"] .shelf-back {
+  background: linear-gradient(180deg,
+    rgba(139, 105, 20, 0.05) 0%,
+    rgba(139, 105, 20, 0.12) 100%
+  );
+}
+html[data-theme="light"] .paper-sheaf {
+  background: #f5f0e4;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+html[data-theme="light"] .paper-sheaf::before {
+  background: #ece7d8;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+html[data-theme="light"] .paper-sheaf::after {
+  background: #e3ddd0;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+html[data-theme="light"] .sheaf-text {
+  color: #2c2c2c;
+}
+
+/* Empty shelf message */
+.shelf-empty {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-style: italic;
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+}

@@ -49,6 +49,10 @@
     rel="stylesheet" />
 
   <link rel="stylesheet" href="styles/index.css" />
+  <link rel="stylesheet" href="styles/bookshelf.css" />
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="Christian Garry — Living CV" href="https://christiangarry.com/feed.xml" />
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNEPJQNV6M"></script>
@@ -114,6 +118,7 @@
 
       <span class="brand-name">Christian Garry</span>
 
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
       <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -121,6 +126,7 @@
       <ul class="nav-links">
         <li><a class="active" href="index.html" aria-current="page">Home</a></li>
         <li><a href="cv.html">CV</a></li>
+        <li><a href="stats.html">Stats</a></li>
       </ul>
     </div>
   </nav>
@@ -229,6 +235,35 @@
         </div>
       </a>
     </section>
+
+    <!-- BOOKSHELF -->
+    <section class="bookshelf-section fade-in" aria-labelledby="bookshelf-title">
+      <h2 id="bookshelf-title" class="section-title">Bookshelf</h2>
+      <p style="font-size: 0.88rem; color: var(--muted); margin: 0 0 8px;">Books I've been reading and papers I'm working through. Click a spine to learn more.</p>
+      <div id="bookshelf" class="shelf-container"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="card contact-section fade-in" aria-labelledby="contact-title">
+      <h2 id="contact-title" class="section-title">Get in Touch</h2>
+      <p style="margin: 0 0 16px; line-height: 1.55;">
+        Interested in collaborating, discussing quantitative engineering, or just want to say hello?
+      </p>
+      <div class="contact-links">
+        <a class="contact-chip" href="mailto:christiangarry.southafrica@gmail.com">
+          <span class="contact-chip-icon">&#9993;</span>
+          <span>christiangarry.southafrica@gmail.com</span>
+        </a>
+        <a class="contact-chip" href="https://uk.linkedin.com/in/christian-tt-garry" target="_blank" rel="noreferrer noopener">
+          <img src="assets/linkedin.svg" alt="" class="contact-chip-icon" style="width: 16px; height: 16px;" />
+          <span>LinkedIn</span>
+        </a>
+        <a class="contact-chip" href="https://github.com/cgarryZA" target="_blank" rel="noreferrer noopener">
+          <img src="assets/github.svg" alt="" class="contact-chip-icon" style="width: 16px; height: 16px;" />
+          <span>GitHub</span>
+        </a>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -237,11 +272,16 @@
       <a href="https://github.com/cgarryZA" target="_blank" rel="noreferrer noopener">GitHub</a>
       &middot;
       <a href="https://uk.linkedin.com/in/christian-tt-garry" target="_blank" rel="noreferrer noopener">LinkedIn</a>
+      &middot;
+      <a href="feed.xml">RSS</a>
+      &middot;
+      <a href="stats.html">Stats</a>
     </nav>
   </footer>
 
   <script src="scripts/nav.js"></script>
-  <script type="module" src="scripts/index.js?v=7"></script>
+  <script src="scripts/bookshelf.js?v=4"></script>
+  <script type="module" src="scripts/index.js?v=8"></script>
   <script src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
 </body>
 </html>

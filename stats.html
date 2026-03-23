@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Site Stats — Christian Garry</title>
+  <meta name="description" content="Public analytics and statistics for christiangarry.com" />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/index.css" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNEPJQNV6M"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LNEPJQNV6M');
+  </script>
+
+  <style>
+    .stats-wrap {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .stats-header {
+      margin-bottom: 24px;
+    }
+    .stats-header h1 {
+      font-family: "Spectral", serif;
+      font-weight: 400;
+      font-size: 1.6rem;
+      margin: 0 0 6px;
+    }
+    .stats-header p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+    .stat-value {
+      font-family: "Spectral", serif;
+      font-size: 2rem;
+      font-weight: 500;
+      margin: 0;
+    }
+    .stat-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 4px 0 0;
+    }
+    .repo-stats-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .repo-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s ease;
+    }
+    .repo-stat-row:hover {
+      border-color: var(--accent);
+    }
+    .repo-stat-name {
+      font-weight: 500;
+    }
+    .repo-stat-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand brand-avatar" href="index.html" aria-label="Home">
+        <img src="/assets/christian-garry-profile.jpg" alt="Christian Garry portrait" width="40" height="40" loading="eager" />
+      </a>
+      <span class="brand-name">Christian Garry</span>
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+      <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a class="active" href="stats.html" aria-current="page">Stats</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <a class="skip-to-content" href="#main-content">Skip to content</a>
+
+  <main id="main-content" class="stats-wrap">
+    <header class="stats-header">
+      <h1>Site Statistics</h1>
+      <p>Public analytics for christiangarry.com</p>
+    </header>
+
+    <section>
+      <h2 class="section-title">Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-label">Pages</p>
+          <p class="stat-value">4</p>
+          <p class="stat-sub">Home, CV, Entry, Stats</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">GitHub Repos</p>
+          <p class="stat-value" id="repo-count">—</p>
+          <p class="stat-sub">Public, non-fork</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Total Stars</p>
+          <p class="stat-value" id="star-count">—</p>
+          <p class="stat-sub">Across all repos</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Top Language</p>
+          <p class="stat-value" id="top-lang">—</p>
+          <p class="stat-sub" id="lang-count">—</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Repository Breakdown</h2>
+      <div id="repo-breakdown" class="repo-stats-list">
+        <p style="color: var(--muted); font-size: 0.9rem;">Loading...</p>
+      </div>
+    </section>
+
+    <section style="margin-top: 28px;">
+      <h2 class="section-title">Technology</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-label">Framework</p>
+          <p class="stat-value" style="font-size: 1.2rem;">None</p>
+          <p class="stat-sub">Vanilla HTML/CSS/JS</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Hosting</p>
+          <p class="stat-value" style="font-size: 1.2rem;">GitHub Pages</p>
+          <p class="stat-sub">Auto-deploy on push</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Analytics</p>
+          <p class="stat-value" style="font-size: 1.2rem;">Google Analytics</p>
+          <p class="stat-sub">GA4 (G-LNEPJQNV6M)</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; 2026 Christian Garry</span>
+    <nav>
+      <a href="https://github.com/cgarryZA" target="_blank" rel="noreferrer noopener">GitHub</a>
+      &middot;
+      <a href="https://uk.linkedin.com/in/christian-tt-garry" target="_blank" rel="noreferrer noopener">LinkedIn</a>
+    </nav>
+  </footer>
+
+  <script src="scripts/nav.js"></script>
+  <script>
+    (async function () {
+      try {
+        const resp = await fetch("https://api.github.com/users/cgarryZA/repos?per_page=100&sort=updated");
+        if (!resp.ok) return;
+        const repos = (await resp.json()).filter(function (r) { return !r.fork; });
+
+        // Overview stats
+        document.getElementById("repo-count").textContent = repos.length;
+        var totalStars = repos.reduce(function (sum, r) { return sum + (r.stargazers_count || 0); }, 0);
+        document.getElementById("star-count").textContent = totalStars;
+
+        // Language breakdown
+        var langs = {};
+        repos.forEach(function (r) {
+          if (r.language) langs[r.language] = (langs[r.language] || 0) + 1;
+        });
+        var sorted = Object.entries(langs).sort(function (a, b) { return b[1] - a[1]; });
+        if (sorted.length) {
+          document.getElementById("top-lang").textContent = sorted[0][0];
+          document.getElementById("lang-count").textContent = sorted.length + " languages used";
+        }
+
+        // Repo breakdown
+        var container = document.getElementById("repo-breakdown");
+        container.innerHTML = "";
+        repos.sort(function (a, b) { return (b.stargazers_count || 0) - (a.stargazers_count || 0); });
+        repos.forEach(function (r) {
+          var row = document.createElement("a");
+          row.className = "repo-stat-row";
+          row.href = r.html_url;
+          row.target = "_blank";
+          row.rel = "noreferrer noopener";
+          row.innerHTML =
+            '<div><span class="repo-stat-name">' + (r.name || "—") + '</span></div>' +
+            '<div class="repo-stat-meta">' +
+              (r.language ? r.language + " &middot; " : "") +
+              (r.stargazers_count ? r.stargazers_count + " stars &middot; " : "") +
+              (r.forks_count ? r.forks_count + " forks" : "") +
+            '</div>';
+          container.appendChild(row);
+        });
+      } catch (e) {
+        console.warn("[Stats] Failed to load GitHub data:", e);
+      }
+    })();
+  </script>
+</body>
+</html>

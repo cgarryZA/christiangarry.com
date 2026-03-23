@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Christian Garry — Living CV</title>
+    <link>https://christiangarry.com/</link>
+    <description>CV entries, projects, and technical writing from Christian Garry — Quantitative Engineer at the intersection of engineering, stochastic modelling, and numerical methods.</description>
+    <language>en-gb</language>
+    <atom:link href="https://christiangarry.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Sun, 23 Mar 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Graduate Communications Engineer</title>
+      <link>https://christiangarry.com/entry.html?id=graduate-communications-engineer</link>
+      <description>Graduate communications engineer focused on Python-based engineering tooling and low-level C/C++ communication systems.</description>
+      <pubDate>Mon, 01 Sep 2024 00:00:00 GMT</pubDate>
+      <guid>https://christiangarry.com/entry.html?id=graduate-communications-engineer</guid>
+    </item>
+  </channel>
+</rss>
