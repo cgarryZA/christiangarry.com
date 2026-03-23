@@ -504,60 +504,50 @@ async function initInlineCv() {
 /* ===== CV repo inline CSS (rewritten) ===== */
 ${rewritten}
 
-/* ===== Dark mode override for injected CV ===== */
-@media (prefers-color-scheme: dark) {
-  :host-context(:not([data-theme="light"])) .cv-root {
-    color: #e2e8f0;
-    background: #1e293b;
-  }
-  :host-context(:not([data-theme="light"])) .cv-root h1,
-  :host-context(:not([data-theme="light"])) .cv-root h2,
-  :host-context(:not([data-theme="light"])) .cv-root h3,
-  :host-context(:not([data-theme="light"])) .cv-root h4,
-  :host-context(:not([data-theme="light"])) .cv-root h5,
-  :host-context(:not([data-theme="light"])) .cv-root h6 {
-    color: #f1f5f9;
-  }
-  :host-context(:not([data-theme="light"])) .cv-root a {
-    color: #2dd4bf;
-  }
-  :host-context(:not([data-theme="light"])) .cv-root table,
-  :host-context(:not([data-theme="light"])) .cv-root th,
-  :host-context(:not([data-theme="light"])) .cv-root td {
-    border-color: rgba(255, 255, 255, 0.12);
-  }
-  :host-context(:not([data-theme="light"])) .cv-root hr {
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-}
-/* Manual dark mode toggle */
-:host-context([data-theme="dark"]) .cv-root {
+/* ===== Dark mode override for injected CV (class-based) ===== */
+.cv-root.cv-dark {
   color: #e2e8f0;
   background: #1e293b;
 }
-:host-context([data-theme="dark"]) .cv-root h1,
-:host-context([data-theme="dark"]) .cv-root h2,
-:host-context([data-theme="dark"]) .cv-root h3,
-:host-context([data-theme="dark"]) .cv-root h4,
-:host-context([data-theme="dark"]) .cv-root h5,
-:host-context([data-theme="dark"]) .cv-root h6 {
+.cv-root.cv-dark h1,
+.cv-root.cv-dark h2,
+.cv-root.cv-dark h3,
+.cv-root.cv-dark h4,
+.cv-root.cv-dark h5,
+.cv-root.cv-dark h6 {
   color: #f1f5f9;
 }
-:host-context([data-theme="dark"]) .cv-root a {
+.cv-root.cv-dark a {
   color: #2dd4bf;
 }
-:host-context([data-theme="dark"]) .cv-root table,
-:host-context([data-theme="dark"]) .cv-root th,
-:host-context([data-theme="dark"]) .cv-root td {
+.cv-root.cv-dark table,
+.cv-root.cv-dark th,
+.cv-root.cv-dark td {
   border-color: rgba(255, 255, 255, 0.12);
 }
-:host-context([data-theme="dark"]) .cv-root hr {
+.cv-root.cv-dark hr {
   border-color: rgba(255, 255, 255, 0.1);
 }
 `;
 
     shadow.appendChild(style);
     shadow.appendChild(wrapper);
+
+    // Sync dark mode class with theme attribute
+    function syncCvDark() {
+      var theme = document.documentElement.getAttribute("data-theme");
+      var isDark = theme === "dark" ||
+        (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      wrapper.classList.toggle("cv-dark", isDark);
+    }
+    syncCvDark();
+
+    // Watch for theme toggle changes
+    var obs = new MutationObserver(syncCvDark);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+    // Watch for system preference changes
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncCvDark);
 
     if (fallback) fallback.style.display = "none";
   } catch (err) {
