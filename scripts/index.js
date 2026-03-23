@@ -9,6 +9,8 @@ import {
   parseFrontMatter,
   resolveCoverURL,
   fetchWithRetry,
+  showLoading,
+  hideLoading,
 } from "./utils.js";
 
 // ===== CONFIG =====
@@ -38,22 +40,8 @@ async function loadGithub() {
 
   const ghUrl = u.html_url || `https://github.com/${GITHUB_USERNAME}`;
 
-  // Networks card chips
   const netGhLink = $("#net-gh-link");
   if (netGhLink) netGhLink.href = ghUrl;
-
-  //setTextById("net-gh-user", "@" + (u.login || GITHUB_USERNAME));
-  //setTextById("net-gh-followers", `${nf.format(u.followers ?? 0)} followers`);
-  //setTextById("net-gh-repos", `${nf.format(u.public_repos ?? 0)} repos`);
-
-  // Green-Wall banner (if present)
-  const gw = $("#gw");
-  if (gw) {
-    const qs = new URLSearchParams({ theme: "Classic" });
-    gw.src = `https://green-wall.leoku.dev/api/og/share/${encodeURIComponent(
-      GITHUB_USERNAME
-    )}?${qs}`;
-  }
 }
 
 // =====================
@@ -309,7 +297,7 @@ async function loadLinkedIn() {
   const iframe = document.createElement("iframe");
   iframe.src = `https://www.linkedin.com/embed/feed/update/urn:li:activity:${actId}`;
   iframe.width = "100%";
-  iframe.height = "1000";
+  iframe.style.height = "100%";
   iframe.style.border = "0";
   iframe.style.borderRadius = "10px";
   iframe.allowFullscreen = true;
@@ -469,8 +457,9 @@ async function loadLatestCvEntry() {
 
   const entry = idx.entries[0];
 
-  // Cache-bust the markdown fetch so CDNs never show stale content after updates
-  const mdUrl = `${entry.url}?v=${Date.now()}`;
+  // Daily cache-bust so CDN refreshes without defeating caching entirely
+  const dayStamp = new Date().toISOString().slice(0, 10);
+  const mdUrl = `${entry.url}?v=${dayStamp}`;
 
   const r = await fetchWithRetry(mdUrl);
   if (!r.ok) {
@@ -544,9 +533,19 @@ async function loadLatestCvEntry() {
   }
 }
 
+// ===== Error state helper =====
+function showError(elementId, message) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.innerHTML = `<p style="color: var(--muted); font-size: 0.9rem; text-align: center; padding: 20px 0;">${escapeHtml(message)}</p>`;
+}
+
 // ===== init =====
 window.addEventListener("DOMContentLoaded", async () => {
-  // ===== PERFORMANCE FIX: Load all sections in parallel =====
+  // Show loading skeletons
+  showLoading("featured-projects");
+  showLoading("repo-list");
+
   const results = await Promise.allSettled([
     loadGithub(),
     loadPinnedProjects(),
@@ -555,11 +554,15 @@ window.addEventListener("DOMContentLoaded", async () => {
     loadLatestCvEntry(),
   ]);
 
-  // Log any failures
   const sectionNames = ["GitHub", "Featured projects", "Latest repo", "LinkedIn", "Latest CV entry"];
+  const errorTargets = [null, "featured-projects", "repo-list", "li-embed", null];
+
   results.forEach((result, i) => {
     if (result.status === "rejected") {
       console.error(`${sectionNames[i]} load failed:`, result.reason);
+      if (errorTargets[i]) {
+        showError(errorTargets[i], `Couldn\u2019t load ${sectionNames[i].toLowerCase()}. Try refreshing.`);
+      }
     }
   });
 });

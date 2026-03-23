@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(kill %1 %2)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill //F //PID 39840)",
+      "Bash(taskkill //F //PID 25384)",
+      "Bash(taskkill //F //PID 43404)",
+      "Bash(sort -k5 -hr)",
+      "Bash(python -c \"from PIL import Image; print\\(''pillow ok''\\)\")",
+      "Bash(grep -r \"data-\" *.html)"
+    ]
+  }
+}

@@ -114,12 +114,18 @@
 
       <span class="brand-name">Christian Garry</span>
 
+      <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
       <ul class="nav-links">
         <li><a class="active" href="index.html" aria-current="page">Home</a></li>
         <li><a href="cv.html">CV</a></li>
       </ul>
     </div>
   </nav>
+
+  <a class="skip-to-content" href="#main-content">Skip to content</a>
 
   <main id="main-content" class="wrap">
     <section class="hero-row" aria-label="Introduction">
@@ -182,13 +188,13 @@
     </section>
 
     <!-- FEATURED PROJECTS -->
-    <section class="featured-wrap" aria-labelledby="featured-title">
+    <section class="featured-wrap fade-in" aria-labelledby="featured-title">
       <h2 id="featured-title" class="section-title">Featured Projects</h2>
       <div id="featured-projects" class="featured-row" role="list"></div>
     </section>
 
     <!-- BOTTOM GRID -->
-    <section class="bottom-grid" aria-label="Recent activity">
+    <section class="bottom-grid fade-in" aria-label="Recent activity">
       <section class="card latest" aria-labelledby="latest-title">
         <h2 id="latest-title" class="section-title">Latest Projects</h2>
         <div id="repo-list" class="repo-list" role="list"></div>
@@ -206,10 +212,10 @@
     </section>
 
     <!-- LATEST CV ENTRY -->
-    <section class="card cv-latest" aria-labelledby="cv-entry-title">
+    <section class="card cv-latest fade-in" aria-labelledby="cv-entry-title">
       <h2 id="cv-entry-title" class="section-title">Latest CV Entry</h2>
 
-      <a id="cv-latest-link" class="paper" href="#" target="_blank" rel="noreferrer noopener">
+      <a id="cv-latest-link" class="paper" href="#">
         <div class="paper-inner">
           <div class="paper-media">
             <img id="cv-cover" class="paper-cover" alt="CV entry cover" />
@@ -225,7 +231,17 @@
     </section>
   </main>
 
-  <script type="module" src="scripts/index.js?v=6"></script>
+  <footer class="site-footer">
+    <span>&copy; 2026 Christian Garry</span>
+    <nav>
+      <a href="https://github.com/cgarryZA" target="_blank" rel="noreferrer noopener">GitHub</a>
+      &middot;
+      <a href="https://uk.linkedin.com/in/christian-tt-garry" target="_blank" rel="noreferrer noopener">LinkedIn</a>
+    </nav>
+  </footer>
+
+  <script src="scripts/nav.js"></script>
+  <script type="module" src="scripts/index.js?v=7"></script>
   <script src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
 </body>
 </html>

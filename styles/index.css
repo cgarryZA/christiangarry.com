@@ -1,24 +1,42 @@
+/* ============================================================
+   CSS VARIABLES
+   ============================================================ */
 :root {
   --bg: #f5f2ea;
   --bg-accent: #e6f0ec;
   --text: #111827;
   --muted: #6b7280;
-
   --card-bg: #ffffff;
   --card-border: rgba(0, 0, 0, 0.12);
-
   --accent: #0d9488;
   --accent-soft: rgba(13, 148, 136, 0.12);
-
   --shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --bg-accent: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --card-bg: #1e293b;
+    --card-border: rgba(255, 255, 255, 0.1);
+    --accent: #2dd4bf;
+    --accent-soft: rgba(45, 212, 191, 0.15);
+    --shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background: radial-gradient(
       circle at top left,
       var(--bg-accent),
@@ -29,7 +47,67 @@ body {
   color: var(--text);
 }
 
-/* NAV -------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: var(--bg);
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:visited {
+  color: inherit;
+}
+
+/* ============================================================
+   PAGE TRANSITION
+   ============================================================ */
+main {
+  animation: pageIn 0.3s ease;
+}
+
+/* SKIP TO CONTENT ---------------------------------------- */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--text);
+  color: var(--bg);
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 200;
+  border-radius: 0 0 4px 0;
+  font-size: 0.85rem;
+}
+.skip-to-content:focus {
+  top: 0;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   SCROLL FADE-IN
+   ============================================================ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
 .nav {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
@@ -38,35 +116,113 @@ body {
   top: 0;
   z-index: 100;
 }
+
+@media (prefers-color-scheme: dark) {
+  .nav {
+    background: rgba(15, 23, 42, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+  }
+}
+
 .nav-inner {
   max-width: 1500px;
   margin: auto;
   padding: 10px 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 16px;
 }
+
 .nav-links {
   display: flex;
   gap: 50px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.nav a {
+
+.nav-links a {
+  font-family: "Inter", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 450;
+  letter-spacing: 0.02em;
+  color: #334155;
   text-decoration: none;
-  color: var(--muted);
 }
+
+.nav-links a:hover {
+  color: #0f172a;
+}
+
 .nav a.active,
 .nav a:hover {
   color: var(--text);
 }
 
-/* WRAP -------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .nav-links a {
+    color: var(--muted);
+  }
+  .nav-links a:hover {
+    color: var(--text);
+  }
+}
+
+.brand-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brand-avatar img {
+  width: 140%;
+  height: auto;
+  display: block;
+  transform: translateY(20%);
+  transition: transform 0.15s ease;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  image-rendering: auto;
+}
+
+.brand-avatar:hover img {
+  transform: translateY(20%) scale(1.05);
+}
+
+.brand-name {
+  font-family: "Spectral", serif;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin-left: 12px;
+  white-space: nowrap;
+  color: #1f2933;
+  font-variant-caps: small-caps;
+  position: relative;
+  top: -1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .brand-name {
+    color: var(--text);
+  }
+}
+
+/* ============================================================
+   WRAP
+   ============================================================ */
 .wrap {
   max-width: 1500px;
   margin: 30px auto;
   padding: 0 20px;
 }
 
-/* CARD -------------------------------------------------- */
+/* ============================================================
+   CARD
+   ============================================================ */
 .card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -76,24 +232,38 @@ body {
   margin-bottom: 22px;
 }
 
-/* HERO + NETWORK GRID ----------------------------------- */
+/* ============================================================
+   HERO + NETWORK GRID
+   ============================================================ */
 .hero-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 22px;
 }
-@media (max-width: 900px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-  }
+
+/* ============================================================
+   HERO ROW
+   ============================================================ */
+.hero-row {
+  display: grid;
+  grid-template-columns: 300px 1fr 250px;
+  gap: 22px;
+  min-height: 385px;
+  height: auto;
+  max-height: none;
+  align-items: stretch;
+  margin-bottom: 22px;
 }
 
-/* HERO CARD (manual info) ------------------------------- */
+/* ============================================================
+   HERO CARD (manual info)
+   ============================================================ */
 .row-identity {
   display: flex;
   gap: 16px;
   align-items: center;
 }
+
 .hero-avatar {
   width: 82px;
   height: 82px;
@@ -104,11 +274,13 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 .hero-avatar-initials {
   font-family: "Spectral", serif;
   font-size: 1.4rem;
   color: var(--text);
 }
+
 .hero-avatar img {
   width: 100%;
   height: 100%;
@@ -116,19 +288,24 @@ body {
   object-fit: cover;
   display: block;
 }
+
 .hero-name {
   margin: 0 0 4px;
   font-family: "Spectral", serif;
   font-size: 1.6rem;
 }
+
 .hero-tagline {
   font-size: 0.95rem;
   color: var(--muted);
+  max-width: 620px;
 }
+
 .hero-body {
   margin-top: 10px;
   line-height: 1.55;
 }
+
 .hero-meta {
   margin-top: 12px;
   display: flex;
@@ -138,7 +315,100 @@ body {
   color: var(--muted);
 }
 
-/* NETWORK CARDS (GitHub + LinkedIn) ---------------------- */
+/* AVATAR CARD */
+.hero-avatar-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.hero-avatar-large {
+  width: 100%;
+  height: 100%;
+  border-radius: 5%;
+  object-fit: cover;
+}
+
+/* BIO CARD */
+.hero-bio-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 24px;
+}
+
+.hero-bio-card .hero-name {
+  margin-top: 0;
+}
+
+.hero-bio-card .hero-body {
+  margin: 15px 0;
+  flex-grow: 1;
+}
+
+.hero-bio-card .hero-meta {
+  margin-top: auto;
+}
+
+/* HERO BIO LINK */
+.hero-bio-link {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.hero-bio-link:hover {
+  cursor: pointer;
+}
+
+/* SOCIALS CARD */
+.hero-socials-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.hero-socials-card .net-label {
+  font-size: 0.7rem;
+}
+
+.hero-socials-card .net-handle {
+  font-size: 0.9rem;
+}
+
+/* SOCIALS WRAPPER */
+.hero-socials-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 250px;
+}
+
+.hero-socials-links {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 0;
+}
+
+#net-gh-link {
+  margin-top: auto;
+  width: 100%;
+}
+
+.LI-profile-badge {
+  width: 100% !important;
+  max-width: 250px !important;
+}
+
+/* ============================================================
+   NETWORK CARDS (GitHub + LinkedIn)
+   ============================================================ */
 .networks-title {
   margin: 0 0 10px;
   font-family: "Spectral", serif;
@@ -147,21 +417,49 @@ body {
   font-size: 1rem;
 }
 
+.net-chip {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  margin-bottom: 0;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .net-chip {
+    background: var(--card-bg);
+    border-color: var(--card-border);
+  }
+}
 
 .net-chip-main {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
   align-items: center;
+  gap: 0.8em;
 }
 
 .net-icon-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
+  width: clamp(36px, 25%, 64px);
+  height: clamp(36px, 25%, 64px);
+  border-radius: 50%;
   background: var(--accent-soft);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+}
+
+.net-icon-circle img {
+  width: 55%;
+  height: 55%;
 }
 
 .net-icon {
@@ -170,10 +468,10 @@ body {
 }
 
 .net-label {
-  font-size: 0.75rem;
-  color: var(--muted);
+  font-size: clamp(0.7rem, 1.6vw, 0.9rem);
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
+  color: var(--muted);
 }
 
 .net-handle {
@@ -187,8 +485,26 @@ body {
   margin-top: 4px;
 }
 
+/* UNIFIED HOVER STATE */
+.hero-bio-link:hover,
+.net-chip:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+  cursor: pointer;
+}
 
-/* SECTION TITLES ---------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .hero-bio-link:hover,
+  .net-chip:hover {
+    background: var(--card-bg);
+  }
+}
+
+/* ============================================================
+   SECTION TITLES
+   ============================================================ */
 .section-title {
   margin: 0 0 14px;
   font-family: "Spectral", serif;
@@ -197,30 +513,9 @@ body {
   font-size: 1rem;
 }
 
-/* LATEST PROJECT ---------------------------------------- */
-.latest-card {
-  display: block;
-  padding: 16px;
-  text-decoration: none;
-  color: var(--text);
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-.latest-card:hover {
-  border-color: var(--accent);
-  background: #fff;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
-}
-.latest-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.repo-list .latest-card {
-  margin: 0;
-}
-
+/* ============================================================
+   LATEST PROJECT
+   ============================================================ */
 .latest {
   height: 1000px;
   display: flex;
@@ -229,6 +524,33 @@ body {
 
 .latest .section-title {
   margin-bottom: 12px;
+}
+
+.latest-card {
+  display: block;
+  padding: 16px;
+  text-decoration: none;
+  color: var(--text);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.latest-card:hover {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .latest-card:hover {
+    background: var(--card-bg);
+  }
+}
+
+.latest-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .repo-list {
@@ -241,7 +563,13 @@ body {
   padding-right: 4px;
 }
 
-/* LINKEDIN EMBED --------------------------------------- */
+.repo-list .latest-card {
+  margin: 0;
+}
+
+/* ============================================================
+   LINKEDIN EMBED
+   ============================================================ */
 .li-card {
   height: 1000px;
   display: flex;
@@ -259,7 +587,9 @@ body {
   border: none;
 }
 
-/* CV ENTRY --------------------------------------------- */
+/* ============================================================
+   CV ENTRY
+   ============================================================ */
 .paper {
   text-decoration: none;
   color: inherit;
@@ -271,11 +601,6 @@ body {
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.1);
-}
-@media (max-width: 800px) {
-  .paper-inner {
-    grid-template-columns: 1fr;
-  }
 }
 
 .paper-cover {
@@ -292,11 +617,13 @@ body {
   margin: 0;
   font-family: "Spectral", serif;
 }
+
 .paper-date {
   font-size: 0.9rem;
   color: var(--muted);
   margin: 4px 0 10px;
 }
+
 .paper-snippet {
   margin: 8px 0 12px;
   line-height: 1.55;
@@ -306,6 +633,7 @@ body {
   display: flex;
   gap: 10px;
 }
+
 .paper-badges a {
   padding: 6px 12px;
   border-radius: 999px;
@@ -315,20 +643,25 @@ body {
   font-size: 0.85rem;
 }
 
-/* BOTTOM GRID (latest repos + LinkedIn) ------------- */
+@media (prefers-color-scheme: dark) {
+  .paper-badges a {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+  }
+}
+
+/* ============================================================
+   BOTTOM GRID (latest repos + LinkedIn)
+   ============================================================ */
 .bottom-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 22px;
 }
 
-@media (max-width: 1100px) {
-  .bottom-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* FEATURED PROJECTS STRIP ------------------------------ */
+/* ============================================================
+   FEATURED PROJECTS STRIP
+   ============================================================ */
 .featured-wrap {
   margin-top: 24px;
   margin-bottom: 12px;
@@ -345,9 +678,11 @@ body {
 .featured-row::-webkit-scrollbar {
   height: 6px;
 }
+
 .featured-row::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .featured-row::-webkit-scrollbar-thumb {
   background: rgba(148, 163, 184, 0.7);
   border-radius: 999px;
@@ -356,7 +691,7 @@ body {
 .featured-card {
   flex: 0 0 400px;
   width: 400px;
-  max-width: 100%; /* never wider than its column / viewport */
+  max-width: 100%;
   height: 500px;
   border-radius: 10px;
   border: 1px solid rgba(15, 23, 42, 0.18);
@@ -366,15 +701,19 @@ body {
   cursor: pointer;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.16s ease, border-color 0.16s ease,
-    background 0.16s ease; /* no transform here */
+  transition: box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
 }
 
 .featured-card:hover {
-  /* outer frame stays put */
   border-color: var(--accent);
   background: #fffdf6;
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  .featured-card:hover {
+    background: #1e293b;
+  }
 }
 
 .featured-inner {
@@ -388,6 +727,15 @@ body {
   width: 100%;
   transition: transform 0.16s ease;
   overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .featured-inner {
+    background: #1a2332;
+  }
+  .featured-inner::after {
+    opacity: 0.15;
+  }
 }
 
 .featured-inner::after {
@@ -432,6 +780,7 @@ body {
   text-decoration: none;
   border-bottom: 1px dashed rgba(15, 23, 42, 0.4);
 }
+
 .featured-meta a:hover {
   border-bottom-style: solid;
 }
@@ -444,6 +793,12 @@ body {
   padding-right: 0;
   max-height: none;
   margin-top: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .featured-body {
+    color: var(--text);
+  }
 }
 
 .featured-body p {
@@ -463,221 +818,81 @@ body {
   padding: 0;
 }
 
-/* Mobile tweaks for featured cards ---------------------- */
-@media (max-width: 700px) {
-  .featured-card {
-    flex: 0 0 100%;
-    width: 100%; /* full-width card; no horizontal overflow */
-  }
-}
-
-@media (max-width: 1000px) {
-  .hero-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* AVATAR CARD -------------------------------------------- */
-.hero-avatar-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  overflow: hidden;
-}
-
-/* BIO CARD ----------------------------------------------- */
-.hero-bio-card .hero-name {
-  margin-top: 0;
-}
-
-/* SOCIALS CARD ------------------------------------------- */
-.hero-socials-card {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-}
-
-.hero-socials-card .net-label {
-  font-size: 0.7rem;
-}
-
-.hero-socials-card .net-handle {
-  font-size: 0.9rem;
-}
-
-/* HERO ROW ------------------------------------------------ */
-
-.hero-avatar-large {
-  width: 100%;
-  height: 100%;
-  border-radius: 5%;
-  object-fit: cover;
-}
-
-.hero-tagline {
-  max-width: 620px;
-}
-
-.hero-bio-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-.hero-bio-link:hover {
+/* ============================================================
+   HAMBURGER MENU BUTTON (hidden on desktop)
+   ============================================================ */
+.nav-burger {
+  display: none;
+  background: none;
+  border: none;
   cursor: pointer;
+  padding: 6px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
-.hero-bio-card .hero-meta {
-  margin-top: auto;
+.nav-burger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  margin: 5px 0;
+  border-radius: 2px;
+  transition: transform 200ms ease, opacity 200ms ease;
 }
 
-@media (max-width: 1000px) {
-  .hero-row {
-    height: auto;
-    max-height: none;
-  }
-
-  .hero-bio-card {
-    overflow: visible;
-  }
+.nav-burger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
 }
 
-.net-chip {
-  width: 100%;
-  max-width: 100%;
+.nav-burger.open span:nth-child(2) {
+  opacity: 0;
+}
 
+.nav-burger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  max-width: 1500px;
+  margin: 40px auto 0;
+  padding: 24px 20px;
+  border-top: 1px solid var(--card-border);
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-
-  border-radius: 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background: #ffffff;
-  text-decoration: none;
-  color: inherit;
-
-  transition: transform 160ms ease, box-shadow 160ms ease,
-    border-color 160ms ease;
-}
-
-.net-chip-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8em;
-}
-
-/* icon container scales */
-.net-icon-circle {
-  width: clamp(36px, 25%, 64px);
-  height: clamp(36px, 25%, 64px);
-  border-radius: 50%;
-  background: var(--accent-soft);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.net-icon-circle img {
-  width: 55%;
-  height: 55%;
-}
-
-/* text scales */
-.net-label {
-  font-size: clamp(0.7rem, 1.6vw, 0.9rem);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.85rem;
   color: var(--muted);
 }
 
-.net-chip:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
-}
-
-a {
-  color: inherit;
+.site-footer a {
+  color: var(--accent);
   text-decoration: none;
 }
 
-a:visited {
-  color: inherit;
+.site-footer a:hover {
+  text-decoration: underline;
 }
 
-/* HERO ROW - FIXED OVERLAP & ALIGNMENT */
-.hero-row {
-  display: grid;
-  /* Col 1: Avatar (Fixed) 
-     Col 2: Bio (Flexible - fills remaining space)
-     Col 3: Socials (Fixed width to match LinkedIn badge) */
-  grid-template-columns: 300px 1fr 250px;
-  gap: 22px;
-
-  /* CRITICAL: Changed from 'height' to 'min-height' */
-  /* This prevents the row from collapsing, but allows it to grow if text wraps */
-  min-height: 385px;
-  height: auto;
-  max-height: none;
-
-  align-items: stretch;
-  margin-bottom: 22px;
-}
-
-/* Fix the Bio Card to distribute text evenly */
-.hero-bio-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Spreads content from top to bottom */
-  height: 100%;
-  padding: 24px;
-}
-
-/* This pushes the middle text away from the header and footer */
-.hero-bio-card .hero-body {
-  margin: 15px 0;
-  flex-grow: 1;
-}
-
-/* Socials Wrapper Alignment */
-.hero-socials-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 250px; /* Forces buttons to match the column width */
-}
-
-.hero-socials-links {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding-bottom: 0;
-}
-
-/* Make GitHub button align to the bottom of the column */
-#net-gh-link {
-  margin-top: auto;
-  width: 100%;
-}
-
-/* Ensure LinkedIn badge fits the 250px column exactly */
-.LI-profile-badge {
-  width: 100% !important;
-  max-width: 250px !important;
-}
-
-/* RESPONSIVE FIX */
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================ */
 @media (max-width: 1100px) {
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
   .hero-row {
-    /* Switch to 1 column when screen is too narrow for 3 side-by-side */
     grid-template-columns: 1fr;
     height: auto;
     min-height: 0;
   }
+
   .hero-socials-wrapper {
     width: 100%;
     flex-direction: row;
@@ -692,104 +907,145 @@ a:visited {
   }
 }
 
-.net-chip {
-  margin-bottom: 0;
-  height: 100%;
+@media (max-width: 1000px) {
+  .hero-row {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+  }
+
+  .hero-bio-card {
+    overflow: visible;
+  }
 }
 
-.hero-avatar-card {
-  margin-bottom: 0;
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* UNIFIED HOVER TRANSITION BASE */
-.hero-bio-link, 
-.net-chip {
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+@media (max-width: 800px) {
+  .paper-inner {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* UNIFIED HOVER STATE */
-.hero-bio-link:hover, 
-.net-chip:hover {
-  transform: translateY(-4px); /* Unified lift distance */
-  border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18); /* Matches your Featured Card shadow */
-  cursor: pointer;
+@media (max-width: 700px) {
+  .featured-card {
+    flex: 0 0 100%;
+    width: 100%;
+  }
 }
 
-/* Specific resets to ensure no conflicting styles interfere */
-.hero-bio-link {
-  display: flex; /* Keeps the flex distribution we set up earlier */
-  text-decoration: none;
-  color: inherit;
-}
+/* ============================================================
+   MOBILE LAYOUT FIXES  (must be last to win cascade)
+   ============================================================ */
+@media (max-width: 600px) {
+  /* --- Nav bar: name + burger only --- */
+  .brand-avatar {
+    display: none;
+  }
 
-.net-chip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
+  .brand-name {
+    font-size: 1.15rem;
+    margin-left: 0;
+  }
 
-.brand-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 25%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
+  .nav-inner {
+    padding: 10px 16px;
+    gap: 0;
+    flex-wrap: wrap;
+  }
 
-.brand-avatar img {
-width: 140%;
-height: auto;
-display: block;
-transform: translateY(20%);
-transition: transform 0.15s ease;
-border: 2px solid rgba(0,0,0,0.08);
-image-rendering: auto;
-}
+  .nav-burger {
+    display: block;
+  }
 
-.brand-avatar:hover img {
-  transform: translateY(20%) scale(1.05);
-}
+  /* Hide nav links by default, show as dropdown when .open */
+  .nav-links {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 0 4px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    margin-top: 8px;
+  }
 
-.brand-name {
-  font-family: "Spectral", serif;
-  font-size: 2rem; /* larger than nav */
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  margin-left: 12px;
-  white-space: nowrap;
-  color: #1f2933; /* deep neutral, not pure black */
-  font-variant-caps: small-caps;
-  position: relative;
-  top: -1px;
-}
+  .nav-links.open {
+    display: flex;
+  }
 
-.nav-links a {
-  font-family: "Inter", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 450;
-  letter-spacing: 0.02em;
-  color: #334155;
-  text-decoration: none;
-}
+  .nav-links li {
+    list-style: none;
+  }
 
+  .nav-links a {
+    display: block;
+    padding: 10px 0;
+    font-size: 1rem;
+  }
 
-.nav-links a:hover {
-  color: #0f172a;
-}
+  /* --- Hero --- */
+  .hero-row {
+    gap: 14px;
+    margin-bottom: 14px;
+  }
 
-.nav-inner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
+  .hero-avatar-card {
+    max-height: 300px;
+  }
 
-.nav-links {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  .hero-bio-card {
+    padding: 16px;
+  }
+
+  .hero-name {
+    font-size: 1.3rem;
+  }
+
+  .hero-body {
+    font-size: 0.92rem;
+  }
+
+  /* Stack socials vertically on mobile */
+  .hero-socials-wrapper {
+    flex-direction: column;
+  }
+
+  .net-chip {
+    padding: 14px;
+  }
+
+  /* --- Fixed-height sections --- */
+  .latest,
+  .li-card {
+    height: auto;
+    max-height: none;
+  }
+
+  .repo-list {
+    max-height: 600px;
+  }
+
+  .li-embed iframe {
+    min-height: 400px;
+  }
+
+  /* --- Spacing --- */
+  .wrap {
+    padding: 0 12px;
+    margin: 16px auto;
+  }
+
+  .card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  /* --- Featured cards --- */
+  .featured-card {
+    height: 400px;
+  }
 }
