@@ -8,6 +8,24 @@
   padding: 20px 0 0;
 }
 
+/* Side-by-side layout on desktop */
+.shelf-row {
+  display: flex;
+  gap: 24px;
+}
+
+.shelf-col {
+  flex: 1;
+  min-width: 0; /* allow shrinking */
+}
+
+@media (max-width: 800px) {
+  .shelf-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
 .shelf-container {
   position: relative;
   overflow-x: auto;

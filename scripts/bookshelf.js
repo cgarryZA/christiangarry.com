@@ -119,15 +119,22 @@
 
     container.innerHTML = "";
 
+    // Side-by-side wrapper
+    var row = document.createElement("div");
+    row.className = "shelf-row";
+
     // Books shelf
     if (bookFiles.length) {
       var books = await fetchAll("data/books/", bookFiles);
       if (books.length) {
+        var col = document.createElement("div");
+        col.className = "shelf-col";
         var label = document.createElement("p");
         label.className = "shelf-label";
         label.textContent = "Books";
-        container.appendChild(label);
-        container.appendChild(buildShelf(books, "books"));
+        col.appendChild(label);
+        col.appendChild(buildShelf(books, "books"));
+        row.appendChild(col);
       }
     }
 
@@ -135,14 +142,18 @@
     if (paperFiles.length) {
       var papers = await fetchAll("data/papers/", paperFiles);
       if (papers.length) {
+        var col2 = document.createElement("div");
+        col2.className = "shelf-col";
         var label2 = document.createElement("p");
         label2.className = "shelf-label";
         label2.textContent = "Papers";
-        label2.style.marginTop = "16px";
-        container.appendChild(label2);
-        container.appendChild(buildShelf(papers, "papers"));
+        col2.appendChild(label2);
+        col2.appendChild(buildShelf(papers, "papers"));
+        row.appendChild(col2);
       }
     }
+
+    container.appendChild(row);
   }
 
   if (document.readyState === "loading") {
