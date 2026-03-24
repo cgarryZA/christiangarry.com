@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog Editor — Christian Garry</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="favicon.ico" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="styles/index.css" />
+  <link rel="stylesheet" href="styles/blog.css" />
+
+  <style>
+    .editor-wrap {
+      max-width: 1400px;
+      margin: 20px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      min-height: calc(100vh - 160px);
+    }
+
+    @media (max-width: 900px) {
+      .editor-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .editor-panel, .preview-panel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      font-family: "Spectral", serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    /* --- Meta fields --- */
+    .meta-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .meta-field {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .meta-field label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .meta-field input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .meta-field input:focus {
+      border-color: var(--accent);
+    }
+
+    /* --- Textarea --- */
+    .editor-textarea {
+      flex: 1;
+      width: 100%;
+      min-height: 400px;
+      padding: 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-family: "Fira Code", "Cascadia Code", "Consolas", monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      box-sizing: border-box;
+      tab-size: 2;
+    }
+
+    .editor-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    /* --- Preview --- */
+    .preview-content {
+      flex: 1;
+      padding: 20px;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      background: var(--card-bg);
+      overflow-y: auto;
+      min-height: 400px;
+    }
+
+    /* --- Actions --- */
+    .editor-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      background: var(--card-bg);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    /* --- Helpers --- */
+    .helper-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .helper-btn {
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      background: var(--card-bg);
+      color: var(--muted);
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+    }
+
+    .helper-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* --- Toast --- */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.85rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 200ms ease, transform 200ms ease;
+      pointer-events: none;
+      z-index: 200;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand brand-avatar" href="index.html" aria-label="Home">
+        <img src="/assets/christian-garry-profile.jpg" alt="Christian Garry portrait" width="40" height="40" loading="eager" />
+      </a>
+      <span class="brand-name">Christian Garry</span>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="stats.html">Stats</a></li>
+        <li><a href="blog.html">Research Blog</a></li>
+        <li class="nav-theme-item"><button class="theme-toggle" aria-label="Toggle dark mode"></button></li>
+      </ul>
+      <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="editor-wrap">
+    <!-- LEFT: Editor -->
+    <div class="editor-panel">
+      <div class="panel-header">Editor</div>
+
+      <div class="meta-row">
+        <div class="meta-field">
+          <label for="post-title">Title</label>
+          <input type="text" id="post-title" placeholder="e.g. Ito's Lemma — Proof and Formalisation" />
+        </div>
+        <div class="meta-field" style="max-width:160px">
+          <label for="post-date">Date</label>
+          <input type="date" id="post-date" />
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <div class="meta-field">
+          <label for="post-slug">Slug (filename)</label>
+          <input type="text" id="post-slug" placeholder="auto-generated from title" />
+        </div>
+        <div class="meta-field">
+          <label for="post-tags">Tags (comma-separated)</label>
+          <input type="text" id="post-tags" placeholder="e.g. stochastic-calculus, lean" />
+        </div>
+      </div>
+
+      <div class="helper-bar">
+        <button class="helper-btn" data-insert="## ">H2</button>
+        <button class="helper-btn" data-insert="### ">H3</button>
+        <button class="helper-btn" data-wrap="**">Bold</button>
+        <button class="helper-btn" data-wrap="*">Italic</button>
+        <button class="helper-btn" data-wrap="$">Inline $</button>
+        <button class="helper-btn" data-insert="$$\n\n$$" data-cursor="-3">Display $$</button>
+        <button class="helper-btn" data-insert="```lean\n\n```" data-cursor="-4">Lean block</button>
+        <button class="helper-btn" data-insert="```\n\n```" data-cursor="-4">Code block</button>
+        <button class="helper-btn" data-insert="> ">Quote</button>
+        <button class="helper-btn" data-insert="---">Rule</button>
+      </div>
+
+      <textarea id="editor" class="editor-textarea" placeholder="Write your post in markdown...
+
+## Theorem
+
+Let $X$ be a random variable...
+
+$$\mathbb{E}[X] = \int_\Omega X \, d\mathbb{P}$$
+
+```lean
+theorem my_theorem : ... := by
+  sorry
+```"></textarea>
+
+      <div class="editor-actions">
+        <button class="btn btn-primary" id="btn-download">Download .md file</button>
+        <button class="btn" id="btn-copy-md">Copy markdown</button>
+        <button class="btn" id="btn-copy-index">Copy updated index.json</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Preview -->
+    <div class="preview-panel">
+      <div class="panel-header">Preview</div>
+      <div class="preview-content">
+        <div class="blog-post-body" id="preview-body">
+          <p class="muted" style="font-style:italic">Start typing to see a live preview...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="scripts/nav.js"></script>
+  <script>
+  (function () {
+    var titleEl = document.getElementById("post-title");
+    var dateEl = document.getElementById("post-date");
+    var slugEl = document.getElementById("post-slug");
+    var tagsEl = document.getElementById("post-tags");
+    var editor = document.getElementById("editor");
+    var preview = document.getElementById("preview-body");
+
+    // Default date to today
+    dateEl.value = new Date().toISOString().split("T")[0];
+
+    // Auto-generate slug from title
+    titleEl.addEventListener("input", function () {
+      if (!slugEl.dataset.manual) {
+        slugEl.value = titleEl.value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
+      }
+    });
+
+    slugEl.addEventListener("input", function () {
+      slugEl.dataset.manual = "1";
+    });
+
+    // --- Markdown renderer (same as blog.js) ---
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function renderMarkdown(md) {
+      var html = md;
+
+      html = html.replace(/```(\w*)\n([\s\S]*?)```/g, function (_, lang, code) {
+        var escaped = escapeHtml(code.trim());
+        var attr = lang ? ' data-lang="' + escapeHtml(lang) + '"' : "";
+        return "<pre" + attr + "><code>" + escaped + "</code></pre>";
+      });
+
+      html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+      html = html.replace(/^#### (.+)$/gm, "<h4>$1</h4>");
+      html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
+      html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>");
+      html = html.replace(/^---$/gm, "<hr/>");
+      html = html.replace(/^> (.+)$/gm, "<blockquote>$1</blockquote>");
+      html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+      html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+      html = html.replace(/((?:^\d+\. .+\n?)+)/gm, function (block) {
+        var items = block.trim().split(/\n/).map(function (line) {
+          return "<li>" + line.replace(/^\d+\.\s*/, "") + "</li>";
+        }).join("");
+        return "<ol>" + items + "</ol>";
+      });
+
+      html = html.replace(/((?:^- .+\n?)+)/gm, function (block) {
+        var items = block.trim().split(/\n/).map(function (line) {
+          return "<li>" + line.replace(/^-\s*/, "") + "</li>";
+        }).join("");
+        return "<ul>" + items + "</ul>";
+      });
+
+      html = html.replace(/^(?!<[houpb]|<li|<hr|<pre|<code|<blockquote|\$\$)(.+)$/gm, "<p>$1</p>");
+      html = html.replace(/<\/blockquote>\s*<blockquote>/g, "<br/>");
+
+      return html;
+    }
+
+    // --- Live preview ---
+    var previewTimer;
+    function updatePreview() {
+      var md = editor.value;
+      if (!md.trim()) {
+        preview.innerHTML = '<p class="muted" style="font-style:italic">Start typing to see a live preview...</p>';
+        return;
+      }
+      preview.innerHTML = renderMarkdown(md);
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(preview, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    editor.addEventListener("input", function () {
+      clearTimeout(previewTimer);
+      previewTimer = setTimeout(updatePreview, 200);
+    });
+
+    // --- Helper buttons ---
+    document.querySelectorAll(".helper-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var start = editor.selectionStart;
+        var end = editor.selectionEnd;
+        var text = editor.value;
+        var selected = text.substring(start, end);
+
+        if (btn.dataset.wrap) {
+          var w = btn.dataset.wrap;
+          editor.value = text.substring(0, start) + w + selected + w + text.substring(end);
+          editor.selectionStart = start + w.length;
+          editor.selectionEnd = end + w.length;
+        } else if (btn.dataset.insert) {
+          var ins = btn.dataset.insert.replace(/\\n/g, "\n");
+          editor.value = text.substring(0, start) + ins + text.substring(end);
+          var cursorOffset = parseInt(btn.dataset.cursor || "0");
+          var newPos = start + ins.length + cursorOffset;
+          editor.selectionStart = editor.selectionEnd = newPos;
+        }
+
+        editor.focus();
+        updatePreview();
+      });
+    });
+
+    // --- Tab key inserts spaces ---
+    editor.addEventListener("keydown", function (e) {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        var start = editor.selectionStart;
+        editor.value = editor.value.substring(0, start) + "  " + editor.value.substring(editor.selectionEnd);
+        editor.selectionStart = editor.selectionEnd = start + 2;
+      }
+    });
+
+    // --- Build full markdown with front matter ---
+    function buildMarkdown() {
+      var title = titleEl.value.trim();
+      var slug = slugEl.value.trim();
+      var date = dateEl.value;
+      var tags = tagsEl.value.trim();
+
+      var fm = "---\n";
+      fm += 'title: "' + title + '"\n';
+      fm += "slug: " + slug + "\n";
+      fm += "date: " + date + "\n";
+      if (tags) {
+        var tagArr = tags.split(",").map(function (t) { return t.trim(); });
+        fm += "tags: [" + tagArr.join(", ") + "]\n";
+      }
+      fm += "---\n\n";
+      return fm + editor.value;
+    }
+
+    // --- Toast ---
+    function showToast(msg) {
+      var toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(function () { toast.classList.remove("show"); }, 2000);
+    }
+
+    // --- Download .md file ---
+    document.getElementById("btn-download").addEventListener("click", function () {
+      var slug = slugEl.value.trim() || "post";
+      var blob = new Blob([buildMarkdown()], { type: "text/markdown" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = slug + ".md";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast("Downloaded " + slug + ".md");
+    });
+
+    // --- Copy markdown ---
+    document.getElementById("btn-copy-md").addEventListener("click", function () {
+      navigator.clipboard.writeText(buildMarkdown()).then(function () {
+        showToast("Markdown copied to clipboard");
+      });
+    });
+
+    // --- Copy updated index.json ---
+    document.getElementById("btn-copy-index").addEventListener("click", function () {
+      var slug = slugEl.value.trim() || "post";
+      var filename = slug + ".md";
+
+      fetch("data/blog/index.json?v=" + Date.now())
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .catch(function () { return []; })
+        .then(function (existing) {
+          if (existing.indexOf(filename) === -1) {
+            existing.unshift(filename);
+          }
+          var json = JSON.stringify(existing, null, 2);
+          navigator.clipboard.writeText(json).then(function () {
+            showToast("Updated index.json copied to clipboard");
+          });
+        });
+    });
+  })();
+  </script>
+</body>
+</html>
