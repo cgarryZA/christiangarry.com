@@ -19,7 +19,6 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* align shelf planks at the bottom */
 }
 
 @media (max-width: 800px) {
@@ -51,6 +50,10 @@
 .shelf {
   position: relative;
   padding-bottom: 18px; /* space for plank + lip */
+  flex: 1;              /* fill column so both shelves match height */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* books sit at the bottom of the shelf */
 }
 
 /* Scrollable inner row — only books/papers scroll */

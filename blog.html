@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Research Blog — Christian Garry</title>
+  <meta name="description" content="Research logbook for Christian Garry's MSc dissertation — mathematical proofs, Lean formalisations, and notes on stochastic calculus and quantitative finance." />
+  <meta name="author" content="Christian Garry" />
+
+  <link rel="icon" href="favicon.ico" />
+  <link rel="canonical" href="https://christiangarry.com/blog.html" id="canonical-url" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://christiangarry.com/blog.html" id="og-url" />
+  <meta property="og:title" content="Research Blog — Christian Garry" id="og-title" />
+  <meta property="og:description" content="Research logbook — mathematical proofs, Lean formalisations, and notes on stochastic calculus." id="og-description" />
+
+  <!-- RSS Feed -->
+  <link rel="alternate" type="application/rss+xml" title="Christian Garry — Research Blog" href="https://christiangarry.com/feed.xml" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- KaTeX for LaTeX rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="styles/index.css" />
+  <link rel="stylesheet" href="styles/blog.css" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNEPJQNV6M"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LNEPJQNV6M');
+  </script>
+</head>
+
+<body>
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand brand-avatar" href="index.html" aria-label="Home">
+        <img src="/assets/christian-garry-profile.jpg" alt="Christian Garry portrait" width="40" height="40" loading="eager" />
+      </a>
+      <span class="brand-name">Christian Garry</span>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="stats.html">Stats</a></li>
+        <li><a class="active" href="blog.html" aria-current="page">Research Blog</a></li>
+        <li class="nav-theme-item"><button class="theme-toggle" aria-label="Toggle dark mode"></button></li>
+      </ul>
+      <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <a class="skip-to-content" href="#main-content">Skip to content</a>
+
+  <main id="main-content" class="blog-wrap">
+    <!-- LIST VIEW (shown when no ?post= param) -->
+    <section id="blog-list" aria-label="Blog posts">
+      <header class="blog-header">
+        <h1 class="blog-title">Research Blog</h1>
+        <p class="blog-subtitle">Dissertation logbook — mathematical proofs, Lean formalisations, and working notes on stochastic calculus, numerical methods, and quantitative finance.</p>
+      </header>
+
+      <div id="blog-posts" class="blog-posts">
+        <p class="blog-loading muted">Loading posts...</p>
+      </div>
+    </section>
+
+    <!-- SINGLE POST VIEW (shown when ?post=slug) -->
+    <article id="blog-post" style="display:none" aria-label="Blog post">
+      <div class="blog-post-nav">
+        <a href="blog.html" class="back-button">
+          <span class="back-button-icon">&larr;</span>
+          <span>All posts</span>
+        </a>
+      </div>
+
+      <header class="blog-post-header">
+        <h1 id="post-title" class="blog-post-title">—</h1>
+        <div class="blog-post-meta">
+          <time id="post-date" class="blog-post-date">—</time>
+          <div id="post-tags" class="blog-post-tags"></div>
+        </div>
+      </header>
+
+      <div id="post-body" class="blog-post-body"></div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; 2026 Christian Garry</span>
+    <nav>
+      <a href="https://github.com/cgarryZA" target="_blank" rel="noreferrer noopener">GitHub</a>
+      &middot;
+      <a href="https://uk.linkedin.com/in/christian-tt-garry" target="_blank" rel="noreferrer noopener">LinkedIn</a>
+      &middot;
+      <a href="feed.xml">RSS</a>
+    </nav>
+  </footer>
+
+  <script src="scripts/nav.js"></script>
+  <script src="scripts/blog.js?v=1"></script>
+</body>
+</html>
