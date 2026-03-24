@@ -16,6 +16,9 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
+  <!-- JSZip for export -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
   <link rel="stylesheet" href="styles/index.css" />
   <link rel="stylesheet" href="styles/blog.css" />
 
@@ -282,9 +285,7 @@ theorem my_theorem : ... := by
 ```"></textarea>
 
       <div class="editor-actions">
-        <button class="btn btn-primary" id="btn-download">Download .md file</button>
-        <button class="btn" id="btn-copy-md">Copy markdown</button>
-        <button class="btn" id="btn-copy-index">Copy updated index.json</button>
+        <button class="btn btn-primary" id="btn-export">Export</button>
       </div>
     </div>
 
@@ -460,27 +461,8 @@ theorem my_theorem : ... := by
       setTimeout(function () { toast.classList.remove("show"); }, 2000);
     }
 
-    // --- Download .md file ---
-    document.getElementById("btn-download").addEventListener("click", function () {
-      var slug = slugEl.value.trim() || "post";
-      var blob = new Blob([buildMarkdown()], { type: "text/markdown" });
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = slug + ".md";
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast("Downloaded " + slug + ".md");
-    });
-
-    // --- Copy markdown ---
-    document.getElementById("btn-copy-md").addEventListener("click", function () {
-      navigator.clipboard.writeText(buildMarkdown()).then(function () {
-        showToast("Markdown copied to clipboard");
-      });
-    });
-
-    // --- Copy updated index.json ---
-    document.getElementById("btn-copy-index").addEventListener("click", function () {
+    // --- Export: download zip with .md file + updated index.json ---
+    document.getElementById("btn-export").addEventListener("click", function () {
       var slug = slugEl.value.trim() || "post";
       var filename = slug + ".md";
 
@@ -491,9 +473,19 @@ theorem my_theorem : ... := by
           if (existing.indexOf(filename) === -1) {
             existing.unshift(filename);
           }
-          var json = JSON.stringify(existing, null, 2);
-          navigator.clipboard.writeText(json).then(function () {
-            showToast("Updated index.json copied to clipboard");
+
+          var zip = new JSZip();
+          var folder = zip.folder("data/blog");
+          folder.file(filename, buildMarkdown());
+          folder.file("index.json", JSON.stringify(existing, null, 2) + "\n");
+
+          zip.generateAsync({ type: "blob" }).then(function (blob) {
+            var a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "blog-post-" + slug + ".zip";
+            a.click();
+            URL.revokeObjectURL(a.href);
+            showToast("Exported blog-post-" + slug + ".zip");
           });
         });
     });
