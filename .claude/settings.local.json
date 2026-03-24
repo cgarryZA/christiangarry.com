@@ -9,7 +9,23 @@
       "Bash(taskkill //F //PID 43404)",
       "Bash(sort -k5 -hr)",
       "Bash(python -c \"from PIL import Image; print\\(''pillow ok''\\)\")",
-      "Bash(grep -r \"data-\" *.html)"
+      "Bash(grep -r \"data-\" *.html)",
+      "Bash(jq -e '.hooks.Stop[] | .hooks[] | select\\(.type == \"\"command\"\"\\) | .command' .claude/settings.local.json)",
+      "Bash(python -c \"import json; d=json.load\\(open\\(''.claude/settings.local.json''\\)\\); print\\(d[''hooks''][''Stop''][0][''hooks''][0][''command'']\\)\")"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd C:/Users/z00503ku/Documents/christiangarry.com && git diff --quiet && git diff --cached --quiet || (git add -A && git commit -m \"Auto-commit changes\" && git push origin main)",
+            "timeout": 30,
+            "statusMessage": "Committing and pushing..."
+          }
+        ]
+      }
     ]
   }
 }
