@@ -8,15 +8,18 @@
   padding: 20px 0 0;
 }
 
-/* Side-by-side layout on desktop */
+/* Side-by-side layout on desktop — no gap so shelves look continuous */
 .shelf-row {
   display: flex;
-  gap: 24px;
+  gap: 0;
 }
 
 .shelf-col {
   flex: 1;
-  min-width: 0; /* allow shrinking */
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* align shelf planks at the bottom */
 }
 
 @media (max-width: 800px) {
@@ -28,21 +31,7 @@
 
 .shelf-container {
   position: relative;
-  overflow-x: auto;
-  overflow-y: visible;
   padding: 0 0 12px;
-}
-
-/* Custom scrollbar */
-.shelf-container::-webkit-scrollbar {
-  height: 6px;
-}
-.shelf-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-.shelf-container::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.5);
-  border-radius: 999px;
 }
 
 /* Shelf label */
@@ -60,14 +49,35 @@
    SHARED SHELF BASE
    ============================================================ */
 .shelf {
+  position: relative;
+  padding-bottom: 18px; /* space for plank + lip */
+}
+
+/* Scrollable inner row — only books/papers scroll */
+.shelf-scroll {
   display: flex;
   align-items: flex-end;
   gap: 4px;
-  padding: 10px 16px 0;
+  padding: 18px 16px 0;  /* top padding accommodates hover lift + shadow */
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
+  z-index: 1;
 }
 
-/* The wooden shelf plank */
+/* Custom scrollbar per shelf */
+.shelf-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.shelf-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.shelf-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 999px;
+}
+
+/* The wooden shelf plank — stays fixed at the bottom, never scrolls */
 .shelf::after {
   content: "";
   position: absolute;
@@ -78,10 +88,10 @@
   background: linear-gradient(180deg, #8B6914 0%, #6B4F12 40%, #5a4210 100%);
   border-radius: 0 0 4px 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  z-index: 2;
+  z-index: 4;
 }
 
-/* Shelf edge lip */
+/* Shelf edge lip — stays fixed */
 .shelf::before {
   content: "";
   position: absolute;
@@ -91,16 +101,16 @@
   height: 4px;
   background: linear-gradient(180deg, #a07d2a, #8B6914);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 3;
+  z-index: 5;
 }
 
-/* Back panel behind items */
+/* Back panel behind items — stays fixed */
 .shelf-back {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 14px;
+  bottom: 0;
   background: linear-gradient(180deg,
     rgba(139, 105, 20, 0.05) 0%,
     rgba(139, 105, 20, 0.12) 100%
@@ -112,6 +122,30 @@
 /* Papers shelf */
 .shelf.shelf--papers {
   margin-top: 6px;
+}
+
+/* Continuous shelf: remove inner border-radius when side-by-side */
+@media (min-width: 801px) {
+  /* First column — remove right rounding */
+  .shelf-col:first-child .shelf::after {
+    border-radius: 0 0 0 4px;
+  }
+  .shelf-col:first-child .shelf-back {
+    border-radius: 4px 0 0 0;
+  }
+
+  /* Last column — remove left rounding */
+  .shelf-col:last-child .shelf::after {
+    border-radius: 0 0 4px 0;
+  }
+  .shelf-col:last-child .shelf-back {
+    border-radius: 0 4px 0 0;
+  }
+
+  /* Remove papers top margin so shelves align flush */
+  .shelf.shelf--papers {
+    margin-top: 0;
+  }
 }
 
 /* ============================================================

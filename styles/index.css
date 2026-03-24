@@ -174,9 +174,9 @@ html[data-theme="dark"] .nav {
 
 .nav-links {
   display: flex;
-  gap: 50px;
+  gap: 40px;
   list-style: none;
-  margin: 0;
+  margin: 0 0 0 auto;
   padding: 0;
 }
 
@@ -243,8 +243,6 @@ html[data-theme="dark"] .nav {
   font-variant-caps: small-caps;
   position: relative;
   top: -1px;
-  flex: 1;
-  text-align: center;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1005,6 +1003,12 @@ html[data-theme="dark"] .featured-body {
 }
 
 /* DARK MODE TOGGLE ------------------------------------ */
+.nav-theme-item {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
 .theme-toggle {
   background: none;
   border: 1px solid var(--card-border);
@@ -1019,7 +1023,6 @@ html[data-theme="dark"] .featured-body {
   color: var(--text);
   transition: background 160ms ease, border-color 160ms ease;
   flex-shrink: 0;
-  margin-left: auto;
 }
 
 .theme-toggle:hover {
@@ -1028,10 +1031,9 @@ html[data-theme="dark"] .featured-body {
 }
 
 /* ============================================================
-   MOBILE LAYOUT FIXES  (must be last to win cascade)
+   HAMBURGER NAV (triggers earlier for longer nav items)
    ============================================================ */
-@media (max-width: 600px) {
-  /* --- Nav bar: name + burger only --- */
+@media (max-width: 900px) {
   .brand-avatar {
     display: none;
   }
@@ -1076,6 +1078,15 @@ html[data-theme="dark"] .featured-body {
     font-size: 1rem;
   }
 
+  .nav-theme-item {
+    padding: 10px 0;
+  }
+}
+
+/* ============================================================
+   MOBILE LAYOUT FIXES  (must be last to win cascade)
+   ============================================================ */
+@media (max-width: 600px) {
   /* --- Hero --- */
   .hero-row {
     gap: 14px;

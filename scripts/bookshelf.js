@@ -23,6 +23,10 @@
     back.className = "shelf-back";
     shelf.appendChild(back);
 
+    // Scrollable inner container for items only
+    var scroll = document.createElement("div");
+    scroll.className = "shelf-scroll";
+
     items.forEach(function (item) {
       var el;
       if (item.url) {
@@ -36,7 +40,7 @@
 
       if (type === "papers") {
         // Paper sheaf
-        var height = 150 + ((item.title.length * 5) % 60); // 150-210px
+        var height = 180 + ((item.title.length * 5) % 60); // 180-240px
         el.className = "paper-sheaf";
         el.style.height = height + "px";
         el.title = item.title + (item.author ? " — " + item.author : "") + (item.year ? " (" + item.year + ")" : "");
@@ -88,9 +92,10 @@
         el.appendChild(textWrap);
       }
 
-      shelf.appendChild(el);
+      scroll.appendChild(el);
     });
 
+    shelf.appendChild(scroll);
     return shelf;
   }
 
