@@ -297,6 +297,7 @@ html[data-theme="dark"] .brand-name {
   margin: 0 0 4px;
   font-family: "Spectral", serif;
   font-size: 1.6rem;
+  text-align: center;
 }
 
 .hero-tagline {
@@ -347,6 +348,7 @@ html[data-theme="dark"] .brand-name {
 
 .hero-bio-card .hero-name {
   margin-top: 0;
+  text-align: center;
 }
 
 .hero-bio-card .hero-body {
@@ -923,6 +925,10 @@ html[data-theme="dark"] .featured-body {
 
   .hero-bio-card {
     overflow: visible;
+  }
+
+  .hero-bio-card .hero-name {
+    text-align: left;
   }
 }
 
