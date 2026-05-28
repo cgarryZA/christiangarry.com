@@ -1,0 +1,62 @@
+{
+  "$comment": "Mirror of platform/apps.json. Single registry, two consumers (the platform launcher and this workshop page). Keep in sync; eventually a build step can copy it automatically.",
+  "platform": {
+    "name": "christiangarry platform",
+    "owner": "Christian Garry",
+    "base_domain": "christiangarry.com"
+  },
+  "apps": [
+    {
+      "id": "health",
+      "name": "Health",
+      "description": "WHOOP + Hevy + FeelFit + blood labs + nutrition + AI coach. Built first, currently the most complete.",
+      "kind": "private",
+      "stack": "fastapi+nextjs",
+      "dev_port": 3000,
+      "dev_url": "http://localhost:3000",
+      "prod_url": "https://health.christiangarry.com",
+      "api": {
+        "dev_url": "http://localhost:8000",
+        "prod_url": "https://health-api.christiangarry.com"
+      },
+      "icon": "activity",
+      "color": "#10b981"
+    },
+    {
+      "id": "pilot-view",
+      "name": "Pilot View",
+      "description": "Garage and vehicle monitoring. Sensors, door, lights, battery, calibration — all realtime via WebSocket.",
+      "kind": "private",
+      "stack": "fastapi+vanilla",
+      "dev_port": 8100,
+      "dev_url": "http://localhost:8100",
+      "prod_url": "https://pilot.christiangarry.com",
+      "icon": "car",
+      "color": "#a78bfa"
+    },
+    {
+      "id": "networth",
+      "name": "Net worth",
+      "description": "Bank + Amex + T212 + investments aggregator. Self-hosted because Mint is dead and Monarch wants your soul.",
+      "kind": "private",
+      "stack": "fastapi",
+      "dev_port": 8765,
+      "dev_url": "http://localhost:8765",
+      "prod_url": "https://networth.christiangarry.com",
+      "icon": "trending-up",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "degrees",
+      "name": "Degree tracker",
+      "description": "Durham MSc Scientific Computing + Illinois MSc Computer Science. Module grades, planning, GPA modelling.",
+      "kind": "private",
+      "stack": "static-html",
+      "dev_port": 4010,
+      "dev_url": "http://localhost:4010",
+      "prod_url": "https://degrees.christiangarry.com",
+      "icon": "graduation-cap",
+      "color": "#ec4899"
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+/* Workshop dashboard — private apps grid. Matches site palette. */
+
+.workshop-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 96px 24px 64px;
+}
+
+.workshop-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.workshop-header h1 {
+  font-family: "Spectral", serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  color: var(--text);
+}
+
+.workshop-subtitle {
+  color: var(--muted);
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.env-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  font-family: "Inter", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.env-pill[data-env="local"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.env-pill[data-env="production"] {
+  border-color: #f59e0b;
+  color: #d97706;
+}
+
+.workshop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.app-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  border-color: var(--accent);
+}
+
+.app-card[data-status="unreachable"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.app-card[data-status="unreachable"]:hover {
+  transform: none;
+  box-shadow: var(--shadow);
+  border-color: var(--card-border);
+}
+
+.app-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--card-accent, var(--accent));
+}
+
+.app-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.app-card-title {
+  font-family: "Spectral", serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin: 0;
+  color: var(--text);
+}
+
+.app-card-kind {
+  font-family: "Inter", sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--bg-accent);
+  white-space: nowrap;
+}
+
+.app-card-desc {
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
+  flex-grow: 1;
+}
+
+.app-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: "Inter", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.app-card-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-card-status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.app-card-status[data-status="online"] { color: #10b981; }
+.app-card-status[data-status="unreachable"] { color: #6b7280; box-shadow: none; }
+.app-card-status[data-status="unreachable"]::before { box-shadow: none; }
+.app-card-status[data-status="checking"] { color: var(--muted); animation: pulse 1.2s ease-in-out infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.app-card-link {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.workshop-footer {
+  margin-top: 64px;
+  text-align: center;
+  color: var(--muted);
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+}
+
+.workshop-footer code {
+  background: var(--bg-accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  border: 1px solid var(--card-border);
+}
+
+.workshop-footer a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms ease;
+}
+
+.workshop-footer a:hover {
+  border-bottom-color: var(--accent);
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Workshop — Christian Garry</title>
+    <meta name="description" content="Private dashboard for personal apps and tools." />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="icon" href="favicon.ico" />
+    <link rel="canonical" href="https://christiangarry.com/workshop.html" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles/index.css" />
+    <link rel="stylesheet" href="styles/workshop.css" />
+  </head>
+
+  <body>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-inner">
+        <a class="brand brand-avatar" href="index.html" aria-label="Home">
+          <img
+            src="/assets/christian-garry-profile.jpg"
+            alt="Christian Garry portrait"
+            width="40"
+            height="40"
+            loading="eager"
+          />
+        </a>
+        <span class="brand-name">Christian Garry</span>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="cv.html">CV</a></li>
+          <li><a href="stats.html">Stats</a></li>
+          <li><a href="blog.html">Research Blog</a></li>
+          <li><a class="active" href="workshop.html" aria-current="page">Workshop</a></li>
+          <li class="nav-theme-item"><button class="theme-toggle" aria-label="Toggle dark mode"></button></li>
+        </ul>
+        <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <a class="skip-to-content" href="#main">Skip to content</a>
+
+    <main id="main" class="workshop-main">
+      <header class="workshop-header">
+        <h1>Workshop</h1>
+        <p class="workshop-subtitle">
+          Personal apps running on the home server.
+          <span id="env-indicator" class="env-pill">detecting…</span>
+        </p>
+      </header>
+
+      <section class="workshop-grid" id="app-grid" aria-live="polite">
+        <!-- Cards rendered by workshop.js -->
+      </section>
+
+      <footer class="workshop-footer">
+        <p>
+          Local? Run <code>npm run dev</code> in <code>~/Documents/platform/</code> to start all
+          services. See the
+          <a href="https://github.com/cgarryZA/christiangarry-platform" target="_blank" rel="noopener">platform repo</a>
+          for setup.
+        </p>
+      </footer>
+    </main>
+
+    <script src="scripts/workshop.js" defer></script>
+  </body>
+</html>
