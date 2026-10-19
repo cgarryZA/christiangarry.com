@@ -12,19 +12,5 @@
     "title": "My Website",
     "branch": "main",
     "readme": "COVER.md"
-  },
-  {
-    "owner": "cgarryZA",
-    "repo": "cashflow-stress-testing",
-    "title": "Cashflow Stress Testing Under Rate and Vacancy Shocks",
-    "branch": "main",
-    "readme": "COVER.md"
-  },
-  {
-  "owner": "cgarryZA",
-  "repo": "leverage-feasibility-frontier",
-  "title": "Leverage Feasibility Frontier Under Rate and Occupancy Shocks",
-  "branch": "main",
-  "readme": "COVER.md"
-}
+  }
 ]
