@@ -1,6 +1,19 @@
 [
   {
     "owner": "cgarryZA",
+    "repo": "MachineChecked",
+    "title": "MachineChecked",
+    "cover": "data/covers/MachineChecked.md",
+    "target": "https://machinechecked.org"
+  },
+  {
+    "owner": "cgarryZA",
+    "repo": "deepJFET",
+    "title": "Silicon-Carbide JFET Intel 4004",
+    "cover": "data/covers/deepJFET.md"
+  },
+  {
+    "owner": "cgarryZA",
     "repo": "advent-of-camel-2025",
     "title": "FPGA - Advent of Code",
     "branch": "main",

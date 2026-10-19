@@ -84,9 +84,12 @@ async function loadPinnedProjects() {
     const branch = pin.branch || "main";
     const readmePath = pin.readme || "README.md";
 
-    const rawUrl = `https://raw.githubusercontent.com/${encodeURIComponent(
-      owner
-    )}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${readmePath}`;
+    // `cover` is a file in this site's own repo, for projects that carry no COVER.md.
+    const rawUrl = pin.cover
+      ? pin.cover
+      : `https://raw.githubusercontent.com/${encodeURIComponent(
+          owner
+        )}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${readmePath}`;
 
     return fetchWithRetry(rawUrl)
       .then((r) => (r.ok ? r.text() : ""))
