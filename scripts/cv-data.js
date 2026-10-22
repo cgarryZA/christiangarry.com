@@ -1,15 +1,18 @@
 const siteRoot = new URL("../", import.meta.url);
 
+// The approved CV export is published alongside this site.
+export const publicCvBaseUrl = new URL("public-cv/", siteRoot).href;
+
 export const publicCvUrls = Object.freeze({
-  entries: new URL("public-cv/entries.json", siteRoot).href,
-  html: new URL("public-cv/cv.html", siteRoot).href,
-  pdf: new URL("public-cv/cv.pdf", siteRoot).href,
+  entries: new URL("entries.json", publicCvBaseUrl).href,
+  html: new URL("cv.html", publicCvBaseUrl).href,
+  pdf: new URL("cv.pdf", publicCvBaseUrl).href,
 });
 
-const approvedCovers = new Set([
-  "/public-cv/assets/siemens_logo.jpeg",
-  "/public-cv/assets/durham_university_logo.jpeg",
-]);
+const approvedCoverUrls = new Set([
+  "assets/siemens_logo.jpeg",
+  "assets/durham_university_logo.jpeg",
+].map((path) => new URL(path, publicCvBaseUrl).href));
 const entryIdPattern = /^[a-z0-9][a-z0-9_-]{0,119}$/i;
 const entryPathPattern = /^entries\/[a-z0-9][a-z0-9_.-]*\.md$/i;
 let publicCvPromise;
@@ -32,9 +35,22 @@ clearLegacyCvCache();
 export function safeCoverUrl(value) {
   if (typeof value !== "string" || !value) return "";
   try {
-    const url = new URL(value, siteRoot);
-    return url.origin === siteRoot.origin && approvedCovers.has(url.pathname) && !url.search && !url.hash && !url.username && !url.password
-      ? url.href : "";
+    const url = new URL(value, publicCvBaseUrl);
+    return approvedCoverUrls.has(url.href) ? url.href : "";
+  } catch { return ""; }
+}
+
+export function decodeProtectedEmail(encoded) {
+  if (typeof encoded !== "string" || !/^(?:[a-f\d]{2}){2,512}$/i.test(encoded)) return "";
+  try {
+    const key = parseInt(encoded.slice(0, 2), 16);
+    const bytes = new Uint8Array(encoded.length / 2 - 1);
+    for (let index = 0; index < bytes.length; index += 1) {
+      bytes[index] = parseInt(encoded.slice(index * 2 + 2, index * 2 + 4), 16) ^ key;
+    }
+    const email = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    return /^[^\s@<>"`]+@[^\s@<>"`]+\.[^\s@<>"`]+$/.test(email) && !/[\u0000-\u001f\u007f]/.test(email)
+      ? email : "";
   } catch { return ""; }
 }
 

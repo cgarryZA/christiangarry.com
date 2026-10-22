@@ -13,22 +13,15 @@ The site presents selected projects, a public CV and links to professional profi
 - **CV:** a reviewed public snapshot, with a downloadable PDF and individual entries.
 - **Repository statistics:** an optional page at `stats.html`, using public GitHub repository data.
 
-## Public CV snapshot
+## Automatic public CV updates
 
-`public-cv/` contains the material intentionally published on this website: `cv.html`, `cv.pdf`, `entries.json` and individually selected files in `assets/`. The source CV repository is private; the website reads the local public snapshot and does not request private repository contents in a visitor's browser.
+The private CV repository remains the source of truth. Its build workflow automatically regenerates the PDF, HTML and entry index after source changes on main, then publishes the validated output to this website's public-cv/ directory. GitHub Pages deploys the website commit. New canonical entries marked cv: true appear automatically; no second entry list or manual copy is required.
 
-When updating the CV:
+Only generated public CV documents, entry prose and the two approved logos are exported. Raw Markdown, private notes, front matter attachments and supporting documents remain in the private repository. An export that fails validation leaves the previous public version available.
 
-1. Generate the CV in the private source repository.
-2. Review the HTML, PDF and selected entries for publication, and update the explicit manifest in `public_export.json`.
-3. Use `export_public.py` in the private CV repository to export only the approved material into this website's `public-cv/` directory.
-4. Check the CV, entry pages, download and links locally before publishing.
+Publishing uses a dedicated write deploy key attached only to this website repository. Its private half belongs in the private CV repository's WEBSITE_DEPLOY_KEY Actions secret. No credential is sent to visitors or stored in this public repository. The workflow stages only public-cv/; the key itself has write access to the website repository.
 
-Attachments are selected individually. Do not automatically copy the source repository's assets, transcripts, reports or other attachments into the public snapshot. An entry should only link to an attachment that has been explicitly included for publication.
-
-No browser token is needed. Keep GitHub access tokens and other credentials out of client-side code, data files and the public repository.
-
-The private CV build workflow includes a prepared publishing step, but automatic publication requires a dedicated deploy credential scoped to this website repository. That credential has not been configured; updating the private CV alone does not currently publish a new snapshot here.
+The build and export code is committed. The deploy key still needs activation before automatic website publishing can run; the workflow reports a clear failure if the secret is absent. The current public CV remains available during setup.
 
 ## Project cards
 

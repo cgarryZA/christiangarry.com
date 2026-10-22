@@ -3,7 +3,7 @@ import {
   loadPublicCv,
   readEntryQuery,
   renderEntryMarkdown,
-} from "./cv-data.js";
+} from "./cv-data.js?v=20261022b";
 
 function showUnavailable(failed = false) {
   document.getElementById("entry-content").hidden = true;
@@ -32,9 +32,7 @@ function showUnavailable(failed = false) {
 function updateMetadata(entry) {
   const title = `${entry.title} — Christian Garry`;
   const url = `https://christiangarry.com/entry.html?id=${encodeURIComponent(entry.id)}`;
-  const image = entry.cover
-    ? new URL(new URL(entry.cover).pathname, "https://christiangarry.com").href
-    : "https://christiangarry.com/assets/christian-garry-profile.jpg";
+  const image = entry.cover || "https://christiangarry.com/assets/christian-garry-profile.jpg";
   document.title = title;
   document.querySelector('meta[name="description"]').content = entry.summary;
   document.getElementById("canonical-url").href = url;

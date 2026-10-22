@@ -1,9 +1,10 @@
 import {
+  decodeProtectedEmail,
   entryHref,
   fetchPublicCvFile,
   loadPublicCv,
   publicCvUrls,
-} from "./cv-data.js";
+} from "./cv-data.js?v=20261022b";
 
 let entriesLoaded = false;
 
@@ -80,6 +81,20 @@ function prepareInlineCv(html) {
   const template = document.createElement("template");
   template.innerHTML = html;
   const content = template.content;
+  for (const element of content.querySelectorAll("[data-cfemail]")) {
+    const email = decodeProtectedEmail(element.getAttribute("data-cfemail"));
+    if (!email) continue;
+    element.textContent = email;
+    const anchor = element.closest("a[href]");
+    if (anchor) {
+      try {
+        const url = new URL(anchor.getAttribute("href"), publicCvUrls.html);
+        if (url.origin === new URL(publicCvUrls.html).origin && url.pathname === "/cdn-cgi/l/email-protection") {
+          anchor.setAttribute("href", `mailto:${encodeURIComponent(email).replace(/%40/g, "@")}`);
+        }
+      } catch { /* The link is checked again during sanitization. */ }
+    }
+  }
   const styles = [...content.querySelectorAll("style")].map((style) => style.textContent).join("\n");
   const css = styles
     .replace(/@import\s+[^;]+;/gi, "")

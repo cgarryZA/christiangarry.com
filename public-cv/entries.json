@@ -56,7 +56,7 @@
       "summary": "Taught-module average 84.75%, including 95% in GPU programming and 94% in machine learning and statistics. Dissertation mark pending.",
       "head": "### MSc Scientific Computing & Data Analysis (AI for Engineering) — Durham University\n\n*Sep 2025 – Sep 2026*\n\nTaught-module average **84.75%**, including **95%** in GPU programming and **94%** in machine learning and statistics. Dissertation mark pending.",
       "body": "**Research**\n\nDissertation: *McKean–Vlasov Forward–Backward Stochastic Differential Equations with Jumps*, supervised by Prof. C. Feng. The work covers well-posedness, a posteriori error estimation and martingale completion.\n\n**Selected results**\n\nCohort-highest mark on both MATH52115 summatives: Regression **92** (cohort mean 85) and Classification **87** (cohort mean 69).\n\n**Technical focus**\n\nMachine learning and Bayesian statistics, convex optimisation, numerical methods, high-performance computing and GPU programming, applied to engineering problems.",
-      "cover": "/public-cv/assets/durham_university_logo.jpeg",
+      "cover": "assets/durham_university_logo.jpeg",
       "links": [
         {
           "label": "Durham course",
@@ -74,7 +74,7 @@
       "summary": "Four-year integrated Master’s progressing from core engineering mathematics and modelling into electronics, communications, control, and embedded systems, culminating in an individual MEng research project with significant software and systems design content.",
       "head": "### MEng Electronic Engineering — Durham University  \n*Awarded Jun 2024 (Upper Second-Class Honours; H711 Electronic Engineering pathway)*\n\nFour-year integrated Master’s progressing from core engineering mathematics and modelling into electronics, communications, control, and embedded systems, culminating in an individual MEng research project with significant software and systems design content.",
       "body": "**Curriculum structure**  \n- **Years 1–2 (Core engineering):** engineering mathematics, probability & statistics, mathematical modelling & computing, mechanics, thermodynamics, electronics, and electrical systems.  \n- **Year 3 (Specialisation):** digital electronics & DSP, electronics & communications, control & signal processing, semiconductor devices, systems-level design.  \n- **Year 4 (Advanced topics):** radio & digital communications, communications networks, advanced electronics, photonics, AI & deep learning, measurement & instrumentation, MEng research project.\n\n**Key technical themes**  \n- **Mathematics & modelling:** linear algebra, probability, statistics, numerical methods.  \n- **Signals & systems:** DSP, communications theory, control systems.  \n- **Hardware–software interface:** embedded systems, digital logic, device-level understanding.  \n- **Engineering computation:** C/C++, Python, simulation-driven design and analysis.\n\n**Selected highlights**  \n- **MEng Research Project:** *Silicon Carbide JFET CPU* — designed and simulated a custom 4-bit CPU architecture in LTspice, supported by a bespoke C++ compiler/assembler toolchain and Python-based waveform generation utilities.  \n- **Design & analysis projects:** multi-year engineering design projects involving control, electronics, and system integration.  \n- **Laboratory work:** real-time systems, measurement, and verification in electronics and communications context",
-      "cover": "/public-cv/assets/durham_university_logo.jpeg",
+      "cover": "assets/durham_university_logo.jpeg",
       "links": [
         {
           "label": "Durham engineering",
@@ -110,7 +110,7 @@
       "summary": "Software Developer/Engineer at Siemens, following the Graduate Communications Engineer role held from September 2024 to August 2026.",
       "head": "### Software Developer/Engineer - Siemens PLC\n*Sep 2026 - Present | On-site (Hebburn)*\n\nSoftware Developer/Engineer at Siemens, following the Graduate Communications Engineer role held from September 2024 to August 2026.",
       "body": "",
-      "cover": "/public-cv/assets/siemens_logo.jpeg",
+      "cover": "assets/siemens_logo.jpeg",
       "links": []
     },
     {
@@ -123,7 +123,7 @@
       "summary": "Worked on Python-based engineering tooling and low-level C/C++ communication systems. Built a Retrieval-Augmented Generation (RAG) system from scratch to structure technical knowledge and accelerate engineering analysis, alongside custom networking components used in simulation and digital-twin…",
       "head": "### Graduate Communications Engineer — Siemens PLC\n*Sep 2024 – Aug 2026 | On-site (Hebburn)*\n\nWorked on **Python-based engineering tooling and low-level C/C++ communication systems**. Built a **Retrieval-Augmented Generation (RAG)** system from scratch to structure technical knowledge and accelerate engineering analysis, alongside custom networking components used in simulation and digital-twin workflows.",
       "body": "**Engineering Tooling (RAG)**  \n- Designed and implemented a **Retrieval-Augmented Generation (RAG)** platform **from scratch in Python**, integrating local LLMs (**Ollama**) with a **vector database (Qdrant)** to structure technical documentation and codebases.  \n- Enabled context-aware querying over large protocol specifications and source trees, **reducing engineer time-to-solution by over 90%**.  \n- Built the system end-to-end, including data ingestion, chunking, embedding, retrieval logic, and query orchestration, with an emphasis on **transparent and reproducible behaviour** suitable for engineering use.\n\n**Systems / Networking**  \n- Implemented **custom C/C++ networking components** using TCP/IP and serial communication to support industrial communication and **digital-twin simulation environments**.  \n- Developed communication logic to stream and exchange data between simulated systems and PC-based tooling.  \n- Built supporting simulation utilities to validate communication behaviour during development.",
-      "cover": "/public-cv/assets/siemens_logo.jpeg",
+      "cover": "assets/siemens_logo.jpeg",
       "links": []
     },
     {
@@ -136,7 +136,7 @@
       "summary": "I lead weekly project tutorials for undergraduate design teams and act as an industry mentor. The emphasis is on quantitative decision‑making under constraints and communicating engineering reasoning clearly.",
       "head": "### Industrial Tutor — Durham University (Engineering)\n*Sep 2025 – Present | On‑site, part‑time*\n\nI lead weekly project tutorials for undergraduate design teams and act as an industry mentor. The emphasis is on **quantitative decision‑making under constraints** and communicating engineering reasoning clearly.",
       "body": "**What I do**\n- Guide teams through structured milestones: **Gantt planning, feasibility studies, design reviews**, and checkpoint retros.\n- Mark feasibility and final submissions; deliver **objective, rubric‑based feedback** on clarity, rigour, assumptions, and justification.\n- Coach teams to formalise vague ideas into **specifications**, run **back‑of‑the‑envelope estimates**, and make **sensitivity/constraint analyses** (cost, risk, performance).\n- Encourage **evidence‑led iteration**: define pass/fail criteria up‑front, run simple tests, and **retire designs** that don’t meet constraints.",
-      "cover": "/public-cv/assets/durham_university_logo.jpeg",
+      "cover": "assets/durham_university_logo.jpeg",
       "links": []
     },
     {
@@ -180,7 +180,7 @@
       "summary": "Designed and validated a custom 4-bit microprocessor in LTspice using Silicon Carbide (SiC) JFET logic, targeting high-temperature and radiation-tolerant computing. Delivered a complete end-to-end toolchain—from device-level gates to compiler, assembler, and simulation infrastructure—enabling…",
       "head": "### Silicon Carbide JFET CPU — Master’s Dissertation  \n*Extreme-environment computing; device-level logic to system-level verification*\n\nDesigned and validated a custom **4-bit microprocessor** in **LTspice** using **Silicon Carbide (SiC) JFET logic**, targeting **high-temperature and radiation-tolerant** computing. Delivered a **complete end-to-end toolchain**—from device-level gates to compiler, assembler, and simulation infrastructure—enabling instruction-level verification against a behavioural reference.",
       "body": "**What I built**\n- Designed SiC **NAND/NOR/XOR** logic and transistor-optimised gates, balancing device count against timing and race-condition risk.\n- Architected and simulated a **4004-compatible 4-bit CPU micro-architecture**, decomposed into ALU, control logic, registers, buses, and memory interfaces.\n- Implemented a **full software toolchain**: C-like language and compiler (**C++**), assembler, and **Python** scripts to generate ROM contents and PWL stimulus waveforms.\n- Integrated subsystem netlists programmatically to support repeatable, large-scale simulation runs.\n\n**Verification & validation**\n- Built a **cross-validation stack**: a corrected **JavaScript emulator** as a behavioural reference and a **MATLAB waveform-to-register interpreter** to decode LTspice analog traces step-by-step.\n- Demonstrated **instruction-level parity in simulation** at 100 kHz, including execution of **unmodified Intel 4004 assembly routines**.\n- Fabricated and measured **SiC JFET NAND and NOR gates**, comparing experimental waveforms against simulation to validate device models and frequency response.\n\n**Findings & limitations**\n- Achieved functional parity at the architectural level; identified **storage primitives** as the dominant contributor to transistor count relative to the original 4004.\n- Experimental validation is currently limited to individual gates; system-level results are simulation-backed.\n- Clear future work identified: multi-stage cascades, noise margins, temperature/radiation sweeps, and more transistor-efficient memory implementations.\n\n**Impact**\nBridges **device physics**, **computer architecture**, and **verification infrastructure**, demonstrating end-to-end engineering from transistor models to validated instruction-level behaviour—directly applicable to safety-critical, high-reliability, and research-driven hardware systems.\n\n**Final Grade**  \nAwarded **84%**, among the highest marks in the cohort.",
-      "cover": "/public-cv/assets/durham_university_logo.jpeg",
+      "cover": "assets/durham_university_logo.jpeg",
       "links": [
         {
           "label": "Public code",

@@ -1,4 +1,4 @@
-import { loadPublicCv, entryHref, safeCoverUrl } from "./cv-data.js";
+import { loadPublicCv, entryHref, safeCoverUrl } from "./cv-data.js?v=20261022b";
 
 const GITHUB_USERNAME = "cgarryZA";
 const EXCLUDED_REPOS = new Set(["cv", "cgarryza", "christiangarry.com", "keyboard"]);
