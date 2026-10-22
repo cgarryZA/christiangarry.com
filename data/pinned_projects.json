@@ -1,29 +1,78 @@
 [
   {
-    "owner": "cgarryZA",
-    "repo": "MachineChecked",
+    "title": "Well-posedness of MV-FBSDEs with jumps",
+    "category": "Stochastic analysis",
+    "subtitle": "Research with Chunrong Feng · arXiv preprint",
+    "description": "Existence, uniqueness and stability for fully coupled McKean–Vlasov forward–backward SDEs with jumps, allowing full-tuple law dependence and infinite jump activity. The results hold on every finite horizon under Lipschitz and monotonicity assumptions.",
+    "tags": [
+      "Full-tuple law dependence",
+      "Infinite jump activity",
+      "Every finite horizon"
+    ],
+    "links": [
+      {
+        "label": "Read paper",
+        "url": "https://arxiv.org/abs/2608.23203"
+      },
+      {
+        "label": "Lean formalisation",
+        "url": "https://github.com/cgarryZA/mvfbsdej-well-posedness-lean"
+      }
+    ]
+  },
+  {
     "title": "MachineChecked",
-    "cover": "data/covers/MachineChecked.md",
-    "target": "https://machinechecked.org"
+    "category": "Formal verification",
+    "subtitle": "Connecting mathematical papers with Lean proofs",
+    "description": "A platform for reading mathematical papers alongside their Lean formalisations, with links between claims, proof declarations and reviews of how the two correspond.",
+    "tags": [
+      "Lean",
+      "Mathematics",
+      "Proof review"
+    ],
+    "links": [
+      {
+        "label": "Visit project",
+        "url": "https://machinechecked.org"
+      },
+      {
+        "label": "View code",
+        "url": "https://github.com/cgarryZA/MachineChecked"
+      }
+    ]
   },
   {
-    "owner": "cgarryZA",
-    "repo": "deepJFET",
-    "title": "Silicon-Carbide JFET Intel 4004",
-    "cover": "data/covers/deepJFET.md"
+    "title": "Silicon-carbide JFET Intel 4004",
+    "category": "Hardware & simulation",
+    "subtitle": "deepJFET · transistor logic to processor architecture",
+    "description": "Exploring an Intel 4004 implementation using silicon-carbide JFET logic, with device and circuit models, LTspice test benches, Python simulation and processor-level tooling.",
+    "tags": [
+      "SiC JFET",
+      "LTspice",
+      "Python"
+    ],
+    "links": [
+      {
+        "label": "View code",
+        "url": "https://github.com/cgarryZA/deepJFET"
+      }
+    ]
   },
   {
-    "owner": "cgarryZA",
-    "repo": "advent-of-camel-2025",
-    "title": "FPGA - Advent of Code",
-    "branch": "main",
-    "readme": "COVER.md"
-  },
-  {
-    "owner": "cgarryZA",
-    "repo": "christiangarry.com",
-    "title": "My Website",
-    "branch": "main",
-    "readme": "COVER.md"
+    "title": "Advent of FPGA",
+    "category": "Digital design",
+    "subtitle": "Advent of Code in Hardcaml",
+    "description": "Advent of Code problems implemented as hardware designs in Hardcaml, exploring cycle-accurate simulation and FPGA-oriented architectures through Jane Street’s Advent of FPGA challenge.",
+    "tags": [
+      "OCaml",
+      "Hardcaml",
+      "FPGA"
+    ],
+    "links": [
+      {
+        "label": "View code",
+        "url": "https://github.com/cgarryZA/advent-of-camel-2025"
+      }
+    ]
   }
 ]

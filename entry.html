@@ -5,8 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Entry — Living CV</title>
-  <meta name="description" content="CV entry from Christian Garry's living curriculum vitae - engineering projects, research work, and professional experience." />
+  <title>CV entry — Christian Garry</title>
+  <meta name="description" content="Research, engineering experience, education, and selected projects from Christian Garry's CV." />
   <meta name="author" content="Christian Garry" />
 
   <!-- Favicon -->
@@ -18,16 +18,16 @@
   <!-- Open Graph / Facebook (will be updated by JavaScript) -->
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://christiangarry.com/entry.html" id="og-url" />
-  <meta property="og:title" content="Entry — Living CV" id="og-title" />
-  <meta property="og:description" content="CV entry from Christian Garry's living curriculum vitae." id="og-description" />
-  <meta property="og:image" content="https://christiangarry.com/assets/me.png" id="og-image" />
+  <meta property="og:title" content="CV entry — Christian Garry" id="og-title" />
+  <meta property="og:description" content="Research, engineering experience, education, and selected projects from Christian Garry's CV." id="og-description" />
+  <meta property="og:image" content="https://christiangarry.com/assets/christian-garry-profile.jpg" id="og-image" />
 
   <!-- Twitter (will be updated by JavaScript) -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://christiangarry.com/entry.html" id="twitter-url" />
-  <meta name="twitter:title" content="Entry — Living CV" id="twitter-title" />
-  <meta name="twitter:description" content="CV entry from Christian Garry's living curriculum vitae." id="twitter-description" />
-  <meta name="twitter:image" content="https://christiangarry.com/assets/me.png" id="twitter-image" />
+  <meta name="twitter:title" content="CV entry — Christian Garry" id="twitter-title" />
+  <meta name="twitter:description" content="Research, engineering experience, education, and selected projects from Christian Garry's CV." id="twitter-description" />
+  <meta name="twitter:image" content="https://christiangarry.com/assets/christian-garry-profile.jpg" id="twitter-image" />
 
   <!-- Fonts to match site -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -67,9 +67,9 @@
 
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
         <li><a href="cv.html">CV</a></li>
-        <li><a href="stats.html">Stats</a></li>
-        <li><a href="blog.html">Research Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
         <li class="nav-theme-item"><button class="theme-toggle" aria-label="Toggle dark mode"></button></li>
       </ul>
 
@@ -81,34 +81,35 @@
 
   <a class="skip-to-content" href="#main-content">Skip to content</a>
 
-  <main id="main-content" class="entry-wrap">
+  <main id="main-content" class="entry-wrap" aria-busy="false">
     <div class="entry-nav">
-      <a href="cv.html#blog" class="back-button">
+      <a href="cv.html#entries" class="back-button">
         <span class="back-button-icon">←</span>
-        <span>Back to CV blog view</span>
+        <span>Back to CV entries</span>
       </a>
     </div>
 
-    <header class="entry-header">
-      <div class="entry-top">
-        <div id="cover" class="entry-coverbox" aria-label="Entry cover"></div>
+    <div id="entry-status" class="entry-status" role="status">Loading entry…</div>
+    <noscript>
+      <p>Read the <a href="public-cv/cv.html">CV in HTML</a> or <a href="public-cv/cv.pdf">download the PDF</a>.</p>
+    </noscript>
 
-        <div class="entry-meta">
-          <h1 id="title" class="entry-title">—</h1>
-          <div id="period" class="entry-period muted">—</div>
+    <article id="entry-content" hidden>
+      <header class="entry-header">
+        <div class="entry-top">
+          <div id="cover" class="entry-coverbox" hidden></div>
 
-          <!-- Buttons sit here now (top under title/period) -->
-          <div class="buttonrow" id="xlinks"></div>
-          <div class="buttonrow" id="extlinks"></div>
+          <div class="entry-meta">
+            <h1 id="title" class="entry-title"></h1>
+            <div id="period" class="entry-period muted"></div>
+
+            <div class="buttonrow" id="extlinks"></div>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <article>
       <section id="head" class="entry-section" aria-label="Entry summary"></section>
       <section id="body" class="entry-section" aria-label="Entry content"></section>
-
-      <div id="embeds" aria-label="Embedded content"></div>
     </article>
   </main>
 
@@ -122,6 +123,6 @@
   </footer>
 
   <script src="scripts/nav.js"></script>
-  <script type="module" src="scripts/entry.js?v=13"></script>
+  <script type="module" src="scripts/entry.js?v=public1"></script>
 </body>
 </html>

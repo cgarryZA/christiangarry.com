@@ -8,6 +8,20 @@
       links.classList.toggle('open');
       burger.setAttribute('aria-expanded', burger.classList.contains('open'));
     });
+    function closeMenu() {
+      burger.classList.remove('open');
+      links.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+    links.addEventListener('click', function (event) {
+      if (event.target.closest('a')) closeMenu();
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && links.classList.contains('open')) {
+        closeMenu();
+        burger.focus();
+      }
+    });
   }
 })();
 
@@ -19,7 +33,8 @@
   if (!btn) return;
 
   // Restore saved preference
-  var saved = localStorage.getItem(STORAGE_KEY);
+  var saved;
+  try { saved = localStorage.getItem(STORAGE_KEY); } catch (_) {}
   if (saved) {
     html.setAttribute('data-theme', saved);
   }
@@ -49,7 +64,7 @@
     }
 
     html.setAttribute('data-theme', next);
-    localStorage.setItem(STORAGE_KEY, next);
+    try { localStorage.setItem(STORAGE_KEY, next); } catch (_) {}
     updateIcon();
   });
 

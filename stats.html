@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Stats — Christian Garry</title>
-  <meta name="description" content="Public analytics and statistics for christiangarry.com" />
+  <title>Repository Statistics — Christian Garry</title>
+  <meta name="description" content="Public GitHub repository statistics for Christian Garry." />
+  <link rel="canonical" href="https://christiangarry.com/stats.html" />
   <link rel="icon" href="favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -108,9 +109,9 @@
       <span class="brand-name">Christian Garry</span>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
         <li><a href="cv.html">CV</a></li>
-        <li><a class="active" href="stats.html" aria-current="page">Stats</a></li>
-        <li><a href="blog.html">Research Blog</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
         <li class="nav-theme-item"><button class="theme-toggle" aria-label="Toggle dark mode"></button></li>
       </ul>
       <button class="nav-burger" aria-label="Toggle menu" aria-expanded="false">
@@ -123,18 +124,13 @@
 
   <main id="main-content" class="stats-wrap">
     <header class="stats-header">
-      <h1>Site Statistics</h1>
-      <p>Public analytics for christiangarry.com</p>
+      <h1>Repository Statistics</h1>
+      <p>Current public repository data from <a href="https://github.com/cgarryZA" target="_blank" rel="noreferrer noopener">GitHub</a>.</p>
     </header>
 
     <section>
       <h2 class="section-title">Overview</h2>
       <div class="stats-grid">
-        <div class="stat-card">
-          <p class="stat-label">Pages</p>
-          <p class="stat-value">4</p>
-          <p class="stat-sub">Home, CV, Entry, Stats</p>
-        </div>
         <div class="stat-card">
           <p class="stat-label">GitHub Repos</p>
           <p class="stat-value" id="repo-count">—</p>
@@ -143,7 +139,7 @@
         <div class="stat-card">
           <p class="stat-label">Total Stars</p>
           <p class="stat-value" id="star-count">—</p>
-          <p class="stat-sub">Across all repos</p>
+          <p class="stat-sub">Across public, non-fork repos</p>
         </div>
         <div class="stat-card">
           <p class="stat-label">Top Language</p>
@@ -160,26 +156,6 @@
       </div>
     </section>
 
-    <section style="margin-top: 28px;">
-      <h2 class="section-title">Technology</h2>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <p class="stat-label">Framework</p>
-          <p class="stat-value" style="font-size: 1.2rem;">None</p>
-          <p class="stat-sub">Vanilla HTML/CSS/JS</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Hosting</p>
-          <p class="stat-value" style="font-size: 1.2rem;">GitHub Pages</p>
-          <p class="stat-sub">Auto-deploy on push</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Analytics</p>
-          <p class="stat-value" style="font-size: 1.2rem;">Google Analytics</p>
-          <p class="stat-sub">GA4 (G-LNEPJQNV6M)</p>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="site-footer">
@@ -196,7 +172,7 @@
     (async function () {
       try {
         const resp = await fetch("https://api.github.com/users/cgarryZA/repos?per_page=100&sort=updated");
-        if (!resp.ok) return;
+        if (!resp.ok) throw new Error("GitHub request failed: " + resp.status);
         const repos = (await resp.json()).filter(function (r) { return !r.fork; });
 
         // Overview stats
@@ -213,11 +189,17 @@
         if (sorted.length) {
           document.getElementById("top-lang").textContent = sorted[0][0];
           document.getElementById("lang-count").textContent = sorted.length + " languages used";
+        } else {
+          document.getElementById("top-lang").textContent = "None listed";
+          document.getElementById("lang-count").textContent = "No language data available";
         }
 
         // Repo breakdown
         var container = document.getElementById("repo-breakdown");
         container.innerHTML = "";
+        if (!repos.length) {
+          container.textContent = "No public repositories are currently available.";
+        }
         repos.sort(function (a, b) { return (b.stargazers_count || 0) - (a.stargazers_count || 0); });
         repos.forEach(function (r) {
           var row = document.createElement("a");
@@ -236,6 +218,12 @@
         });
       } catch (e) {
         console.warn("[Stats] Failed to load GitHub data:", e);
+        document.getElementById("repo-breakdown").innerHTML =
+          '<p>Repository data is unavailable right now. <a href="https://github.com/cgarryZA?tab=repositories" target="_blank" rel="noreferrer noopener">View repositories on GitHub</a>.</p>';
+        ["repo-count", "star-count", "top-lang"].forEach(function (id) {
+          document.getElementById(id).textContent = "Unavailable";
+        });
+        document.getElementById("lang-count").textContent = "";
       }
     })();
   </script>

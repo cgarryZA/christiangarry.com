@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>CV — Christian Garry</title>
-    <meta name="description" content="Christian Garry's living curriculum vitae - a dynamic portfolio of engineering projects, research work, and professional experience in communications, ML systems, and quantitative analysis." />
+    <meta name="description" content="Christian Garry's curriculum vitae, including research, engineering experience, education, and selected projects." />
     <meta name="author" content="Christian Garry" />
 
     <!-- Favicon -->
@@ -18,15 +18,15 @@
     <meta property="og:type" content="profile" />
     <meta property="og:url" content="https://christiangarry.com/cv.html" />
     <meta property="og:title" content="CV — Christian Garry" />
-    <meta property="og:description" content="Christian Garry's living curriculum vitae - a dynamic portfolio of engineering projects, research work, and professional experience." />
-    <meta property="og:image" content="https://christiangarry.com/assets/me.png" />
+    <meta property="og:description" content="Research, engineering experience, education, and selected projects from Christian Garry's CV." />
+    <meta property="og:image" content="https://christiangarry.com/assets/christian-garry-profile.jpg" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:url" content="https://christiangarry.com/cv.html" />
     <meta name="twitter:title" content="CV — Christian Garry" />
-    <meta name="twitter:description" content="Christian Garry's living curriculum vitae - a dynamic portfolio of engineering projects, research work, and professional experience." />
-    <meta name="twitter:image" content="https://christiangarry.com/assets/me.png" />
+    <meta name="twitter:description" content="Research, engineering experience, education, and selected projects from Christian Garry's CV." />
+    <meta name="twitter:image" content="https://christiangarry.com/assets/christian-garry-profile.jpg" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -65,9 +65,9 @@
 
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#projects">Projects</a></li>
           <li><a class="active" href="cv.html" aria-current="page">CV</a></li>
-          <li><a href="stats.html">Stats</a></li>
-          <li><a href="blog.html">Research Blog</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
           <li class="nav-theme-item"><button class="theme-toggle" aria-label="Toggle dark mode"></button></li>
         </ul>
 
@@ -86,44 +86,44 @@
         <a
           id="download-pdf"
           class="cv-download"
-          href="#"
-          target="_blank"
-          rel="noreferrer noopener"
+          href="public-cv/cv.pdf"
+          download="Christian-Garry-CV.pdf"
           aria-label="Download CV as PDF"
           >Download PDF</a
         >
 
-        <button id="toggle" class="cv-toggle" type="button" aria-pressed="false" aria-label="Toggle between CV view and blog view">
-          <span>Blog view</span>
+        <button id="toggle" class="cv-toggle" type="button" aria-pressed="false" aria-label="Show CV entries" aria-controls="cv-view entries-view">
+          <span>Entries</span>
         </button>
       </div>
     </header>
 
     <main id="main-content">
-      <!-- CV VIEW (INLINE HTML, NO IFRAME) -->
-      <div id="cv-view" class="cv-inline-wrap">
-      <div class="cv-inline-card paper">
-        <div class="paper">
-          <!-- We inject the fetched CV html into this host via Shadow DOM -->
-          <div id="cv-inline-host" class="cv-inline-host" aria-label="CV HTML"></div>
-
-          <div id="cv-inline-fallback" class="muted cv-hint" style="display:none; margin-top: 10px;">
-            If the CV doesn’t load, you can
+      <section id="cv-view" class="cv-inline-wrap" aria-label="Curriculum vitae">
+        <div class="cv-inline-card">
+          <p id="cv-inline-status" class="muted cv-status" role="status">Loading CV…</p>
+          <div id="cv-inline-host" class="cv-inline-host" aria-label="Curriculum vitae" aria-busy="true"></div>
+          <p id="cv-inline-fallback" class="muted cv-hint" hidden>
+            You can
             <a
               id="cv-raw-html-link"
-              href="#"
-              target="_blank"
-              rel="noreferrer noopener"
-              >open it directly</a
-            >.
-          </div>
+              href="public-cv/cv.html"
+              >open the CV directly</a>
+            or <a href="public-cv/cv.pdf">download the PDF</a>.
+          </p>
+          <noscript>
+            <p class="cv-hint">Read the <a href="public-cv/cv.html">CV in HTML</a> or <a href="public-cv/cv.pdf">download the PDF</a>.</p>
+          </noscript>
         </div>
-      </div>
-    </div>
+      </section>
 
-      <!-- BLOG VIEW -->
-      <section id="blog-view" style="display: none" aria-label="Blog view of CV entries">
-        <div id="cards" class="cards"></div>
+      <section id="entries-view" hidden aria-labelledby="entries-heading">
+        <div class="entries-intro">
+          <h2 id="entries-heading">CV entries</h2>
+          <p class="muted">Research, experience, education, and selected projects.</p>
+        </div>
+        <p id="entries-status" class="cv-status" role="status">Loading entries…</p>
+        <div id="cards" class="cards" aria-busy="true"></div>
       </section>
     </main>
 
@@ -137,6 +137,6 @@
     </footer>
 
     <script src="scripts/nav.js"></script>
-    <script type="module" src="scripts/cv.js?v=1004"></script>
+    <script type="module" src="scripts/cv.js?v=public1"></script>
   </body>
 </html>
